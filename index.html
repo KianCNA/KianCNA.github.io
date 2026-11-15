@@ -22,7 +22,7 @@
 /* ===== 老入口自升级（2026-10-19）=====
    旧 HTML 被 CDN 缓存时，靠它自己跳到最新版：
    请求 version.json 带时间戳（CDN 必回源），版本号不同则 replace 到带时间戳的新 URL。 */
-var BUILD_VER = "20261115b";
+var BUILD_VER = "20261116a";
 (function(){
   function base(){
     var m = location.pathname.match(/^(.*)\/[^\/]*$/);
@@ -1122,7 +1122,6 @@ body{background:var(--bg1);color:var(--tx)}
         <div class="nav-cnt">最近变更 <b id="navChg">—</b></div>
       </div>
       <div class="nav-act">
-        <button class="btn pri" data-act="check">检测资费</button>
         <button class="btn" id="opBtn" data-act="op"><span id="opBtnTxt">移动</span> ▾</button>
         <button class="btn" data-act="theme">深色</button>
       </div>
@@ -3833,7 +3832,6 @@ document.addEventListener("click", function(e){
       toast(next === "dark" ? "已切换到深色模式" : "已切换到浅色模式");
       return;
     }
-    if(act === "check"){ ckOpen(); return; }
     if(act === "op"){ renderOpGrid(); document.getElementById("opMask").classList.add("on"); return; }
   }
   /* 关闭按钮 */
