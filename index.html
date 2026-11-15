@@ -22,7 +22,7 @@
 /* ===== 老入口自升级（2026-10-19）=====
    旧 HTML 被 CDN 缓存时，靠它自己跳到最新版：
    请求 version.json 带时间戳（CDN 必回源），版本号不同则 replace 到带时间戳的新 URL。 */
-var BUILD_VER = "20261108a";
+var BUILD_VER = "20261115a";
 (function(){
   function base(){
     var m = location.pathname.match(/^(.*)\/[^\/]*$/);
@@ -949,6 +949,155 @@ a.opc{text-decoration:none;display:block}
   z-index:260;display:none;padding:10px 14px;border-radius:12px;background:#0b7a3f;color:#fff;
   font-size:13px;box-shadow:0 6px 20px rgba(0,0,0,.28);cursor:pointer}
 #newTip.on{display:block}
+
+/* ================= 视觉统一：对齐 fp 报告页（白底卡片 / 细边框 / 统一圆角 / 双列适配） ================= */
+.aurora,.grain{display:none!important}
+
+:root{
+  --op1:#3f6fd8; --op2:#6b96e8; --op3:#9cbbef; --op1d:#2f5db8;
+  --bg1:#f7f8fa; --bg2:#f7f8fa; --bg3:#ffffff;
+  --glass:#ffffff; --glass2:#fbfcfd; --glass3:#f2f5fa;
+  --bd:#e6e9ef; --bd2:#d7dde7;
+  --tx:#1e2733; --tx2:#5f6b7a; --tx3:#8d97a5;
+  --ac:var(--op1); --ac2:var(--op1); --ac3:var(--op3); --ac4:var(--op1);
+  --ac2t:var(--op1); --ac3t:var(--op1);
+  --ok:#3f8060; --warn:#8a6114; --bad:#b23b4b;
+  --sh:0 1px 2px rgba(31,45,66,.04); --sh2:0 10px 26px rgba(31,45,66,.09);
+  --r:12px; --r2:10px; --blur:0px;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --soft1:rgba(63,111,216,.10); --soft2:rgba(75,143,107,.12);
+  --softb1:rgba(63,111,216,.28); --softb2:rgba(75,143,107,.30);
+}
+[data-op="unicom"]{ --op1:#e2231a; --op2:#ff7a45; --op3:#ffb199; --op1d:#c4160c; }
+[data-op="telecom"]{ --op1:#0057b8; --op2:#00a0e9; --op3:#4ad3c8; --op1d:#004494; }
+[data-op="broadnet"]{ --op1:#c8102e; --op2:#ff4d6d; --op3:#ff9bb0; --op1d:#a50c24; }
+[data-theme="light"]{
+  --bg1:#f7f8fa; --bg2:#f7f8fa; --bg3:#ffffff;
+  --glass:#ffffff; --glass2:#fbfcfd; --glass3:#f2f5fa;
+  --bd:#e6e9ef; --bd2:#d7dde7;
+  --tx:#1e2733; --tx2:#5f6b7a; --tx3:#8d97a5;
+  --ac:var(--op1); --ac2:var(--op1); --ac3:var(--op3); --ac4:var(--op1);
+  --ac2t:var(--op1); --ac3t:var(--op1);
+  --ok:#3f8060; --warn:#8a6114; --bad:#b23b4b;
+  --sh:0 1px 2px rgba(31,45,66,.04); --sh2:0 10px 26px rgba(31,45,66,.09);
+}
+[data-theme="dark"]{
+  --bg1:#0f1620; --bg2:#0f1620; --bg3:#16202c;
+  --glass:#151f2b; --glass2:#1a2532; --glass3:#22303f;
+  --bd:rgba(255,255,255,.09); --bd2:rgba(255,255,255,.16);
+  --tx:#e7eef7; --tx2:#a7b5c6; --tx3:#778596;
+  --ac:#3f6fd8; --ac2:#3f6fd8; --ac3:#9cbbef; --ac4:#3f6fd8;
+  --ac2t:#3f6fd8; --ac3t:#9cbbef;
+  --ok:#5fbb8e; --warn:#e0b355; --bad:#f08a9b;
+  --sh:0 1px 2px rgba(0,0,0,.35); --sh2:0 10px 26px rgba(0,0,0,.45);
+}
+
+body{background:var(--bg1);color:var(--tx)}
+.glass{backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:var(--sh)}
+
+/* 顶栏 / 标签 */
+.nav{margin:10px 0 0;padding:11px 16px;box-shadow:var(--sh)}
+.logo{background:var(--op1);box-shadow:none;border-radius:10px;width:34px;height:34px;font-size:14px}
+.brand-n{font-size:14.5px}
+.brand-s{font-size:10.5px;color:var(--tx3)}
+.btn{border-radius:9px;padding:8px 13px;font-size:12.5px;box-shadow:none;background:var(--glass2)}
+.btn:hover{transform:none;border-color:#c9d5e6;background:#f6f9fc;box-shadow:none}
+.btn:active{transform:scale(.98)}
+.btn.pri{background:var(--ac);border-color:var(--ac);color:#fff;box-shadow:0 1px 2px rgba(31,45,66,.10)}
+.btn.pri:hover{background:var(--op1d);border-color:var(--op1d)}
+[data-theme="dark"] .btn:hover{background:var(--glass3);border-color:var(--bd2)}
+.tabs{margin:10px 0 0;padding:5px;border-radius:12px;box-shadow:var(--sh)}
+.tab{padding:9px 14px;border-radius:8px;font-size:13px}
+.tab.on{color:var(--ac)}
+.ind{border-radius:8px;box-shadow:none;background:var(--glass3);border-color:var(--bd2)}
+[data-theme="light"] .ind{background:#eef3fc;border-color:#dbe6fa;box-shadow:none}
+
+/* 统计卡 */
+.stats{gap:12px;margin:12px 0}
+.stat{padding:16px;border-radius:12px;box-shadow:var(--sh);transition:none}
+.stat::before,.stat::after{display:none}
+.stat:hover{transform:none;box-shadow:var(--sh);border-color:var(--bd2)}
+.stat-ic{width:28px;height:28px;border-radius:8px;font-size:13px;margin-bottom:10px;background:var(--glass3);border:1px solid var(--bd)}
+.stat-n{font-size:26px;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
+.stat-l{font-size:11.5px;margin-top:4px;color:var(--tx3)}
+
+/* 面板 / 分布条 */
+.panel{padding:16px 18px;border-radius:12px;margin:12px 0;box-shadow:var(--sh)}
+.ph{margin-bottom:14px}
+.pt{font-size:14.5px}
+.ps{font-size:11px}
+.bars{gap:10px}
+.bar{grid-template-columns:minmax(96px,132px) 1fr 58px;gap:12px;font-size:12.5px}
+.bar-l{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--tx2)}
+.bar-t{height:8px;border:0;background:#eef1f6}
+[data-theme="dark"] .bar-t{background:rgba(255,255,255,.08)}
+.bar-v{font-family:var(--mono);font-size:12px;color:var(--tx2)}
+
+/* 筛选栏 / 列表卡片 */
+.tool{padding:12px;border-radius:12px;margin:12px 0;box-shadow:var(--sh)}
+.search input{border-radius:9px;padding:10px 12px 10px 36px;background:#fff}
+[data-theme="dark"] .search input{background:var(--glass2)}
+.search input:focus{border-color:#b9cdf0;box-shadow:0 0 0 3px rgba(63,111,216,.08)}
+.pick{border-radius:9px;padding:8px 12px;font-size:12.5px;background:#fff}
+[data-theme="dark"] .pick{background:var(--glass2)}
+.pick:hover{transform:none;border-color:#c3d3ec}
+.seg{border-radius:9px;background:var(--glass3)}
+.seg button{padding:7px 11px;border-radius:7px}
+.seg button.on{background:#fff;box-shadow:0 1px 2px rgba(31,45,66,.08)}
+[data-theme="dark"] .seg button.on{background:var(--glass2);box-shadow:none}
+.list{gap:12px;margin:12px 0}
+.card{border-radius:12px;padding:15px;box-shadow:var(--sh)}
+.card::after{display:none}
+.card:hover{transform:none;box-shadow:var(--sh2);border-color:#cfd9e8}
+.cpv{color:var(--ac);font-size:23px;font-family:var(--mono)}
+.tag{border-radius:7px}
+.pg{border-radius:9px;height:34px;min-width:34px}
+.pg:hover:not(:disabled){transform:none;border-color:#c3d3ec}
+.pg.on{background:var(--ac);border-color:var(--ac)}
+
+/* 变化历史时间线 */
+.tl{padding-left:22px}
+.tl::before{left:6px;background:linear-gradient(180deg,var(--ac),rgba(63,111,216,.12))}
+.ti{border-radius:12px;padding:14px;box-shadow:var(--sh)}
+.ti:hover{transform:none;box-shadow:var(--sh2)}
+.ti::before{left:-19px;top:19px;width:9px;height:9px;background:var(--ac);box-shadow:0 0 0 3px var(--bg1)}
+.ti-ts{font-family:var(--mono);font-size:11px;color:var(--tx3)}
+.chip{border-radius:7px}
+[data-theme="light"] .chip{background:#f7f9fc;border-color:var(--bd)}
+.ti-more{border-radius:9px}
+
+/* 弹窗 */
+.modal{border-radius:14px}
+.toast{border-radius:999px}
+
+/* 双列总览 / 响应式 */
+@media(min-width:1000px){
+  #v-overview.on{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+  #v-overview .stats{grid-column:1/-1;margin:0}
+  #v-overview .panel{margin:0}
+}
+@media(max-width:760px){
+  .wrap{padding:0 12px}
+  .nav{padding:9px 12px}
+  .nav-in{gap:8px}
+  .brand{flex:1 1 auto;min-width:0}
+  .brand-n{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .nav-act{order:2;margin-left:auto;gap:6px;flex-wrap:nowrap}
+  .nav-act .btn{padding:7px 10px;font-size:12px}
+  .nav-mid{order:3;flex:1 1 100%;justify-content:space-between;margin-top:2px;gap:8px}
+  .stats{gap:10px}
+  .stat{padding:14px;border-radius:11px}
+  .stat-n{font-size:23px}
+  .panel{padding:14px;border-radius:11px}
+  .bar{grid-template-columns:minmax(78px,106px) 1fr 50px;gap:9px;font-size:12px}
+  .tabs{margin:8px 0 0}
+  .tab{padding:8px 12px;font-size:12.5px}
+}
+@media(max-width:560px){
+  .list{grid-template-columns:1fr}
+  .tl{padding-left:18px}
+  .ti::before{left:-15px}
+}
 </style>
 </head>
 <body>
@@ -1086,7 +1235,8 @@ a.opc{text-decoration:none;display:block}
           <p>本页面展示中国移动「全网资费」及各省（默认北京）的公开资费资料，数据由自动监控程序定期抓取官网并存入代码仓库，再发布为静态网页。</p>
           <ul>
             <li><b>数据来源：</b>中国移动官网公开资费专区（北京 + 全国，31 省可选）</li>
-            <li><b>页面版本：</b>2026-09-27（看到这一行说明是最新版；看不到就是手机缓存，请清缓存或用无痕模式打开）</li>
+            <li><b>页面版本：</b>2026-11-15（看到这一行说明是最新版；看不到就是手机缓存，请清缓存或用无痕模式打开）</li>
+            <li><b>历史记录：</b>变更记录全量长期保留在仓库里、不做条数截断，页面上全部展示；抓取到的上架/下架一律计入，不再按日期阈值回退判定</li>
             <li><b>省份切换：</b>「省份资费」页可自助选择其他省份，默认北京；变化历史同样按省份标注</li>
             <li><b>更新方式：</b>自动定时抓取比对，有变化即刷新本页</li>
             <li><b>数据口径：</b>以官网「适用地区」「适用范围」字段为准，仅供参考</li>
@@ -1582,7 +1732,7 @@ function renderBars(box, dist){
                  "营销活动":"linear-gradient(90deg,var(--op3),var(--op2))" };
   box.innerHTML = rows.map(function(r){
     var pct = max ? (r.v / max * 100) : 0;
-    return '<div class="bar"><div class="bar-l">' + esc(r.label) + '</div>' +
+    return '<div class="bar"><div class="bar-l" title="' + esc(r.label) + '">' + esc(r.label) + '</div>' +
       '<div class="bar-t"><div class="bar-f" data-w="' + pct.toFixed(1) + '" style="background:' + (colors[r.t] || colors["套餐"]) + '"></div></div>' +
       '<div class="bar-v">' + fmt(r.v) + '</div></div>';
   }).join("");
@@ -1600,7 +1750,7 @@ function renderRank(){
   var box = document.getElementById("rankBars");
   box.innerHTML = arr.map(function(r){
     var pct = max ? (r.v / max * 100) : 0, on = r.key === state.prov;
-    return '<div class="bar"><div class="bar-l"' + (on ? ' style="color:var(--ac);font-weight:700"' : '') + '>' + esc(r.name) + '</div>' +
+    return '<div class="bar"><div class="bar-l" title="' + esc(r.name) + '"' + (on ? ' style="color:var(--ac);font-weight:700"' : '') + '>' + esc(r.name) + '</div>' +
       '<div class="bar-t"><div class="bar-f" data-w="' + pct.toFixed(1) + '" style="background:linear-gradient(90deg,var(--op1),var(--op2))"></div></div>' +
       '<div class="bar-v">' + fmt(r.v) + '</div></div>';
   }).join("");
@@ -1977,10 +2127,10 @@ function renderHistory(){
     }
     list.push({ h:h, hi:hi });
   });
-  hint.textContent = "共 " + list.length + " 次变更记录";
+  hint.textContent = "共 " + list.length + " 次变更记录（全部展示）";
   if(!list.length){ box.innerHTML = '<div style="color:var(--tx3);font-size:13px">暂无变更记录</div>'; return; }
   if(!HIST_INIT){
-    HIST_INIT = true; HIST_ALL = false; HIST_SHOW = 15;
+    HIST_INIT = true; HIST_ALL = false; HIST_SHOW = list.length;
     HIST_OPEN = {}; HIST_POPEN = {};
     for(var q0 = 0; q0 < list.length; q0++){ HIST_OPEN[list[q0].hi] = (q0 === 0); }
   }
@@ -1992,7 +2142,7 @@ function renderHistory(){
   box.innerHTML = html;
   if(tg){ tg.textContent = HIST_ALL ? "全部收起" : "全部展开"; }
 }
-function histShowMore(){ HIST_SHOW += 20; renderHistory(); }
+function histShowMore(){ HIST_SHOW += 200; renderHistory(); }
 function histToggleAll(){
   HIST_ALL = !HIST_ALL;
   var tl = document.getElementById("tlBox");
@@ -2177,6 +2327,38 @@ function toast(msg){
   t.textContent = msg; t.classList.add("on");
   clearTimeout(toastTimer);
   toastTimer = setTimeout(function(){ t.classList.remove("on"); }, 2200);
+}
+
+/* 复制到剪贴板：部分 WebView 会拒绝 navigator.clipboard（只要在 https 下存在但 writeText 报 NotAllowedError），
+   丢失降级就会只能弹一遍“复制失败”。这里依次尝试 Async Clipboard → execCommand → 手动选中。 */
+function copyText(text, okMsg){
+  var s = (text === null || text === undefined) ? "" : String(text);
+  if(!s){ toast("没有可复制的内容"); return; }
+  var fallback = function(){
+    var ta = document.createElement("textarea");
+    ta.value = s;
+    ta.setAttribute("readonly", "");
+    ta.style.cssText = "position:fixed;top:0;left:0;width:1px;height:1px;padding:0;border:0;opacity:0;z-index:-1";
+    document.body.appendChild(ta);
+    var range = document.createRange();
+    range.selectNodeContents(ta);
+    var sel = window.getSelection();
+    if(sel){ sel.removeAllRanges(); sel.addRange(range); }
+    ta.select(); ta.setSelectionRange(0, s.length);
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch(e){ ok = false; }
+    document.body.removeChild(ta);
+    if(sel){ sel.removeAllRanges(); }
+    if(ok){ toast(okMsg || "已复制"); return; }
+    toast("自动复制被拦截，已选中文本，请长按复制");
+  };
+  try {
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(s).then(function(){ toast(okMsg || "已复制"); }, fallback);
+      return;
+    }
+  } catch(e){ /* 降级 */ }
+  fallback();
 }
 
 /* ---------- 详情弹窗 ---------- */
@@ -3713,10 +3895,7 @@ document.addEventListener("click", function(e){
   if(el.id === "hmX" || el.id === "hmOk"){ closeHist(); return; }
   if(el.id === "hmMask"){ closeHist(); return; }
   if(el.id === "hmCopy" && curHist){
-    var htxt = curHist.name || "";
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(htxt).then(function(){ toast("已复制业务名称"); }, function(){ toast("复制失败"); });
-    } else { toast("当前浏览器不支持复制"); }
+    copyText(curHist.name || "", "已复制业务名称");
     return;
   }
   if(el.id === "pkX"){ closePicker(); return; }
@@ -3741,10 +3920,7 @@ document.addEventListener("click", function(e){
     return;
   }
   if(el.id === "mCopy" && curDetail){
-    var txt = curDetail.name || "";
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(txt).then(function(){ toast("已复制资费名称"); }, function(){ toast("复制失败"); });
-    } else { toast("当前浏览器不支持复制"); }
+    copyText(curDetail.name || "", "已复制资费名称");
     return;
   }
   /* 运营商卡片 */

@@ -124,6 +124,9 @@ def _write_history_split(data_dir, history):
         if not ts:
             continue
         slim = {"ts": ts}
+        if rec.get("recovered"):
+            # 恢复自 hist 分片的历史记录：字段明细在分片里，靠该标记避开误报清理
+            slim["recovered"] = True
         det = {}
         for sec, blk in rec.items():
             if sec == "ts" or not isinstance(blk, dict):
@@ -392,105 +395,14 @@ def _structure_upgraded(old_items, new_items):
     return ok is not None and nk is not None and ok != nk
 
 
-def _still_on_sale(item, today):
-    """条目是否「仍在售」——下线日期在今天或之后。
-
-    用于识别假下架：源站是随机子集采样，本轮没采到 ≠ 业务下架。
-    真下架的业务其「下线日期」必然已过；若下线日期还在未来
-    （如 2045 年），说明只是这轮没采到。
-    无「下线日期」字段（电信/广电）时返回 False，即不参与过滤。
-    """
-    fields = (item or {}).get("fields") or {}
-    v = str(fields.get("下线日期") or "").strip()
-    if not v:
-        return False
-    m = re.match(r'(\d{4})年(\d{1,2})月(\d{1,2})日', v)
-    if not m:
-        return False
-    try:
-        d = datetime.date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
-    except Exception:
-        return False
-    return d >= today
-
-
-def filter_sampling_removed(sec, removed, today):
-    """剔除因采样缺失被误判为下架的条目（下线日期仍在未来）。
-
-    仅对「本轮条数净减少」时启用：若本轮反而变多，说明采样充分，
-    removed 更可能是真下架，不过滤以免漏报。
-    """
-    if not removed:
-        return removed, 0
-    keep = [r for r in removed if not _still_on_sale(r, today)]
-    dropped = len(removed) - len(keep)
-    if dropped:
-        print(f"  [采样校验] 板块 {sec} 剔除 {dropped} 条「下线日期仍在未来」的假下架"
-              f"（原 {len(removed)} 条，保留 {len(keep)} 条真下架）")
-    return keep, dropped
-
-
-# 补录判据（与 clean_fake_added.py 同源，阈值放宽到 30 天）：
-# 抓取每天多轮，真上架的「上线日期」必然就在本轮或最近几天；而漏采补录的
-# 存量业务上线日期往往在数月甚至数年前。2 天过严——江西 09-23 上线的中秋
-# 国庆假日流量包（09-28 才采到）会被误杀，故放宽为 30 天。
-STALE_ONLINE_DAYS = int(os.getenv("STALE_ONLINE_DAYS") or "30")
-# 陈年停售硬判据：下线日期已过期的业务绝无可能"新上架"，一旦出现在 added
-# 里必然是源站把历史停售条目补录回来（河南 09-28 的 139 条中 137 条属此类）。
-REJECT_EXPIRED_ADDED = os.getenv("REJECT_EXPIRED_ADDED", "1").strip() != "0"
-
-
-def _parse_item_date(item, key):
-    """解析条目字段（上线日期/下线日期）为 date；无或不可解析返回 None。"""
-    fields = (item or {}).get("fields") or {}
-    v = str(fields.get(key) or "").strip()
-    if not v:
-        return None
-    m = re.search(r"(\d{4})\s*[-/年.]\s*(\d{1,2})\s*[-/月.]\s*(\d{1,2})", v)
-    if not m:
-        return None
-    try:
-        return datetime.date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
-    except Exception:
-        return None
-
-
-def filter_stale_added(sec, added, today):
-    """剔除「存量补录」冒充的新增。
-
-    源站按分类随机子集采样：上一轮没采到的存量业务，本轮采到即被 diff 判成
-    "新增"。实测河南 09-28 一次冒出 139 条"新增"，上线日期集中在 2019~2025 年、
-    137 条下线日期早已过期 —— 全部是上一轮漏采、本轮补回，不是新上架。
-    两条判据（命中其一即判补录）：
-      A 硬：下线日期已过期 —— 过期业务不可能新上架，必是陈年补录
-      B 软：上线日期早于记录日 STALE_ONLINE_DAYS 天以上 —— 这才上架不合常理
-    两条都取不到日期时保留，宁可多报也不漏真新增。
-    """
-    if not added:
-        return added, []
-    real, restored = [], []
-    for a in added:
-        off = _parse_item_date(a, "下线日期")
-        on = _parse_item_date(a, "上线日期")
-        stale = False
-        if REJECT_EXPIRED_ADDED and off is not None and off < today:
-            stale = True                      # A：早已下线，不可能新上架
-        elif on is not None and (today - on).days > STALE_ONLINE_DAYS:
-            stale = True                      # B：上线太久，属漏采补录
-        (restored if stale else real).append(a)
-    if restored:
-        print(f"  [新增校验] 板块 {sec} 剔除 {len(restored)} 条存量补录"
-              f"（原 {len(added)} 条，保留 {len(real)} 条真新增）")
-    return real, restored
-
-
 def clean_upgrade_false_records(history, st):
     """剔除字段结构升级造成的全量误报记录：
     某条记录里某板块 modified 数量 >= 该板块业务总量的 90%，几乎不可能真实发生，
     判定为新增字段（如"其他说明"）升级时快照整体 diff 产生的假数据，予以清理。"""
     cleaned = []
     for rec0 in history:
-        if not isinstance(rec0, dict):
+        if not isinstance(rec0, dict) or rec0.get("recovered"):
+            # recovered：从 data/hist 分片恢复的历史记录，字段明细在分片里而非摘要里
             cleaned.append(rec0)
             continue
         suspicious = False
@@ -525,7 +437,7 @@ def clean_shell_modified_records(history):
     """
     cleaned = []
     for rec0 in history:
-        if not isinstance(rec0, dict):
+        if not isinstance(rec0, dict) or rec0.get("recovered"):
             cleaned.append(rec0)
             continue
         rec = dict(rec0)          # 浅拷贝，避免污染上游 history
@@ -568,7 +480,6 @@ def same_change(a, b):
 
 
 # 板块条数骤降阈值已取消：抓取结果一律如实入库（有什么就是有什么）。
-# 真实下架改由 filter_sampling_removed 按下线日期逐条核验，不再看条数比例。
 
 
 def is_reverse_change(a, b):
@@ -685,8 +596,7 @@ def main():
             continue
 
         # 抓取结果如实入库：本轮抓到多少就写多少，不再按条数比例保留旧数据。
-        # 条数骤减可能是源站限流，但也可能是真实批量下架，一律以抓到的为准；
-        # 真实下架由下方 filter_sampling_removed 按下线日期逐条核验。
+        # 条数骤减可能是源站限流，但也可能是真实批量下架，一律以抓到的为准。
         if new_j is not None and os.path.exists(src):
             shutil.copy(src, os.path.join(DATA, sec + ".json"))
         st[sec] = stat_section(sec)
@@ -740,9 +650,6 @@ def main():
         print(f"[清理] 剔除 {_pre_shell - len(history)} 条空壳 modified 误报记录")
     rec = {"ts": now}
     has_change = False
-    # 采样校验用的「今天」取北京时间，与 now 同口径
-    _today = (datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8)))
-              .date())
     diff_details = {}   # sec -> {name: [{field,from,to}, ...]} 供回填旧记录
     for sec in sections:
         j, items, _dist = st[sec]
@@ -758,14 +665,9 @@ def main():
         #   故改为只抑制 modified，保留 added/removed。
         if _structure_upgraded(old_items, items):
             # 字段结构升级时只抑制「字段口径变化」造成的噪音 modified；
-            # 但假下架过滤与改名配对照常执行——2026-10-04 一轮正是因这里
-            # 跳过了两者，误报 2564 条假下架、并把 78 条改名拆成删+增。
+            # 改名配对与新增/下架照实记录，不按日期改判。
             _a, _r, _m, _md, _mb, _ma = pair_renamed_only(old_items, items)
             _noise = len(_field_noise(old_items, items))
-            _r, _drop = filter_sampling_removed(sec, _r, _today)
-            if _drop:
-                print(f"  [采样校验] 板块 {sec} 剔除假下架 {_drop} 条"
-                      f"（下线日期未到，判定为仍在架）")
             print(f"  [升级] 板块 {sec} 字段结构变化：抑制 {_noise} 条字段噪音 modified，"
                   f"保留改名 {len(_m)} / 新增 {len(_a)} / 下架 {len(_r)}")
             if _a or _r or _m:
@@ -794,19 +696,8 @@ def main():
             else:
                 rec[sec] = {"note": "baseline"}
             continue
-        # 真实下架以字段核验为准：filter_sampling_removed 会剔除「下线日期仍在未来」
-        # 的假下架，不再用条数比例拦截本轮 diff。
         added, removed, modified, modified_details, mod_before, mod_after = diff_items(old_items, items)
-        # 采样缺失二次校验：本轮净减少时，剔除「下线日期仍在未来」的假下架。
-        # 河南曾一次性假下架 1613 条（96% 下线日期在未来），靠条数阈值（0.7）
-        # 只能拦住大幅缩水，小幅缩水仍会漏网，故再按业务字段逐条核验。
-        # 采样缺失二次校验（恒执行）：原实现只在「本轮净减少」时启用，理由是
-        # 净增代表采样充分。但江西 09-28 本轮净增（+84/-14）时仍出现 14 条
-        # 「下线日期 2026-12 ~ 2030 年」的假下架 —— 净增不代表采样充分，
-        # 源站子集采样下增减与充分性无关。故去掉该限制。
-        removed, _dropped = filter_sampling_removed(sec, removed, _today)
-        # 新增对称核验：剔除存量补录，避免上一轮漏采的业务冒充本轮上架
-        added, _restored = filter_stale_added(sec, added, _today)
+        # 抓取结果全部生效：不按下线/上线日期回退或改判任何条目
         if added or removed or modified:
             has_change = True
         rec[sec] = {
@@ -817,14 +708,6 @@ def main():
             "removed_names": [name_of(r) for r in removed],
             "modified_names": [name_of(m) for m in modified],
         }
-        if _restored:
-            # 补录不计入新增、不参与推送，仅留名供排查；
-            # 同时保留完整字段快照，前端详情弹窗才能展示资费内容
-            rec[sec]["restored"] = len(_restored)
-            rec[sec]["restored_names"] = [name_of(x) for x in _restored][:200]
-            rec[sec]["restored_details"] = {
-                name_of(x): clean_fields(x.get("fields") or {}) for x in _restored[:200]
-            }
         if added:
             rec[sec]["added_details"] = {
                 name_of(a): clean_fields(a.get("fields") or {}) for a in added
@@ -868,7 +751,6 @@ def main():
 
     if has_change and not (history and same_change(history[-1], rec)):
         history.append(rec)
-        history = history[-60:]
     # history.json 只写摘要，详情拆到 data/hist/<ts>.json 按需加载。
     # 原来单文件 15MB，前端一次性下载 + 解析导致「变化历史」打开卡十几分钟。
     _write_history_split(DATA, history)
