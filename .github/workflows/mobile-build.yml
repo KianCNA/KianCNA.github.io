@@ -263,7 +263,15 @@ jobs:
               echo "[warn] push 失败，重新对齐后重试 ($i/5)"
               git fetch origin main
               git reset --hard FETCH_HEAD
-              cp -a /tmp/art/data/. ./data/ 2>/dev/null || true
+              # 本次产物可能出自「任务启动时的旧代码」，history.json 直接覆盖会把线上
+              # 已累积/已恢复的历史回退（2026-11-15 曾因此从 250 条退回 60 条），
+              # 故 history 只做并集，其余数据文件照常覆盖。
+              for f in /tmp/art/data/*.json; do
+                b=$(basename "$f"); [ "$b" = "history.json" ] && continue
+                cp -f "$f" ./data/ 2>/dev/null || true
+              done
+              cp -a /tmp/art/data/hist/. ./data/hist/ 2>/dev/null || true
+              python3 scripts/merge_history.py data/history.json /tmp/art/data/history.json || true
               cp -a /tmp/art/snap/. pipelines/mobile/snapshots/ 2>/dev/null || true
               git add -A
               git commit -q -m "mobile fetch+build $(date -u +%FT%TZ) retry$i" || true
