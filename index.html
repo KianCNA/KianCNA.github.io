@@ -22,7 +22,7 @@
 /* ===== 老入口自升级（2026-10-19）=====
    旧 HTML 被 CDN 缓存时，靠它自己跳到最新版：
    请求 version.json 带时间戳（CDN 必回源），版本号不同则 replace 到带时间戳的新 URL。 */
-var BUILD_VER = "20261115a";
+var BUILD_VER = "20261115b";
 (function(){
   function base(){
     var m = location.pathname.match(/^(.*)\/[^\/]*$/);
@@ -2127,7 +2127,8 @@ function renderHistory(){
     }
     list.push({ h:h, hi:hi });
   });
-  hint.textContent = "共 " + list.length + " 次变更记录（全部展示）";
+  hint.textContent = "共 " + list.length + " 次变更记录（全部展示" +
+    (list.length ? " · 最早 " + String(list[list.length - 1].h.ts || "").slice(0, 10) : "") + "）";
   if(!list.length){ box.innerHTML = '<div style="color:var(--tx3);font-size:13px">暂无变更记录</div>'; return; }
   if(!HIST_INIT){
     HIST_INIT = true; HIST_ALL = false; HIST_SHOW = list.length;
