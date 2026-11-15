@@ -78,3 +78,14 @@ fork 本项目后，填入**你自己的**凭据，资费变化就能推送到**
 > 说明：联通 / 电信 / 广电的抓取 workflow（`unicom-fetch.yml`、`telecom-gb-fetch.yml`、
 > `telecom-announce.yml`）已删除，三家的抓取与部署永久停用，仅保留历史数据快照。
 > probe / verify / diag-dns 等诊断类一次性工作流已删除，避免触发失败产生通知邮件。
+
+## UI 保护约定
+
+自动化任务只允许提交**数据产物**（`data/`、`pipelines/mobile/snapshots/`、`tariff-fetch-source.zip`），
+界面文件（`index.html`、`nav.html`、`push-center.html`、`style.css`、`app.js`、`version.json` 等）
+只由人工改动：
+
+- 各工作流的提交步骤一律使用带路径限定的 `git add`，不用 `git add -A`；
+- 提交前跑 `python3 scripts/guard_ui.py`，一旦发现界面文件被改动就还原并打日志；
+- `history.json` 用 `scripts/merge_history.py` 做并集，只增不减；
+- 人工改动界面时先 `git pull --rebase`，不要强制推送。

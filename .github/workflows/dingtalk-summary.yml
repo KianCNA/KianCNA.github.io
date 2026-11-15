@@ -362,7 +362,9 @@ jobs:
           fi
           git config user.name "tariff-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
+          # UI 保护：自动化只提交数据产物，界面文件被改动则先还原
+          python3 scripts/guard_ui.py || true
+          git add -A data pipelines/mobile/snapshots
           if git diff --cached --quiet; then
             echo "无变化"
           else
@@ -376,7 +378,8 @@ jobs:
               for d in data; do
                 [ -d "/tmp/art/$d" ] && { rm -rf "$d"; cp -a "/tmp/art/$d" "./$d"; }
               done
-              git add -A
+              python3 scripts/guard_ui.py || true
+              git add -A data pipelines/mobile/snapshots
               git commit -q -m "notify fetch+push retry$i $(date -u +%FT%TZ)" || true
               sleep 8
             done

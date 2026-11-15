@@ -21,7 +21,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A
+          python3 scripts/guard_ui.py || true
+          git add -A data backfill_report.txt
           if git diff --cached --quiet; then echo "无改动"; else
             git commit -m "chore: 恢复 history.json 缩进格式 + 回填校验报告"
             git push
