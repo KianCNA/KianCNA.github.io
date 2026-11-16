@@ -1,7 +1,27 @@
 {
- "updated": "2026-11-16 14:11",
+ "updated": "2026-11-16 16:11",
  "count": 176,
  "items": [
+  {
+   "id": "56185",
+   "prov": "jiangsu",
+   "prov_name": "江苏",
+   "title": "2026年11月24日系统升级公告",
+   "date": "2026-11-16",
+   "summary": "尊敬的客户： 为给客户提供更优质的服务，我公司将于2026年11月24日0:00至6:00进行相关网络调整工作，届时可能会影响全省移动用户的语音、手机上网业务的",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56185.html",
+   "status": "on"
+  },
+  {
+   "id": "56184",
+   "prov": "jiangsu",
+   "prov_name": "江苏",
+   "title": "2026年11月20日系统升级公告",
+   "date": "2026-11-16",
+   "summary": "尊敬的客户： 为给客户提供更优质的服务，我公司将于2026年11月20日0:00至6:00进行相关网络调整工作，届时可能会影响全省移动用户的语音、手机上网、互联",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56184.html",
+   "status": "on"
+  },
   {
    "id": "56179",
    "prov": "shanxi",
@@ -440,26 +460,6 @@
    "date": "2026-10-31",
    "summary": "尊敬的客户： 为给客户提供更优质的服务，我公司将于2026年11月5日22:00至次日10:00进行业务支撑系统升级，调整期间，全省营业系统、10086系统业务",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56105.html",
-   "status": "on"
-  },
-  {
-   "id": "56104",
-   "prov": "jiangsu",
-   "prov_name": "江苏",
-   "title": "2026年11月3日系统升级公告",
-   "date": "2026-10-31",
-   "summary": "尊敬的客户： 为给客户提供更优质的服务，我公司将于2026年11月3日0:00至6:00进行相关网络调整工作，届时可能会影响全省用户的语音、上网业务的正常使用。",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56104.html",
-   "status": "on"
-  },
-  {
-   "id": "56103",
-   "prov": "jiangsu",
-   "prov_name": "江苏",
-   "title": "2026年11月4日系统升级公告",
-   "date": "2026-10-31",
-   "summary": "尊敬的客户： 为给客户提供更优质的服务，我公司将于2026年11月4日0:00至6:00进行相关网络调整工作，届时可能会影响全省移动用户的语音、手机上网、互联网",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56103.html",
    "status": "on"
   },
   {
@@ -1839,10 +1839,10 @@
   {
    "section": "jiangsu",
    "name": "江苏",
-   "count": 4325,
-   "active": 4325,
+   "count": 4327,
+   "active": 4327,
    "removed": 0,
-   "updated": "2026-11-11 17:28"
+   "updated": "2026-11-16 16:11"
   },
   {
    "section": "zhejiang",
