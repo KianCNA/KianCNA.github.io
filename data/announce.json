@@ -1,7 +1,17 @@
 {
- "updated": "2026-11-16 23:46",
+ "updated": "2026-11-17 01:37",
  "count": 176,
  "items": [
+  {
+   "id": "56192",
+   "prov": "tianjin",
+   "prov_name": "天津",
+   "title": "关于算力豆产品向MobileAI产品迁移的公告",
+   "date": "2026-11-17",
+   "summary": "尊敬的客户： 为给您提供更优质的Token服务，中国移动计划自2026年11月13日起有序关停算力豆产品，2026年12月13日完成全部存量用户向全新Mobil",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/tj/index_220_220_detail_56192.html",
+   "status": "on"
+  },
   {
    "id": "56185",
    "prov": "jiangsu",
@@ -993,16 +1003,6 @@
    "status": "on"
   },
   {
-   "id": "55651",
-   "prov": "tianjin",
-   "prov_name": "天津",
-   "title": "关于面向移动客户提供高频骚扰电话拦截、短信免打扰服务的公告",
-   "date": "2026-08-14",
-   "summary": "尊敬的客户: 您好！ 为切实落实《短信接收意愿登记服务实施方案》及《通信短信息服务管理规定》相关要求，净化通信环境，为广大客户提供更为优质的移动通信服务，我公司",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/tj/index_220_220_detail_55651.html",
-   "status": "on"
-  },
-  {
    "id": "55633",
    "prov": "jiangxi",
    "prov_name": "江西",
@@ -1775,10 +1775,10 @@
   {
    "section": "tianjin",
    "name": "天津",
-   "count": 43,
-   "active": 43,
+   "count": 44,
+   "active": 44,
    "removed": 0,
-   "updated": "2026-11-02 15:47"
+   "updated": "2026-11-17 01:37"
   },
   {
    "section": "hebei",
