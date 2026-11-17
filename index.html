@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="light" data-op="mobile">
 <head>
+<script>
+/* 主题跟随系统：只读 prefers-color-scheme，读不到则日间模式；不提供手动切换 */
+(function(){
+  var dark = false;
+  try{ dark = !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches); }catch(e){}
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+})();
+</script>
 <!-- SW-KILL: 注销旧 Service Worker 并清空本地缓存（旧 SW 缓存优先会把旧页面锁死） -->
 <script>
 (function(){
@@ -1101,6 +1109,36 @@ body{background:var(--bg1);color:var(--tx)}
   .tl{padding-left:18px}
   .ti::before{left:-15px}
 }
+
+/* ================= 动效与点击反馈（对齐根站） ================= */
+:root{--ease:cubic-bezier(.22,.9,.3,1)}
+/* 入场只用位移，不做透明度：避免截帧/后台标签下内容“消失” */
+@keyframes cin{from{transform:translateY(6px)}to{transform:none}}
+@keyframes vin{from{transform:translateY(6px)}to{transform:none}}
+.card{animation:cin .32s var(--ease) backwards}
+.view.on{animation:vin .32s var(--ease)}
+
+/* 悬停微浮起、按下回弹 */
+.card,.ti{transition:transform .18s var(--ease),box-shadow .18s var(--ease),border-color .18s var(--ease)}
+.card:hover{transform:translateY(-2px)}
+.card:active{transform:scale(.995)}
+.ti:hover{transform:translateY(-1px)}
+.ti:active{transform:scale(.997)}
+.btn,.tab,.pick,.chip,.pg,.seg button,.an-refresh,.pspill{transition:transform .14s var(--ease),background .15s,border-color .15s,color .15s,box-shadow .15s}
+.btn:active,.pick:active,.pg:active,.chip:active,.seg button:active,.an-refresh:active,.pspill:active{transform:scale(.96)}
+
+/* 焦点环：键盘可达，鼠标点按不出现默认框 */
+.btn:focus-visible,.tab:focus-visible,.pick:focus-visible,.chip:focus-visible,.pg:focus-visible,.seg button:focus-visible,.an-refresh:focus-visible,.pspill:focus-visible,.mx:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
+
+/* 顶栏滚动阴影 */
+.nav{transition:box-shadow .2s var(--ease),border-color .2s var(--ease)}
+.nav.scrolled{box-shadow:var(--sh2)!important}
+
+@media (prefers-reduced-motion:reduce){
+  .card,.ti,.stat,.btn,.tab,.pick,.chip,.pg,.seg button,.nav,.toast,.an-refresh{transition:none!important}
+  .card,.view.on{animation:none!important}
+}
 </style>
 </head>
 <body>
@@ -1126,7 +1164,6 @@ body{background:var(--bg1);color:var(--tx)}
       </div>
       <div class="nav-act">
         <button class="btn" id="opBtn" data-act="op"><span id="opBtnTxt">移动</span> ▾</button>
-        <button class="btn" data-act="theme">深色</button>
       </div>
     </div>
   </header>
@@ -3852,15 +3889,6 @@ document.addEventListener("click", function(e){
   }
   var act = (b && b.getAttribute("data-act")) || (el.getAttribute ? el.getAttribute("data-act") : null);
   if(act){
-    if(act === "theme"){
-      var root = document.documentElement;
-      var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-      root.setAttribute("data-theme", next);
-      var tb = document.querySelector('[data-act="theme"]');
-      if(tb){ tb.textContent = next === "dark" ? "浅色" : "深色"; }
-      toast(next === "dark" ? "已切换到深色模式" : "已切换到浅色模式");
-      return;
-    }
     if(act === "op"){ renderOpGrid(); document.getElementById("opMask").classList.add("on"); return; }
   }
   /* 关闭按钮 */
@@ -4347,6 +4375,28 @@ function __startBoot(){
     document.addEventListener("DOMContentLoaded", bind);
   else bind();
   setTimeout(bind, 800);
+})();
+
+/* ③ 主题跟随系统 + 顶栏滚动阴影（对齐根站交互） */
+(function(){
+  if(window.matchMedia){
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    var apply = function(dark){ document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light'); };
+    var onChange = function(e){ apply(!!e.matches); };
+    if(mq.addEventListener){ mq.addEventListener('change', onChange); }
+    else if(mq.addListener){ mq.addListener(onChange); }
+  }
+  var nav = document.querySelector('.nav');
+  if(nav){
+    var ticking = false;
+    var sync = function(){ nav.classList.toggle('scrolled', window.scrollY > 4); };
+    window.addEventListener('scroll', function(){
+      if(ticking) return;
+      ticking = true;
+      (window.requestAnimationFrame || function(f){ setTimeout(f, 16); })(function(){ sync(); ticking = false; });
+    }, { passive: true });
+    sync();
+  }
 })();
 
 </script>
