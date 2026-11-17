@@ -436,12 +436,19 @@ def _fetch_board(sec: str, attr: str, code: str, opener) -> tuple:
     return list(merged.values()), errors, failed_keys
 
 
-def _pack(sec: str, items: list, errors: list) -> dict:
+def _pack(sec: str, items: list, errors: list, failed_keys=None) -> dict:
+    """打包单板块抓取结果。
+
+    failed_categories 记录本轮哪些分类（type1,type2）彻底抓空。下游靠它区分
+    「源站这批业务真没了」和「这个接口本轮没返回」，避免把漏采记成全量下架。
+    """
     return {
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
         "section": sec,
         "items": items,
         "error": ("；".join(errors)) if errors else None,
+        "failed_categories": sorted(failed_keys or []),
+        "categories_total": len(TYPE_COMBOS),
     }
 
 
@@ -452,8 +459,8 @@ def fetch_section(sec: str, prov_code: str = "731") -> dict:
     else:
         attr, code = "2", prov_code
     opener = _build_opener()
-    items, errors, _failed = _fetch_board(sec, attr, code, opener)
-    return _pack(sec, items, errors)
+    items, errors, failed = _fetch_board(sec, attr, code, opener)
+    return _pack(sec, items, errors, failed)
 
 
 def fetch_all() -> dict:
@@ -478,14 +485,15 @@ def fetch_all() -> dict:
             if sec != SECTIONS[-1]:
                 time.sleep(SECTION_INTERVAL)
 
-            result[sec] = _pack(sec, items, errors)
+            result[sec] = _pack(sec, items, errors, failed_keys)
             status = (f"（{len(failed_keys)} 个分类抓取失败，已尽力重试）"
                       if failed_keys else "")
             print(f"[fetch] 板块 {sec} 抓取 {len(items)} 条{status}")
     except Exception as e:
         print(f"[fetch] 抓取整体失败: {e}")
+        all_cats = [f"{a},{b}" for a, b in TYPE_COMBOS]
         for sec in SECTIONS:
-            result[sec] = _pack(sec, [], [str(e)])
+            result[sec] = _pack(sec, [], [str(e)], all_cats)
     return result
 
 

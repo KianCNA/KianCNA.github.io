@@ -1,10 +1,22 @@
 # 快照模块：存储历史数据并对比变化
 import json
 import os
+import re
 import time
 
 SNAPSHOT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "snapshots")
 os.makedirs(SNAPSHOT_DIR, exist_ok=True)
+
+# 某业务连续多少轮没采到才算真下架。默认 2 轮（约 4 小时）。
+# 源站按「IP + UA 配额」返回子集，单轮漏采很常见；只缺一轮就记下架，
+# 下一轮又整批「新增」回来，正是「全部下架 → 全部上架」反复跳变的根因。
+MISSING_ROUNDS = max(1, int(os.getenv("MISSING_ROUNDS") or "2"))
+_STATE_PATH = os.path.join(SNAPSHOT_DIR, "_missing.json")
+
+# 归属/资费类型 → 抓取分类（与 fetcher.TYPE_COMBOS 的 (type1,type2) 对应）
+_OWN_TO_T1 = {"个人资费": "1", "政企资费": "2"}
+_TYPE_TO_T2 = {"套餐": "1", "加装包": "2", "营销活动": "3"}
+_DATE_RE = re.compile(r"(\d{4})\D{0,3}(\d{1,2})\D{0,3}(\d{1,2})")
 
 
 def _snapshot_path(section: str) -> str:
@@ -141,31 +153,175 @@ def diff(old_items: list, new_items: list) -> dict:
             modified.append({"name": _parse_name(new[ni]), "old": _mobile_fields(old[oi]), "new": _mobile_fields(new[ni]), "changed": changed})
     return {"added": added, "removed": removed, "modified": modified, "restored": []}
 
-def check_section(section: str, new_data: dict):
+def _state_load():
+    try:
+        with open(_STATE_PATH, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
+def _state_save(state):
+    try:
+        tmp = _STATE_PATH + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(state, f, ensure_ascii=False, separators=(",", ":"))
+        os.replace(tmp, _STATE_PATH)
+    except Exception as e:
+        print(f"  [state] 连续缺失计数写入失败: {e}")
+
+
+def _key_of(item):
+    return json.dumps(_mobile_key(item), ensure_ascii=False, separators=(",", ":"))
+
+
+def _cat_of(item):
+    """从条目字段推回抓取分类 (type1,type2)，如 "1,2"。推不出返回空串。"""
+    f = _mobile_fields(item)
+    t1 = _OWN_TO_T1.get(_norm(f.get("归属")))
+    t2 = _TYPE_TO_T2.get(_norm(f.get("资费类型")))
+    return f"{t1},{t2}" if t1 and t2 else ""
+
+
+def _off_date(item):
+    """解析业务自带的「下线日期」，返回 YYYY-MM-DD；无/无法识别返回空串。"""
+    f = _mobile_fields(item)
+    raw = _norm(f.get("下线日期"))
+    if not raw:
+        return ""
+    m = _DATE_RE.search(raw)
+    if not m:
+        return ""
+    y, mo, d = m.groups()
+    try:
+        return "%04d-%02d-%02d" % (int(y), int(mo), int(d))
+    except ValueError:
+        return ""
+
+
+def merge_failed_categories(prev_items, new_items, failed_keys):
+    """把基线里属于「本轮抓空分类」的条目补回去。
+
+    接口没返回数据不等于这批业务下架；不补齐就会在 diff 里变成整分类的下架，
+    下一轮接口恢复又整批「新增」。返回 (补齐后的列表, 补齐条数)。
+    """
+    if not failed_keys or not prev_items:
+        return list(new_items or []), 0
+    have = {_key_of(x) for x in (new_items or [])}
+    kept = [x for x in prev_items if _cat_of(x) in failed_keys and _key_of(x) not in have]
+    if not kept:
+        return list(new_items or []), 0
+    return kept + list(new_items or []), len(kept)
+
+
+def _apply_missing_cooldown(section, removed_items, present_items):
+    """下架冷却：分离「真下架」与「本轮没采到」。
+
+    - 带下线日期且已过期 → 真下架（按业务自身日期）
+    - 带下线日期但未到期 → 业务还在售期，判为漏采，保留
+    - 无下线日期 → 连续 MISSING_ROUNDS 轮都没采到才判下架，否则保留
+
+    返回 (保留列表, 真下架列表)。连续计数存在 snapshots/_missing.json，
+    条目下一轮重新出现时自动清零。
+    """
+    state = _state_load()
+    sec_state = state.setdefault(section, {})
+    today = time.strftime("%Y-%m-%d")
+
+    # 本轮采到的条目清零计数（说明它只是漏了一轮）
+    present = {_key_of(x) for x in (present_items or [])}
+    for k in list(sec_state):
+        if k in present:
+            sec_state.pop(k, None)
+
+    held, real = [], []
+    for it in removed_items or []:
+        key = _key_of(it)
+        off = _off_date(it)
+        if off and off <= today:
+            real.append(it)
+            sec_state.pop(key, None)
+            continue
+        if off and off > today:
+            held.append(it)          # 还在业务自己的在售期内
+            sec_state.pop(key, None)
+            continue
+        n = int(sec_state.get(key, 0)) + 1
+        if n >= MISSING_ROUNDS:
+            real.append(it)
+            sec_state.pop(key, None)
+        else:
+            sec_state[key] = n
+            held.append(it)
+
+    _state_save(state)
+    return held, real
+
+
+def check_section(section: str, new_data: dict, failed_categories=None):
     """对比某板块变化，返回变化报告 dict 或 None。
-    若旧快照格式与新数据不兼容（如升级前的字符串快照），先重建基线不通知。"""
+
+    三条业务化护栏，目的都是把「接口没返回数据」和「业务真的下架」分开：
+
+      1) failed_categories 里的分类本轮彻底抓空 → 用基线补齐该分类的条目，
+         不参与 diff。接口挂了不等于这批业务下架。
+      2) 条目标了「下线日期」→ 以业务自己的日期为准：已过期才判下架；
+         日期未到说明还在售，视为本轮没采到，保留在基线里。
+      3) 没有下线日期却消失了 → 连续 MISSING_ROUNDS 轮都采不到才判下架；
+         只缺一轮视为源站返回子集，条目继续留在基线。
+
+    保留（held）的条目会写回快照，下一轮仍以它为基线，因此不会再出现
+    「这轮全下架、下轮全上架」的来回跳变。
+    """
     old = load_snapshot(section)
-    if old is not None and not _same_structure(old.get("items", []), new_data.get("items", [])):
-        print(f"  [基线] 板块 {section} 快照格式已升级，重建基线不通知")
-        save_snapshot(section, new_data)
-        return None
-    # 字段结构升级（如新增采集字段）同样重建基线，避免一次性全量误报"修改"
-    if old is not None and _structure_upgraded(old.get("items", []), new_data.get("items", [])):
-        print(f"  [基线] 板块 {section} 快照字段结构升级，重建基线不通知")
-        save_snapshot(section, new_data)
+    prev_items = (old or {}).get("items") or []
+    cur = dict(new_data or {})
+    items = list(cur.get("items") or [])
+
+    if prev_items and failed_categories:
+        merged_items, merged = merge_failed_categories(prev_items, items, set(failed_categories))
+        if merged:
+            print("  [补齐] 板块 %s 有 %d 个分类本轮抓空，沿用基线 %d 条，不计入变化"
+                  % (section, len(set(failed_categories)), merged))
+            items = merged_items
+            cur["items"] = items
+
+    # 空扫描：本轮一条都没采到而基线有数据 → 接口未返回，不是业务集体下架。
+    # 不写快照、不改基线，等下一轮（写空快照会让下游整板块判成下架）。
+    if prev_items and not items:
+        print("  [空扫描] 板块 %s 本轮 0 条、基线 %d 条，保留旧快照" % (section, len(prev_items)))
         return None
 
-    d = diff(old.get("items") if old else [], new_data.get("items", []))
+    # 若旧快照格式与新数据不兼容（如升级前的字符串快照），先重建基线不通知。
+    if old is not None and not _same_structure(prev_items, items):
+        print(f"  [基线] 板块 {section} 快照格式已升级，重建基线不通知")
+        save_snapshot(section, cur)
+        return None
+    # 字段结构升级（如新增采集字段）同样重建基线，避免一次性全量误报"修改"
+    if old is not None and _structure_upgraded(prev_items, items):
+        print(f"  [基线] 板块 {section} 快照字段结构升级，重建基线不通知")
+        save_snapshot(section, cur)
+        return None
+
+    d = diff(prev_items, items)
+    held, real_removed = _apply_missing_cooldown(section, d["removed"], items)
+    if held:
+        # 保留的条目留在基线里，下轮继续比对，避免变成「新增」
+        cur["items"] = items + held
+        print("  [下架冷却] 板块 %s 本轮 %d 条未采到但未到期/未达轮次，保留在基线"
+              % (section, len(held)))
+
     # 抓取结果全部生效：不按下线/上线日期回退或改判任何条目
-    has_change = bool(d["added"] or d["removed"] or d["modified"])
+    has_change = bool(d["added"] or real_removed or d["modified"])
     report = {
         "section": section,
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
         "added": d["added"],
-        "removed": d["removed"],
+        "removed": real_removed,
         "modified": d["modified"],
         "restored": [],
+        "held": len(held),
         "keep_old": None if not old else old.get("timestamp"),
     }
-    save_snapshot(section, new_data)
+    save_snapshot(section, cur)
     return report if has_change else None

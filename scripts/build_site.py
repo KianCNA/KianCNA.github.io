@@ -574,11 +574,25 @@ def main():
 
     # 1) 复制当前快照到站点 data/
     st = {}   # section -> (json, items, dist)
+    kept_prev = set()   # 本轮因抓取缺失而保留线上数据的板块（不回写基线）
     for sec in sections:
         src = os.path.join(SNAP, sec + ".json")
         old_src = os.path.join(PREV, sec + ".json")
         new_j = load(src) if os.path.exists(src) else None
         old_j = load(old_src)
+
+        # 空扫描保护：本轮快照 0 条、基线却有数据，说明这个接口本轮没返回，
+        # 而不是业务集体下架。保留线上数据与基线，否则会把整板块记成下架，
+        # 下一轮接口恢复再整批记成新增（历史里河南、江西、河北、山西都跳变过）。
+        _new_items = (new_j or {}).get("items") or []
+        _old_items = (old_j or {}).get("items") or []
+        if old_j and _old_items and not _new_items:
+            shutil.copy(old_src, os.path.join(DATA, sec + ".json"))
+            st[sec] = stat_section(sec, PREV)
+            kept_prev.add(sec)
+            print(f"  [空扫描] 板块 {sec} 本轮 0 条、基线 {len(_old_items)} 条，"
+                  f"保留线上数据，本轮不比对")
+            continue
 
         # 时间倒退保护：snapshots/ 是持久目录，focus 模式下未重抓的省份会一直
         # 停留在旧快照。拿它当本轮数据会造成双重破坏：
@@ -757,6 +771,12 @@ def main():
 
     # 4) 保存本次快照副本到站点 prev/（下次 diff 用）
     for sec in sections:
+        if sec in kept_prev:
+            # 本轮抓取缺失：基线原样带过去，否则下一轮没有基线可对、或拿空快照做 diff
+            old_src = os.path.join(PREV, sec + ".json")
+            if os.path.exists(old_src):
+                shutil.copy(old_src, os.path.join(PREV_OUT, sec + ".json"))
+            continue
         src = os.path.join(SNAP, sec + ".json")
         if os.path.exists(src):
             shutil.copy(src, os.path.join(PREV_OUT, sec + ".json"))
