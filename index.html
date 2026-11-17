@@ -1677,6 +1677,16 @@ function esc(s){
     .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 }
+function plain(s){
+  // 公告正文是带 <p> 的富文本：直接当 HTML 渲染就是注入点，直接转义又会把标签
+  // 展示给用户。这里去标签、保留段落换行，之后一律 esc() 输出纯文本。
+  s = String(s == null ? "" : s);
+  s = s.replace(/<\s*br\s*\/?>/gi, "\n").replace(/<\s*\/\s*p\s*>/gi, "\n\n");
+  s = s.replace(/<[^>]*>/g, "");
+  s = s.replace(/&nbsp;/gi, " ").replace(/&lt;/gi, "<").replace(/&gt;/gi, ">")
+       .replace(/&quot;/gi, '"').replace(/&#39;/gi, "'").replace(/&amp;/gi, "&");
+  return s.replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+}
 function f(it,k){ var o = it.fields || {}; return o[k] || ""; }
 function priceOf(it){ var m = String(f(it,"资费标准")).match(/(\d+(?:\.\d+)?)\s*元/); return m ? parseFloat(m[1]) : null; }
 function priceMain(it){
@@ -4173,7 +4183,7 @@ function annModal(it, fallback){
   var x = it || fallback || {};
   var prov = x.prov_name || fallback.prov_name || "";
   // 公告正文来自抓取，直接拼进 innerHTML 就是注入点；按纯文本转义并保留换行
-  var body = ((x.content || x.summary) || "").trim();
+  var body = plain(x.content || x.summary || "");
   return '<div class="an-dv">' +
     '<div class="an-dv-d">' + (prov ? '<span class="an-p">' + esc(prov) + "</span>" : "") +
       esc(x.date || "") + "</div>" +
