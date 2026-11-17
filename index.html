@@ -4257,9 +4257,13 @@ document.addEventListener("click", function(e){
 }, true);
 
 if(document.readyState === "loading"){
-  document.addEventListener("DOMContentLoaded", __bootReal);
+  document.addEventListener("DOMContentLoaded", __startBoot);
 } else {
-  __bootReal();
+  __startBoot();
+}
+function __startBoot(){
+  window.__bootP = __bootReal();
+  return window.__bootP;
 }
 
 /* ============ 2026-10-19 缓存根治 ============ */
@@ -4267,9 +4271,13 @@ if(document.readyState === "loading"){
 (function(){
   var KEY = "__lastUpdated__" + location.pathname;
   function nowStamp(){
-    // 首屏刚拉过 latest.json：5 秒内直接复用内存里的更新时间，避免重复请求同一个文件
-    if(D && D.updated && (Date.now() - (window.__bootedAt || 0)) < 5000){
+    // 首屏刚拉过 latest.json：10 秒内直接复用内存里的更新时间，避免重复请求同一个文件
+    if(D && D.updated && (Date.now() - (window.__bootedAt || 0)) < 10000){
       return Promise.resolve({ updated: D.updated });
+    }
+    // 慢网时首屏可能还没完成，等它完成再判断，否则会又发一次请求
+    if(!window.__bootedAt && window.__bootP){
+      return window.__bootP.then(function(){ return nowStamp(); }, function(){ return null; });
     }
     var u = (window.DATA_BASE || "./data/") + "latest.json";
     return fetch(u + "?_t=" + Date.now(), {cache:"no-store"})
