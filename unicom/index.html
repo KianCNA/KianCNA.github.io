@@ -3873,9 +3873,12 @@ function paintAnnDot(){
 function openAnn(i){
   var x = annItems()[i];
   if(!x){ return; }
+  // 公告正文来自抓取，直接拼进 innerHTML 就是注入点；按纯文本转义并保留换行
+  var _txt = ((x.content || x.summary || "") + "").trim();
   var body = '<div class="an-dv">' +
     '<div class="an-dv-d">' + esc(x.date || "") + "</div>" +
-    '<div class="an-dv-c">' + ((x.content || x.summary || "").trim() || '<div class="dfnone">该公告正文需在官网查看（源站接口未开放正文抓取）</div>') + "</div>" +
+    '<div class="an-dv-c"' + (_txt ? ' style="white-space:pre-wrap"' : "") + ">" +
+      (_txt ? esc(_txt) : '<div class="dfnone">该公告正文需在官网查看（源站接口未开放正文抓取）</div>') + "</div>" +
     (x.page_url ? '<div class="an-dv-l"><a href="' + esc(x.page_url) + '" target="_blank" rel="noopener">查看原文 ↗</a></div>' : "") +
     "</div>";
   document.getElementById("mTitle").textContent = x.title || "公告详情";
