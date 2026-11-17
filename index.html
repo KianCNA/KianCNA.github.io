@@ -29,6 +29,7 @@ var BUILD_VER = "20261116a";
     return m ? (m[1] || "") : "";
   }
   function go(){
+    lastAt = Date.now();
     var u = base() + "/version.json?_t=" + Date.now();
     fetch(u, {cache:"no-store"})
       .then(function(r){ return r.ok ? r.json() : null; })
@@ -41,8 +42,10 @@ var BUILD_VER = "20261116a";
       })
       .catch(function(){});
   }
+  var lastAt = 0;
   go();                       // 立即
-  setTimeout(go, 3000);       // 兜底
+  // 兜底：首次已成功就不重复请求（原来固定 3 秒后再拉一次，等于每次访问多一次请求）
+  setTimeout(function(){ if(Date.now() - lastAt > 2500){ go(); } }, 3200);
   setInterval(go, 60000);     // 每分钟
 })();
 </script>
@@ -1444,6 +1447,14 @@ function __j(u){
     return r.json();
   });
 }
+/* 空闲时执行：不抢首屏的带宽与主线程；不可用时退化为定时器 */
+function __idle(fn, timeout){
+  var t = timeout || 4000;
+  if(window.requestIdleCallback){
+    try{ requestIdleCallback(function(){ fn(); }, {timeout: t}); return; }catch(e){}
+  }
+  setTimeout(fn, t);
+}
 function __loadSec(sec){
   return __j(DATA_BASE + sec + ".json").then(function(j){ return (j && j.items) ? j.items : []; });
 }
@@ -1637,12 +1648,13 @@ function __bootReal(){
     for(var k2 in D.quanguo_dist){ if(D.quanguo_dist.hasOwnProperty(k2)){ emptyD = false; break; } }
     if(emptyD && D.qitems){ D.quanguo_dist = __distOf(D.qitems); }
     REAL_OK = true;
+    window.__bootedAt = Date.now();   // 供「新数据提示」复用首屏已拉到的 latest.json
     /* 单处渲染异常不应阻断后续流程，尤其是历史记录的异步加载 */
     try { boot(); } catch(e) { if(window.console){ console.error(e); } }
     try { paintAnnDot(); } catch(e) {}
-    /* history.json 体积较大（近 9MB），改为首屏渲染完成后异步加载，
-       避免与资费列表争抢主线程，导致点开页面长时间卡顿 */
-    setTimeout(function(){ loadHistory(); }, 40);
+    /* history.json 体积大（gzip 后约 340KB），首屏完全用不到它：
+       改为浏览器空闲时预载，点开「变化历史」时立即触发，不再在首屏抢带宽 */
+    __idle(loadHistory, 4000);
   }).catch(__fail);
 }
 
@@ -2018,6 +2030,7 @@ function secHtml(hi, ci, type, arr, diffs){
 }
 var HIST_OPEN = {}, HIST_POPEN = {}, HIST_INIT = false, HIST_ALL = false, HIST_SHOW = 15;
 var HIST_LOADED = false;
+var HIST_LOADING = false;   // 防止空闲预载与「打开历史页」同时触发重复下载
 function updNavChg(){
   var nx = document.getElementById("navChg");
   if(!nx){ return; }
@@ -2030,6 +2043,8 @@ function updNavChg(){
   nx.textContent = t ? (t + " 条") : "\u2014";
 }
 function loadHistory(){
+  if(HIST_LOADED || HIST_LOADING){ return; }
+  HIST_LOADING = true;
   __j(DATA_BASE + "history.json").then(function(hist){
     D.history = __normHist(hist || []);
     HIST_LOADED = true; HIST_INIT = false;
@@ -2039,7 +2054,7 @@ function loadHistory(){
     HIST_LOADED = true;
     var b = document.getElementById("tlBox");
     if(b){ b.innerHTML = '<div class="ti-none">变更记录加载失败</div>'; }
-  });
+  }).then(function(){ HIST_LOADING = false; });
 }
 function histBars(cs){
   var a = 0, r = 0, m = 0, s = 0;
@@ -2302,7 +2317,11 @@ function setView(v){
   var vs = document.querySelectorAll(".view");
   for(var j=0;j<vs.length;j++){ vs[j].classList.toggle("on", vs[j].id === "v-" + v); }
   if(v === "overview"){ renderOverview(); }
-  if(v === "history"){ HIST_INIT = false; renderHistory(); }
+  if(v === "history"){
+    HIST_INIT = false;
+    if(!HIST_LOADED){ loadHistory(); }   // 首次打开才拉 history.json
+    else { renderHistory(); }
+  }
   if(v === "announce"){ renderAnnounce(); }
   window.scrollTo({ top:0, behavior:"smooth" });
 }
@@ -3760,8 +3779,8 @@ function ntAuto(){
 }
 psLoad();
 try{ setTimeout(ntAuto, 700); }catch(e){}   // 一次性公告：延后弹，避免跟首屏加载抢资源
-// 最新检测卡片：页面载入即渲染所选省份最近一次变化
-try{ ldProvInit(); ldRefresh(); }catch(e){}
+// 最新检测卡片：只做轻量的省份初始化；history.json 由弹窗打开时按需拉取
+try{ ldProvInit(); }catch(e){}
 try{ ckProvInit(); }catch(e){}   // 载入即绑定省份按钮，不必等检测弹窗打开
 // 监听挂在弹窗容器上（而不是 document 捕获阶段）。
 // 之前页面任何一次点击都要跑 3 次 closest，等于给整站点击都加了税。
@@ -4248,6 +4267,10 @@ if(document.readyState === "loading"){
 (function(){
   var KEY = "__lastUpdated__" + location.pathname;
   function nowStamp(){
+    // 首屏刚拉过 latest.json：5 秒内直接复用内存里的更新时间，避免重复请求同一个文件
+    if(D && D.updated && (Date.now() - (window.__bootedAt || 0)) < 5000){
+      return Promise.resolve({ updated: D.updated });
+    }
     var u = (window.DATA_BASE || "./data/") + "latest.json";
     return fetch(u + "?_t=" + Date.now(), {cache:"no-store"})
       .then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
