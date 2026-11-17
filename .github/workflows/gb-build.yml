@@ -1,0 +1,57 @@
+name: GB Fetch & Build
+# 中国广电资费抓取（全国 + 31 省 + 深圳），产物提交到 gb/data
+on:
+  schedule:
+    - cron: "50 */4 * * *"    # 每 4 小时（错开移动与电信）
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gb-build
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 抓取广电资费（全国 + 31 省 + 深圳）
+        run: |
+          set -e
+          set -o pipefail
+          cd "$GITHUB_WORKSPACE/pipelines"
+          python3 -u gb_pipeline.py --prev-dir ../gb/data --out-dir ../gb/data 2>&1 | tail -120
+          python3 -c "import json;d=json.load(open('../gb/data/latest.json',encoding='utf-8'));print('[广电] updated =',d.get('updated'),'| 板块 =',len(d.get('sections',[])))"
+
+      - name: 提交
+        if: success()
+        run: |
+          set -e
+          cd "$GITHUB_WORKSPACE"
+          rm -rf /tmp/art && mkdir -p /tmp/art
+          cp -a gb/data /tmp/art/data || { echo "::error::产物缺失"; exit 1; }
+          git config user.name "tariff-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for i in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard FETCH_HEAD
+            rm -rf gb/data
+            cp -a /tmp/art/data gb/data || { echo "::error::data 复制失败"; exit 1; }
+            git add -A gb/data
+            BAD="$(git diff --cached --name-only | grep -vE '^gb/data/' || true)"
+            if [ -n "$BAD" ]; then echo "::error::检测到非数据文件被暂存，已中止"; echo "$BAD"; exit 1; fi
+            if git diff --cached --quiet; then echo "无变化"; exit 0; fi
+            git commit -q -m "gb fetch $(date -u +%FT%TZ)"
+            if git push origin main; then echo "已推送"; exit 0; fi
+            echo "[warn] push 失败，重新对齐后重试 ($i/5)"
+            sleep 8
+          done
+          echo "::error::连续 5 次 push 均失败"
+          exit 1

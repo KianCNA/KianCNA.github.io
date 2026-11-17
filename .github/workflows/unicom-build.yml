@@ -1,0 +1,58 @@
+name: Unicom Fetch & Build
+# 中国联通资费抓取（全国 + 31 省），产物提交到 unicom/data
+on:
+  schedule:
+    - cron: "10 */6 * * *"    # 每 6 小时（联通抓取最重，单轮耗时长）
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: unicom-build
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 抓取联通资费（全国 + 31 省）
+        run: |
+          set -e
+          set -o pipefail
+          cd "$GITHUB_WORKSPACE/pipelines"
+          # 累积池 _pool.json 在 prev-dir 里，必须与 out-dir 同目录
+          python3 -u unicom_pipeline.py --prev-dir ../unicom/data --out-dir ../unicom/data 2>&1 | tail -150
+          python3 -c "import json;d=json.load(open('../unicom/data/latest.json',encoding='utf-8'));print('[联通] updated =',d.get('updated'),'| 板块 =',len(d.get('sections',[])))"
+
+      - name: 提交
+        if: success()
+        run: |
+          set -e
+          cd "$GITHUB_WORKSPACE"
+          rm -rf /tmp/art && mkdir -p /tmp/art
+          cp -a unicom/data /tmp/art/data || { echo "::error::产物缺失"; exit 1; }
+          git config user.name "tariff-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for i in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard FETCH_HEAD
+            rm -rf unicom/data
+            cp -a /tmp/art/data unicom/data || { echo "::error::data 复制失败"; exit 1; }
+            git add -A unicom/data
+            BAD="$(git diff --cached --name-only | grep -vE '^unicom/data/' || true)"
+            if [ -n "$BAD" ]; then echo "::error::检测到非数据文件被暂存，已中止"; echo "$BAD"; exit 1; fi
+            if git diff --cached --quiet; then echo "无变化"; exit 0; fi
+            git commit -q -m "unicom fetch $(date -u +%FT%TZ)"
+            if git push origin main; then echo "已推送"; exit 0; fi
+            echo "[warn] push 失败，重新对齐后重试 ($i/5)"
+            sleep 8
+          done
+          echo "::error::连续 5 次 push 均失败"
+          exit 1

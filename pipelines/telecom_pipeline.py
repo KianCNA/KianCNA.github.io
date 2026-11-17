@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 """中国电信资费监控管线（可在 GitHub Actions 直接运行，路径全部相对脚本目录）
 
-职责：抓取电信「湖南(600203) + 广东(600101) + 山东(609903) + 河南(609904)
-      + 全国(1000000037)」资费（对齐联通站 JSON schema）
+职责：抓取电信「全国 + 31 省」资费（对齐联通站 JSON schema）
       → 与上一版数据 diff → 输出站点数据目录（{scope}.json + latest.json + history.json）。
 说明：provCode 为集团 wap 资费专区内部编码。完整 31 省编码取自电信网厅前端
       index-xdZ1yBwq.js 内置省份表（权威来源），摘录：
@@ -37,11 +36,38 @@ def _ua():
 API = "https://www.189.cn/wapportalweb/wapportalweb/tariffSection.do"
 
 SCOPES = {
-    "hunan": {"prov": "600203", "name": "湖南"},
-    "guangdong": {"prov": "600101", "name": "广东"},
+    "quanguo": {"prov": "1000000037", "name": "全国"},
+    "beijing": {"prov": "609001", "name": "北京"},
+    "tianjin": {"prov": "609902", "name": "天津"},
+    "hebei": {"prov": "609906", "name": "河北"},
+    "shanxi": {"prov": "609907", "name": "山西"},
+    "neimenggu": {"prov": "609908", "name": "内蒙古"},
+    "liaoning": {"prov": "609905", "name": "辽宁"},
+    "jilin": {"prov": "609909", "name": "吉林"},
+    "heilongjiang": {"prov": "609910", "name": "黑龙江"},
+    "shanghai": {"prov": "600102", "name": "上海"},
+    "jiangsu": {"prov": "600103", "name": "江苏"},
+    "zhejiang": {"prov": "600104", "name": "浙江"},
+    "anhui": {"prov": "600301", "name": "安徽"},
+    "fujian": {"prov": "600105", "name": "福建"},
+    "jiangxi": {"prov": "600305", "name": "江西"},
     "shandong": {"prov": "609903", "name": "山东"},
     "henan": {"prov": "609904", "name": "河南"},
-    "quanguo": {"prov": "1000000037", "name": "全国"},
+    "hubei": {"prov": "600202", "name": "湖北"},
+    "hunan": {"prov": "600203", "name": "湖南"},
+    "guangdong": {"prov": "600101", "name": "广东"},
+    "guangxi": {"prov": "600302", "name": "广西"},
+    "hainan": {"prov": "600403", "name": "海南"},
+    "chongqing": {"prov": "600304", "name": "重庆"},
+    "sichuan": {"prov": "600201", "name": "四川"},
+    "guizhou": {"prov": "600402", "name": "贵州"},
+    "yunnan": {"prov": "600205", "name": "云南"},
+    "xizang": {"prov": "600406", "name": "西藏"},
+    "shaanxi": {"prov": "600204", "name": "陕西"},
+    "gansu": {"prov": "600401", "name": "甘肃"},
+    "qinghai": {"prov": "600405", "name": "青海"},
+    "ningxia": {"prov": "600404", "name": "宁夏"},
+    "xinjiang": {"prov": "600303", "name": "新疆"},
 }
 
 
