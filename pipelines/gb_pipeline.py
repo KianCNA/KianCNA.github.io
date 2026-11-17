@@ -289,7 +289,13 @@ def save(path, obj):
 def build_latest(scopes, datadir):
     sections, prov_total, prov_stats = [], set(), {}
     q_total = None
-    for sc in scopes:
+    # 局部抓取（--scopes）时 scopes 只含本轮板块；直接据此重建 latest 会让其它
+    # 省份从仪表盘列表里消失（数据文件还在）。故范围取「本轮板块 ∪ 已有 latest 板块」
+    # 的并集，并只收录实际存在数据文件的板块。
+    _old = load(os.path.join(datadir, "latest.json")) or {}
+    _kept = [x.get("section") for x in (_old.get("sections") or [])
+             if isinstance(x, dict) and x.get("section")]
+    for sc in list(dict.fromkeys(list(scopes) + _kept)):
         d = load(os.path.join(datadir, sc + ".json"))
         if not isinstance(d, dict):
             # 该板块本轮没有产物（抓取失败被跳过 / 首次运行目录为空）：
