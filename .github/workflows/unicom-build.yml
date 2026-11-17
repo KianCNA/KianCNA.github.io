@@ -31,6 +31,12 @@ jobs:
           python3 -u unicom_pipeline.py --prev-dir ../unicom/data --out-dir ../unicom/data 2>&1 | tail -150
           python3 -c "import json;d=json.load(open('../unicom/data/latest.json',encoding='utf-8'));print('[联通] updated =',d.get('updated'),'| 板块 =',len(d.get('sections',[])))"
 
+      - name: 抓取联通公告
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          python3 pipelines/scripts/announce_fetch.py --uni-dir "$GITHUB_WORKSPACE/unicom/data" \
+            || echo "::warning::联通公告抓取失败，沿用现有公告数据"
+
       - name: 提交
         if: success()
         run: |
