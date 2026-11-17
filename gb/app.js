@@ -863,6 +863,14 @@ function showModDetail(ts, sec, name) {
     '<div class="mod-diff">' + rows + "</div>");
 }
 
+/* 历史列表状态：必须在 renderHistory / boot 之前声明。
+   此前它们写在文件靠后位置，而 boot() 在前面就以 #history 直接调
+   renderHistory()，触发 TDZ ReferenceError，后续初始化全部不执行。 */
+const HIST_PAGE = 10;      // 历史每次渲染条数（上滑渐进加载）
+let histShown = 0;          // 当前已渲染条数
+let histAll = [];            // 全量历史数组
+let histFilter = "";
+
 function renderHistory() {
   histFilter = $("hProvFilter") ? $("hProvFilter").value : "";
   histShown = HIST_PAGE;   // 首屏直接展示一页
@@ -1212,12 +1220,6 @@ btnRefresh.addEventListener("click", () => { if (btnRefreshGuard()) doCheck(); }
     });
   }
 })();
-
-const HIST_PAGE = 10;      // 历史每次渲染条数（上滑渐进加载）
-let histShown = 0;          // 当前已渲染条数
-let histAll = [];            // 全量历史数组
-let histFilter = "";
-
 
 /* ===== 变化历史渲染（此前缺失 histDraw，导致历史页一直停在「加载中」）===== */
 function histDraw(list) {

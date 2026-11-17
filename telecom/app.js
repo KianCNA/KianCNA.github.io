@@ -837,7 +837,9 @@ function showPlanDetail(ts, sec, name, kind) {
   let brief = null;
   const lst = (d && d[kind + "_list"]) || null;
   if (Array.isArray(lst) && lst.length) {
-    brief = lst.find((x) => x && String(x.title || x.name || "").trim() === nm) || lst[0];
+    const hit = lst.find((x) => x && String(x.title || x.name || "").trim() === nm);
+    // 名称对不上时只在列表只有一条时才兜底：否则会把别的业务的配置挂在当前业务名下
+    brief = hit || (lst.length === 1 ? lst[0] : null);
   }
   let snap = (d && d[kind + "_details"] && d[kind + "_details"][name]) || null;
   if (!brief && !snap) {
@@ -913,6 +915,14 @@ function showModDetail(ts, sec, name) {
     '<div class="res-row sub">该业务本次字段级修改（共 ' + details.length + " 项）：</div>" +
     '<div class="mod-diff">' + rows + "</div>");
 }
+
+/* 历史列表状态：必须在 renderHistory / boot 之前声明。
+   此前它们写在文件靠后位置，而 boot() 在前面就以 #history 直接调
+   renderHistory()，触发 TDZ ReferenceError，后续初始化全部不执行。 */
+const HIST_PAGE = 10;      // 历史每次渲染条数（上滑渐进加载）
+let histShown = 0;          // 当前已渲染条数
+let histAll = [];            // 全量历史数组
+let histFilter = "";
 
 function renderHistory() {
   histFilter = $("hProvFilter") ? $("hProvFilter").value : "";
@@ -1208,12 +1218,6 @@ btnRefresh.addEventListener("click", () => { if (btnRefreshGuard()) doCheck(); }
     });
   }
 })();
-
-const HIST_PAGE = 10;      // 历史每次渲染条数（上滑渐进加载）
-let histShown = 0;          // 当前已渲染条数
-let histAll = [];            // 全量历史数组
-let histFilter = "";
-
 
 /* ===== 变化历史渲染（此前缺失 histDraw，导致历史页一直停在「加载中」）===== */
 function histDraw(list) {

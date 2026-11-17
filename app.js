@@ -1057,7 +1057,8 @@ function renderAnnounce() {
               '<a class="ann-att-btn" href="' + esc(safeHref(a.url)) + '" target="_blank" rel="noopener">附件 · ' + esc(a.name || "下载") + "</a>").join("") + "</div>"
           : "";
         const body2 = (it.content && it.content.trim())
-          ? '<div class="ann-content" style="display:block;border-top:none;padding-top:0;margin:0">' + it.content + "</div>"
+          // 公告正文来自抓取，原样拼进 innerHTML 就是注入点（存储型 XSS）
+          ? '<div class="ann-content" style="display:block;border-top:none;padding-top:0;margin:0;white-space:pre-wrap">' + esc(it.content) + "</div>"
           : '<div class="ann-noimg">该公告正文以图片形式发布，请点击查看官网原文。</div>';
         if (typeof openModal === "function") {
           openModal(it.title || "公告",
@@ -1419,7 +1420,8 @@ function renderTopChange(){
   var el = document.getElementById("topChange");
   if(!el) return;
   var list = (typeof histAll !== "undefined" && Array.isArray(histAll)) ? histAll : null;
-  var rec = (list && list.length) ? list[0] : null;
+  // histAll 是升序（旧→新），最新一轮在末尾；取 list[0] 会显示最旧的一轮
+  var rec = (list && list.length) ? list[list.length - 1] : null;
   if(!rec){ el.hidden = true; return; }
   var a = 0, m = 0, r = 0;
   Object.keys(rec).forEach(function(k){
@@ -1428,7 +1430,9 @@ function renderTopChange(){
     if(!d || typeof d !== "object") return;
     ["added", "modified", "removed"].forEach(function(f){
       var v = d[f];
-      if(Array.isArray(v)) { var n = v.length; }
+      var n;
+      if(Array.isArray(v)) { n = v.length; }
+      else if(typeof v === "number") { n = v; }        // 摘要记录里存的是数字计数
       else if(v && typeof v === "object") { n = Object.keys(v).length; }
       else { n = 0; }
       if(f === "added") a += n; else if(f === "modified") m += n; else r += n;
