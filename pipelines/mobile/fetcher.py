@@ -362,11 +362,13 @@ def _fetch_board(sec: str, attr: str, code: str, opener) -> tuple:
     """抓取单个板块六大分类并合并（fetch_all / fetch_section 共用）。
 
     并发度 FETCH_WORKERS：同一板块内并行发起多个分类请求，每个分类用独立 UA 指纹。
-    返回 (items, errors, failed_keys)。
+    返回 (items, errors, failed_keys, empty_keys)；empty_keys 是请求成功但 0 条的分类，
+    它们可能只是真的没业务，不能当成「接口挂了」参与整板块跳过判断。
     """
     merged = {}
     errors = []
     failed_keys = set()
+    empty_keys = set()
     lock = threading.Lock()
 
     def work(t1, t2):
@@ -404,12 +406,15 @@ def _fetch_board(sec: str, attr: str, code: str, opener) -> tuple:
                 time.sleep(FETCH_INTERVAL)
         if not cell_items:
             with lock:
-                failed_keys.add(key)
+                if last_err is not None:
+                    failed_keys.add(key)
+                else:
+                    empty_keys.add(key)
                 err = (f"[{TYPE1_CN.get(t1, t1)}/{TYPE2_CN.get(t2, t2)}] "
                        f"{last_err or '空结果'}")
                 if err not in errors:
                     errors.append(err)
-            print(f"[fetch] 板块 {sec} 分类({t1},{t2}) 抓取失败: {last_err}")
+            print(f"[fetch] 板块 {sec} 分类({t1},{t2}) 抓取失败: {last_err or '空结果'}")
             return
         with lock:
             for it in cell_items.values():
@@ -433,14 +438,16 @@ def _fetch_board(sec: str, attr: str, code: str, opener) -> tuple:
             if i + workers < len(combos):
                 time.sleep(FETCH_INTERVAL)
 
-    return list(merged.values()), errors, failed_keys
+    return list(merged.values()), errors, failed_keys, empty_keys
 
 
-def _pack(sec: str, items: list, errors: list, failed_keys=None) -> dict:
+def _pack(sec: str, items: list, errors: list, failed_keys=None, empty_keys=None) -> dict:
     """打包单板块抓取结果。
 
-    failed_categories 记录本轮哪些分类（type1,type2）彻底抓空。下游靠它区分
-    「源站这批业务真没了」和「这个接口本轮没返回」，避免把漏采记成全量下架。
+    failed_categories：请求抛异常的分类（接口挂了）。
+    empty_categories ：请求成功但返回 0 条的分类（可能真没业务，也可能被限流）。
+    下游用它们区分「源站这批业务真没了」和「这个接口本轮没返回」：前者可以
+    整板块跳过等下一轮，后者只能按分类沿用基线，不能把整块判成没数据。
     """
     return {
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
@@ -448,6 +455,7 @@ def _pack(sec: str, items: list, errors: list, failed_keys=None) -> dict:
         "items": items,
         "error": ("；".join(errors)) if errors else None,
         "failed_categories": sorted(failed_keys or []),
+        "empty_categories": sorted(empty_keys or []),
         "categories_total": len(TYPE_COMBOS),
     }
 
@@ -459,8 +467,8 @@ def fetch_section(sec: str, prov_code: str = "731") -> dict:
     else:
         attr, code = "2", prov_code
     opener = _build_opener()
-    items, errors, failed = _fetch_board(sec, attr, code, opener)
-    return _pack(sec, items, errors, failed)
+    items, errors, failed, empty = _fetch_board(sec, attr, code, opener)
+    return _pack(sec, items, errors, failed, empty)
 
 
 def fetch_all() -> dict:
@@ -478,14 +486,14 @@ def fetch_all() -> dict:
         opener = _build_opener()
         for sec in SECTIONS:
             attr, code = SECTIONS_MAP.get(sec, ("1", "731"))
-            items, errors, failed_keys = _fetch_board(
+            items, errors, failed_keys, empty_keys = _fetch_board(
                 sec, attr, code, opener)
 
             # 板块之间休息降温（无论是否降级都要休眠：降级时源站压力大，更该缓一缓）
             if sec != SECTIONS[-1]:
                 time.sleep(SECTION_INTERVAL)
 
-            result[sec] = _pack(sec, items, errors, failed_keys)
+            result[sec] = _pack(sec, items, errors, failed_keys, empty_keys)
             status = (f"（{len(failed_keys)} 个分类抓取失败，已尽力重试）"
                       if failed_keys else "")
             print(f"[fetch] 板块 {sec} 抓取 {len(items)} 条{status}")

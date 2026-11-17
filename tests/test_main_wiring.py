@@ -34,9 +34,10 @@ def item(name, own="个人资费", typ="套餐"):
     return {"name": name, "fields": {"资费类型": typ, "归属": own, "方案编号": "P" + name}}
 
 
-def pack(sec, items, failed=None, total=6):
+def pack(sec, items, failed=None, total=6, empty=None):
     return {"timestamp": "2026-11-17 12:00:00", "section": sec, "items": list(items),
-            "error": None, "failed_categories": list(failed or []), "categories_total": total}
+            "error": None, "failed_categories": list(failed or []),
+            "empty_categories": list(empty or []), "categories_total": total}
 
 
 results = []
@@ -88,6 +89,17 @@ snapshot.check_section = spy
 mobile_main.run_once(send_mail=False)
 snapshot.check_section = _orig
 check("接口恢复：无新增报告", all(not r["added"] for r in reports), str([(r["section"], len(r["added"])) for r in reports]))
+
+# 第四轮：某省 3 个分类「请求成功但 0 条」（可能本来就没业务）——不能整块跳过
+fake.FETCH = {
+    "hunan": pack("hunan", a, empty=["2,1", "2,2", "2,3"]),
+    "henan": pack("henan", a + b),
+    "shanxi": pack("shanxi", a + b),
+}
+mobile_main.run_once(send_mail=False)
+hunan = snapshot.load_snapshot("hunan")["items"]
+check("空分类不阻塞板块：湖南基线仍 8 条", len(hunan) == 8, str(len(hunan)))
+check("空分类不阻塞板块：快照已更新到本轮", snapshot.load_snapshot("hunan")["timestamp"] == "2026-11-17 12:00:00")
 
 shutil.rmtree(tmp, ignore_errors=True)
 failed = [r for r in results if not r[1]]

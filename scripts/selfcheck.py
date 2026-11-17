@@ -144,12 +144,16 @@ def main():
         print(f"[自检] ✓ history {len(h)} 条与分片 {len(have)} 个一一对应")
 
     # ── 5. 单轮新增合理性 ──
+    big = []
     for r in h[-5:]:
         added = sum((v.get("added") or 0) for k, v in r.items()
                     if k != "ts" and isinstance(v, dict))
         if added > 2000:
-            err(f"记录 {r['ts']} 单轮新增 {added} 条，极可能是死快照回放的假数据，请核查")
-    print("[自检] ✓ 最近 5 轮无异常量级新增")
+            big.append((r["ts"], added))
+    for ts, added in big:
+        err(f"记录 {ts} 单轮新增 {added} 条，极可能是死快照回放的假数据，请核查")
+    if not big:
+        print("[自检] ✓ 最近 5 轮无异常量级新增")
 
     print(f"\n[自检] 结果：error {len(errors)} 项 / warning {len(warns)} 项")
     return 1 if errors else 0

@@ -33,7 +33,10 @@ SECTION_NAMES = {
     "shaanxi": "陕西", "gansu": "甘肃", "qinghai": "青海", "ningxia": "宁夏",
     "xinjiang": "新疆",
 }
-DEFAULT_PROV = "hunan"
+# 与 scripts/build_site.py 的 DEFAULT_PROV 保持一致：抓取失败轮次用本脚本重建
+# latest.json 时，首页默认选中的省份不能变成另一个值，否则用户会看到
+# 「正常轮次是北京、失败轮次变湖南」的跳变。
+DEFAULT_PROV = "beijing"
 
 
 def sec_name(sec):

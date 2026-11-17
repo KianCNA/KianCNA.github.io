@@ -72,6 +72,7 @@ def run_once(send_mail=True):
             "n": len(new_items),
             "err": (new_data.get("error") or "")[:120],
             "failed_categories": new_data.get("failed_categories") or [],
+            "empty_categories": new_data.get("empty_categories") or [],
         }
 
         # 抓取结果如实入库：只要抓到数据就写快照并参与对比，不按条数比例拦截。
@@ -86,25 +87,29 @@ def run_once(send_mail=True):
             skipped.append(section)
             continue
 
-        # 分类级完整性：半数以上分类本轮抓空，说明这一轮样本不完整。
+        # 分类级完整性：本轮到报错的分类占一半以上，说明这一轮样本不完整。
         # 残缺样本写进基线，会把没采到的业务全记成下架、下一轮又整批新增，
-        # 因此直接保留旧快照、等下一轮。少数分类失败则由 snapshot 层按分类补齐。
+        # 因此直接保留旧快照、等下一轮。
+        # 注意只统计「报错」的分类：「请求成功但 0 条」可能本来就真的没业务，
+        # 拿它计数会让某省因为长期有 3 个空分类而永远跳过、数据再也不更新。
         failed_cats = new_data.get("failed_categories") or []
+        empty_cats = new_data.get("empty_categories") or []
+        suspect_cats = list(dict.fromkeys(failed_cats + empty_cats))
         total_cats = int(new_data.get("categories_total") or 0) or 6
         if failed_cats and len(failed_cats) * 2 >= total_cats:
-            print(f"  [不完整] 板块 {section} 有 {len(failed_cats)}/{total_cats} 个分类抓取失败，保留旧快照")
+            print(f"  [不完整] 板块 {section} 有 {len(failed_cats)}/{total_cats} 个分类报错，保留旧快照")
             diag["sections"][section]["reason"] = "partial"
             skipped.append(section)
             continue
         # 首次运行：板块还没有基线快照，仅建立基线，不对比不发送
         if snapshot.load_snapshot(section) is None:
-            snapshot.check_section(section, new_data, failed_cats)
+            snapshot.check_section(section, new_data, suspect_cats)
             print(f"  [首次] 板块 {section} 已建立基线快照，本次不通知")
             diag["sections"][section]["reason"] = "baseline"
             first_time = True
             continue
 
-        r = snapshot.check_section(section, new_data, failed_cats)
+        r = snapshot.check_section(section, new_data, suspect_cats)
         if r:
             reports.append(r)
 
