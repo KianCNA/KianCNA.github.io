@@ -252,7 +252,7 @@ jobs:
           # 只暂存数据产物，不用 git add -A，避免顺带提交界面/脚本的改动
           git add -A data pipelines/mobile/snapshots tariff-fetch-source.zip
           # ★ UI 闸门：暂存区里只允许出现数据产物，否则立即中止（宁可不发数据，也不覆盖页面）
-          BAD="$(git diff --cached --name-only | grep -vE '^(data/|pipelines/mobile/snapshots/|tariff-fetch-source\.zip)$' || true)"
+          BAD="$(git diff --cached --name-only | grep -vE '^(data/|pipelines/mobile/snapshots/|tariff-fetch-source\.zip$)' || true)"
           if [ -n "$BAD" ]; then echo "::error::检测到非数据文件被暂存，已中止（页面文件不会被自动化改动）"; echo "$BAD"; exit 1; fi
           if git diff --cached --quiet; then
             echo "无变化"
@@ -276,7 +276,7 @@ jobs:
               cp -a /tmp/art/snap/. pipelines/mobile/snapshots/ 2>/dev/null || true
               python3 scripts/guard_ui.py || true
               git add -A data pipelines/mobile/snapshots tariff-fetch-source.zip
-              BAD="$(git diff --cached --name-only | grep -vE '^(data/|pipelines/mobile/snapshots/|tariff-fetch-source\.zip)$' || true)"
+              BAD="$(git diff --cached --name-only | grep -vE '^(data/|pipelines/mobile/snapshots/|tariff-fetch-source\.zip$)' || true)"
               if [ -n "$BAD" ]; then echo "::error::检测到非数据文件被暂存，已中止"; echo "$BAD"; exit 1; fi
               git commit -q -m "mobile fetch+build $(date -u +%FT%TZ) retry$i" || true
               sleep 8
