@@ -1131,7 +1131,7 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
 }
 
 /* ================= flex gap 兜底（旧内核不支持 gap） ================= */
-.nav-in > * + *{margin-left:12px}
+@media(min-width:761px){.nav-in > * + *{margin-left:12px}}
 .brand > * + *{margin-left:11px}
 .nav-mid > * + *{margin-left:11px}
 .nav-act > * + *{margin-left:8px}
