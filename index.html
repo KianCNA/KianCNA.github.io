@@ -1875,6 +1875,8 @@ function emptyBox(txt){
 }
 
 /* ---------- 列表 ---------- */
+var TYPE_ORDER = { "套餐": 0, "加装包": 1, "营销活动": 2, "流量包": 3 };
+
 function filtered(scope){
   var s = state[scope], arr = ((scope === "q" && D.qitems) ? D.qitems : D.items).slice();
   var kw = s.search.trim().toLowerCase();
@@ -4085,7 +4087,21 @@ document.addEventListener("click", function(e){
     if(kind === "own" || kind === "type"){
       var sc = pk.getAttribute("data-scope");
       var isOwn = kind === "own";
-      var opts = isOwn ? ["全部归属","个人资费","政企资费"] : ["全部类型","套餐","加装包","营销活动"];
+      var opts;
+      if(isOwn){
+        opts = ["全部归属","个人资费","政企资费"];
+      }else{
+        // 类型从当前数据里动态取（套餐/加装包/营销活动/流量包…），避免新增类型时选项缺失
+        var src = (sc === "q" && D.qitems) ? D.qitems : D.items;
+        var seenType = {};
+        (src || []).forEach(function(it){
+          var t = f(it,"资费类型");
+          if(t){ seenType[t] = 1; }
+        });
+        var typeList = Object.keys(seenType);
+        typeList.sort(function(a,b){ return (TYPE_ORDER[a] || 99) - (TYPE_ORDER[b] || 99) || a.localeCompare(b); });
+        opts = ["全部类型"].concat(typeList);
+      }
       openPicker({ title:isOwn ? "选择归属" : "选择类型", value:state[sc][kind], options:simpleOptions(opts), onPick:function(v){
         state[sc][kind] = (v === "全部归属" || v === "全部类型") ? "" : v;
         state[sc].page = 1;

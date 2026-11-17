@@ -122,11 +122,13 @@ FIELD_KEYS = [
     "超出资费说明", "其他服务内容", "其他说明",
 ]
 
-# 分类映射：type1=个人/政企，type2=套餐/加装包/营销活动
+# 分类映射：type1=个人/政企，type2=套餐/加装包/营销活动/流量包
 TYPE1_CN = {"1": "个人资费", "2": "政企资费"}
-TYPE2_CN = {"1": "套餐", "2": "加装包", "3": "营销活动"}
-# 每个板块要抓的分类组合 (type1, type2)，覆盖 六大类 全量
-TYPE_COMBOS = [("1", "1"), ("1", "2"), ("1", "3"),
+TYPE2_CN = {"1": "套餐", "2": "加装包", "3": "营销活动", "4": "流量包"}
+# 每个板块要抓的分类组合 (type1, type2)，覆盖全量。
+# 注意 type2=4（流量包/流量模组）之前漏抓：这类 bean 的条目放在 moduleList[].tariffList，
+# 而旧解析只读 nonModuleList，导致每轮丢掉一大批（实测全网单类就有 1,300+ 条）。
+TYPE_COMBOS = [("1", "1"), ("1", "2"), ("1", "3"), ("1", "4"),
                ("2", "1"), ("2", "2"), ("2", "3")]
 # 分类间请求间隔（秒）。连续请求序列中后段分类会被源站瞬时限流降级(缺量)，
 # 实测 8s 间隔可保证 6 个分类全量返回；间隔过大则单轮耗时过久，取 8s 均衡。
@@ -319,17 +321,25 @@ def _fetch_cell(opener, tariff_attr: str, type1: str, type2: str,
     data = json.loads(plain)
     beans = ((data or {}).get("data") or {}).get("beans") or []
     items_by_name = {}
+
+    def _collect(nm):
+        name = _s(nm.get("name"))
+        if not name or name in items_by_name:
+            return
+        mapped = _nm_to_fields(nm)
+        items_by_name[name] = {
+            "name": name,
+            "fields": {k: (mapped.get(k) or "") for k in FIELD_KEYS},
+        }
+
     for b in beans:
+        # 1) 扁平条目
         for nm in (b.get("nonModuleList") or []):
-            name = _s(nm.get("name"))
-            if not name:
-                continue
-            if name not in items_by_name:
-                mapped = _nm_to_fields(nm)
-                items_by_name[name] = {
-                    "name": name,
-                    "fields": {k: (mapped.get(k) or "") for k in FIELD_KEYS},
-                }
+            _collect(nm)
+        # 2) 模块内条目：moduleList[].tariffList（此前漏读，导致整批资费从未入库）
+        for mod in (b.get("moduleList") or []):
+            for nm in (mod.get("tariffList") or []):
+                _collect(nm)
     return list(items_by_name.values())
 
 
