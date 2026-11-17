@@ -50,7 +50,7 @@ def check(label, cond, detail=""):
 
 tmp = tempfile.mkdtemp()
 snapshot.SNAPSHOT_DIR = tmp
-snapshot._STATE_PATH = os.path.join(tmp, "_missing.json")
+snapshot._SEEN_PATH = os.path.join(tmp, "_seen.json")
 mobile_main._ROOT_DIR = tmp
 mobile_main._write_diag = lambda diag: None
 

@@ -40,8 +40,19 @@ def pack(items, failed=None):
 
 def fresh_state(tmp):
     snapshot.SNAPSHOT_DIR = tmp
-    snapshot._STATE_PATH = os.path.join(tmp, "_missing.json")
-    snapshot.MISSING_ROUNDS = 2
+    snapshot._SEEN_PATH = os.path.join(tmp, "_seen.json")
+    snapshot.POOL_TTL_DAYS = 2
+
+
+def age_seen(tmp, seconds=3 * 86400, section="hunan"):
+    """把采集时间戳往前拨，模拟「保留期已过」。"""
+    p = os.path.join(tmp, "_seen.json")
+    with open(p, encoding="utf-8") as f:
+        data = json.load(f)
+    for k in data.get(section, {}):
+        data[section][k] -= seconds
+    with open(p, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False)
 
 
 def names(items):
@@ -61,20 +72,22 @@ def check(label, cond, detail=""):
     print(("PASS " if cond else "FAIL ") + label + (("  -> " + detail) if detail and not cond else ""))
 
 
-def case_missing_streak():
+def case_union_accumulate():
+    """源站只返回子集时：基线里的条目在保留期内继续保留，超期才回收。"""
     tmp = tempfile.mkdtemp()
     fresh_state(tmp)
     base = [item("A%d" % i) for i in range(10)]
     snapshot.check_section("hunan", pack(base))          # 建基线
 
-    r2 = snapshot.check_section("hunan", pack(base[:5])) # 第一轮缺 5 条
-    check("缺一轮：不判下架", r2 is None or r2["removed"] == [], str(r2))
-    check("缺一轮：基线仍保留 10 条", len(snapshot_items()) == 10, str(len(snapshot_items())))
+    r2 = snapshot.check_section("hunan", pack(base[:5])) # 本轮只返回 5 条
+    check("子集：不判下架", r2 is None or r2["removed"] == [], str(r2))
+    check("子集：基线仍保留 10 条", len(snapshot_items()) == 10, str(len(snapshot_items())))
 
-    r3 = snapshot.check_section("hunan", pack(base[:5])) # 连续第二轮缺
+    age_seen(tmp)                                        # 模拟保留期（2 天）已过
+    r3 = snapshot.check_section("hunan", pack(base[:5]))
     removed = names(r3["removed"]) if r3 else []
-    check("连续两轮缺失：判下架 5 条", sorted(removed) == sorted(names(base[5:])), str(removed))
-    check("下架后基线只剩 5 条", len(snapshot_items()) == 5, str(len(snapshot_items())))
+    check("超期未再出现：判下架 5 条", sorted(removed) == sorted(names(base[5:])), str(removed))
+    check("回收后基线只剩 5 条", len(snapshot_items()) == 5, str(len(snapshot_items())))
     shutil.rmtree(tmp)
 
 
@@ -113,16 +126,16 @@ def case_offline_date():
     alive = item("E-new", off="2099年12月31日")
     keep = item("E-stay")
     snapshot.check_section("hunan", pack([expired, alive, keep]))
-    # 已过期的与未到期的都不见了，只有常驻条目还在
+    # 下线日期已过的条目在入库时就被剔除，不进入基线
+    check("下线日期已过：直接剔除不入库", "E-old" not in names(snapshot_items()), str(names(snapshot_items())))
     r = snapshot.check_section("hunan", pack([keep]))
-    removed = names(r["removed"]) if r else []
-    check("下线日期已过：立即下架", removed == ["E-old"], str(r))
+    check("下线日期已过：后续不产生变化记录", r is None or r["removed"] == [], str(r))
     check("下线日期未到：保留在基线", names(snapshot_items()) == ["E-new", "E-stay"], str(names(snapshot_items())))
     shutil.rmtree(tmp)
 
 
 def case_future_off_date():
-    """下线日期在未来也不能无限保留：连续 MISSING_ROUNDS 轮没采到才算下架。"""
+    """下线日期在未来：保留期内保留，超期仍未出现才回收。"""
     tmp = tempfile.mkdtemp()
     fresh_state(tmp)
     future = item("F-future", off="2099年12月31日")
@@ -130,10 +143,11 @@ def case_future_off_date():
     snapshot.check_section("hunan", pack([future, stay]))
     r1 = snapshot.check_section("hunan", pack([stay]))
     held_ok = (not r1 or not (r1.get("removed") or [])) and len(snapshot_items()) == 2
+    age_seen(tmp)
     r2 = snapshot.check_section("hunan", pack([stay]))
     removed = names(r2["removed"]) if r2 else []
-    check("未来下线日期：首轮保留", held_ok, str(r1))
-    check("未来下线日期：次轮判下架", removed == ["F-future"], str(removed))
+    check("未来下线日期：保留期内不删", held_ok, str(r1))
+    check("未来下线日期：超期判下架", removed == ["F-future"], str(removed))
     shutil.rmtree(tmp)
 
 
@@ -180,7 +194,7 @@ def case_build_site_empty_scan():
     shutil.rmtree(root, ignore_errors=True)
 
 
-case_missing_streak()
+case_union_accumulate()
 case_return_soon()
 case_failed_category()
 case_offline_date()
