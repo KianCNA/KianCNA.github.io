@@ -49,8 +49,12 @@ def main():
 
         # 恢复缩进
         if want_indent and txt.strip().count("\n") < 10:
-            with open(path, "w", encoding="utf-8") as f:
+            # 原子写入：直接 open("w") 时若中途中断，history 会被截断成半个 JSON，
+            # 既丢历史又让页面读不出变化记录
+            tmp = path + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
                 json.dump(hist, f, ensure_ascii=False, indent=2)
+            os.replace(tmp, path)
             lines.append("[%s] 已恢复缩进格式" % label)
 
         lines.append("[%s] 记录 %d · 业务名 %d · 有字段 %d · 仍缺 %d"

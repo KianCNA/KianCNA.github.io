@@ -291,7 +291,13 @@ def build_latest(scopes, datadir):
     q_total = None
     for sc in scopes:
         d = load(os.path.join(datadir, sc + ".json"))
-        items = d["items"]
+        if not isinstance(d, dict):
+            # 该板块本轮没有产物（抓取失败被跳过 / 首次运行目录为空）：
+            # 不能直接 d["items"]，否则整轮以 TypeError 中断，history 已写而
+            # latest 没生成，站点仪表盘就会读到上一版的旧文件。
+            print("  [latest] 跳过无产物板块: %s" % sc)
+            continue
+        items = d.get("items") or []
         dist = {}
         for it in items:
             fl = it.get("firstLevel") or "其他"
@@ -299,7 +305,7 @@ def build_latest(scopes, datadir):
         if sc == "quanguo":
             q_total = len(items)
         else:
-            prov_total.update(x["title"] for x in items)
+            prov_total.update((x.get("title") or "") for x in items)
             prov_stats[sc] = {"total": len(items), "onsale": len(items), "dist": dist}
         sections.append({"section": sc, "name": KEY2NAME.get(sc, sc), "total": len(items), "onsale": len(items),
                          "updated": d.get("timestamp") or ""})
@@ -431,7 +437,19 @@ def main():
     if changes:
         entry = {"ts": now}
         entry.update(changes)
-        history.append(entry)
+
+        def _sig(rec):
+            # 时间戳不参与比较：重跑一轮时 ts 会变，但业务变化完全相同
+            return json.dumps({k: v for k, v in (rec or {}).items() if k != "ts"},
+                              ensure_ascii=False, sort_keys=True)
+
+        if history and _sig(history[-1]) == _sig(entry):
+            # 同一批变化重跑（推送重试 / 上轮基线未推进）不再追加重复记录，
+            # 否则 HISTORY_LIMIT 会把更早的真实记录挤掉。
+            print("本轮变化与上一条完全相同，跳过重复记录")
+            history[-1] = entry          # 仅把时间戳推进到本轮
+        else:
+            history.append(entry)
         # 与电信/联通对齐：只保留最近 N 条，避免 history 无限膨胀
         # （前端需一次性下载，过大则移动端打不开）
         history = history[-int(os.getenv("HISTORY_LIMIT") or "30"):]

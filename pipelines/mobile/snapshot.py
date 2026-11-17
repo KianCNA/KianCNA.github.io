@@ -217,9 +217,11 @@ def merge_failed_categories(prev_items, new_items, failed_keys):
 def _apply_missing_cooldown(section, removed_items, present_items):
     """下架冷却：分离「真下架」与「本轮没采到」。
 
-    - 带下线日期且已过期 → 真下架（按业务自身日期）
-    - 带下线日期但未到期 → 业务还在售期，判为漏采，保留
-    - 无下线日期 → 连续 MISSING_ROUNDS 轮都没采到才判下架，否则保留
+    - 带下线日期且已过期 → 立即真下架（按业务自身的下线日期）
+    - 其余（无下线日期，或下线日期未到）→ 连续 MISSING_ROUNDS 轮都没采到才判下架，
+      否则保留在基线，等下一轮再看。
+      注：不能因为「下线日期未到」就无限保留——很多业务的下线日期写的是 2099 或
+      一年后，源站已经不再返回它，无限保留会让它永久占着在售列表。
 
     返回 (保留列表, 真下架列表)。连续计数存在 snapshots/_missing.json，
     条目下一轮重新出现时自动清零。
@@ -240,10 +242,6 @@ def _apply_missing_cooldown(section, removed_items, present_items):
         off = _off_date(it)
         if off and off <= today:
             real.append(it)
-            sec_state.pop(key, None)
-            continue
-        if off and off > today:
-            held.append(it)          # 还在业务自己的在售期内
             sec_state.pop(key, None)
             continue
         n = int(sec_state.get(key, 0)) + 1

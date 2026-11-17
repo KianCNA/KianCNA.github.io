@@ -233,7 +233,7 @@ def summarize(hist, since, provs=None):
                 for d in batch_notes(v):
                     batches.append((sec_cn(k), d))
             secs.append((sec_cn(k), a, r, m, note, str(k).strip().lower()))
-    return tot_add, tot_rm, tot_mod, secs, batches
+    return tot_add, tot_rm, tot_mod, secs, batches, (latest.get("ts") if isinstance(latest, dict) else None)
 
 
 def _short(v, n=28):
@@ -359,6 +359,18 @@ def main():
 
     now = datetime.now(CST)
     since = now - timedelta(hours=SINCE_HOURS)
+    # 已推送标记：定时任务每两小时跑一次，而 history 只在真有变化时新增记录。
+    # 不记录“这条已推过”，同一轮变化会被后续每个时段重复播报（用户曾收到
+    # 昨晚同一条内容两次），只能等下一条新记录出现才能停下来。
+    marks_path = os.path.join(SITE_ROOT, "data", ".notify_marks.json")
+    marks = {}
+    if os.path.exists(marks_path):
+        try:
+            with open(marks_path, encoding="utf-8") as f:
+                marks = json.load(f) or {}
+        except Exception:
+            marks = {}
+    pushed_marks = {}
     print("统计窗口: %s 之后 (CST)" % since.strftime("%Y-%m-%d %H:%M"))
 
     lines = ["## 资费变化汇总", "",
@@ -381,8 +393,10 @@ def main():
         if PUSH_OPS and op not in PUSH_OPS:
             continue          # 运营商没勾选，整个跳过，连「无变化」都不提
         hist = load_history(path)
-        a, r, m, secs, batches = summarize(hist, since, PUSH_PROVS or None)
+        a, r, m, secs, batches, latest_ts = summarize(hist, since, PUSH_PROVS or None)
         grand[0] += a; grand[1] += r; grand[2] += m
+        if a or r or m:
+            pushed_marks[op] = str(latest_ts or "")
         if not (a or r or m):
             # 说清「查过了但没变化」，而不是干巴巴一句「无变化」——
             # 否则用户看到网站时间戳在跳、钉钉却说无变化，会以为钉钉滞后。
@@ -429,14 +443,36 @@ def main():
     # （曾导致每天两次都收到昨晚同一条内容，误以为推送延迟了 12 小时。）
     # 手动触发（workflow_dispatch）仍然照常推 —— 那是站长主动要看，不是自动播报。
     ev = os.getenv("GITHUB_EVENT_NAME", "").strip()
-    skip = (not any_change) and ev == "schedule" and not os.getenv("FORCE_PUSH")
+    force = bool(os.getenv("FORCE_PUSH"))
+    skip = (not any_change) and ev == "schedule" and not force
     if skip:
         print("\n⏭ 本轮四家均无变化（定时触发）→ 跳过推送，不再重发旧内容。")
         print("   如需强制推送，设置 FORCE_PUSH=1（或在网页手动 Run workflow）。")
         return
 
+    # 同一批变化只推一次：变化指纹 = {运营商: 该站最新变化记录的 ts}
+    mark = json.dumps(sorted(pushed_marks.items()), ensure_ascii=False)
+    if (any_change and ev == "schedule" and not force
+            and marks.get("__summary_mark") == mark):
+        print("\n⏭ 本轮变化与上次已推送的完全相同（%s）→ 跳过重复播报。"
+              % (marks.get("__summary_mark_at") or "上次"))
+        print("   如需强制推送，设置 FORCE_PUSH=1（或在网页手动 Run workflow）。")
+        return
+
     title = "资费汇总 新增%d 下架%d 修改%d" % tuple(grand)
-    send_notify(title, text)
+    res = send_notify(title, text)
+    # 至少有一个通道推送成功才记指纹：全部失败时不记，下个时段还能重试
+    ok_any = (not res) or any(ok for _n, ok, _d in res)
+    if any_change and ok_any:
+        marks["__summary_mark"] = mark
+        marks["__summary_mark_at"] = now.strftime("%Y-%m-%d %H:%M:%S")
+        try:
+            tmp = marks_path + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(marks, f, ensure_ascii=False, indent=1)
+            os.replace(tmp, marks_path)
+        except Exception as e:
+            print("[warn] 推送标记写入失败：%s" % e)
 
 
 if __name__ == "__main__":

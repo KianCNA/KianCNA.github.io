@@ -121,6 +121,22 @@ def case_offline_date():
     shutil.rmtree(tmp)
 
 
+def case_future_off_date():
+    """下线日期在未来也不能无限保留：连续 MISSING_ROUNDS 轮没采到才算下架。"""
+    tmp = tempfile.mkdtemp()
+    fresh_state(tmp)
+    future = item("F-future", off="2099年12月31日")
+    stay = item("F-stay")
+    snapshot.check_section("hunan", pack([future, stay]))
+    r1 = snapshot.check_section("hunan", pack([stay]))
+    held_ok = (not r1 or not (r1.get("removed") or [])) and len(snapshot_items()) == 2
+    r2 = snapshot.check_section("hunan", pack([stay]))
+    removed = names(r2["removed"]) if r2 else []
+    check("未来下线日期：首轮保留", held_ok, str(r1))
+    check("未来下线日期：次轮判下架", removed == ["F-future"], str(removed))
+    shutil.rmtree(tmp)
+
+
 def case_empty_scan_snapshot():
     """快照层：接口整轮返回 0 条时不得清空基线。"""
     tmp = tempfile.mkdtemp()
@@ -168,6 +184,7 @@ case_missing_streak()
 case_return_soon()
 case_failed_category()
 case_offline_date()
+case_future_off_date()
 case_empty_scan_snapshot()
 case_build_site_empty_scan()
 
