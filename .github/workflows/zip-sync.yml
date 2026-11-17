@@ -39,6 +39,8 @@ jobs:
           git config user.name "tariff-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add tariff-fetch-source.zip
+          BAD="$(git diff --cached --name-only | grep -vE '^tariff-fetch-source\.zip$' || true)"
+          if [ -n "$BAD" ]; then echo "::error::检测到非源码包文件被暂存，已中止"; echo "$BAD"; exit 1; fi
           if git diff --cached --quiet; then
             echo "源码包无变化，跳过提交"
             exit 0
@@ -52,6 +54,8 @@ jobs:
             git reset --hard FETCH_HEAD
             python3 scripts/make_source_zip.py || exit 1
             git add tariff-fetch-source.zip
+            BAD="$(git diff --cached --name-only | grep -vE '^tariff-fetch-source\.zip$' || true)"
+            if [ -n "$BAD" ]; then echo "::error::检测到非源码包文件被暂存，已中止"; echo "$BAD"; exit 1; fi
             git commit -q -m "sync: 重打源码包 $(date -u +%FT%TZ) retry$i" || true
             sleep 8
           done

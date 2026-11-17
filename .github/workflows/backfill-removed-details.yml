@@ -32,6 +32,8 @@ jobs:
           git pull --rebase origin main || true
           python3 scripts/guard_ui.py || true
           git add -A data
+          BAD="$(git diff --cached --name-only | grep -vE '^data/' || true)"
+          if [ -n "$BAD" ]; then echo "::error::检测到非数据文件被暂存，已中止"; echo "$BAD"; exit 1; fi
           if git diff --cached --quiet; then
             echo "无改动"
           else
