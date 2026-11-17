@@ -28,24 +28,24 @@ var BUILD_VER = "20261116a";
     var m = location.pathname.match(/^(.*)\/[^\/]*$/);
     return m ? (m[1] || "") : "";
   }
+  var done = false;
   function go(){
-    lastAt = Date.now();
     var u = base() + "/version.json?_t=" + Date.now();
     fetch(u, {cache:"no-store"})
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(function(j){
+        done = true;                 // 首次已拿到版本号，兜底不必再拉
         if(!j || !j.ver) return;
         if(j.ver !== BUILD_VER){
           var cur = location.href.split("#")[0].split("?")[0];
           location.replace(cur + "?_v=" + j.ver + "&_t=" + Date.now());
         }
       })
-      .catch(function(){});
+      .catch(function(){});          // 失败保留 done=false，由兜底重试
   }
-  var lastAt = 0;
   go();                       // 立即
-  // 兜底：首次已成功就不重复请求（原来固定 3 秒后再拉一次，等于每次访问多一次请求）
-  setTimeout(function(){ if(Date.now() - lastAt > 2500){ go(); } }, 3200);
+  // 兜底：只在首次没成功时补拉（原来固定 3 秒后再拉一次，等于每次访问多一次请求）
+  setTimeout(function(){ if(!done){ go(); } }, 3200);
   setInterval(go, 60000);     // 每分钟
 })();
 </script>
