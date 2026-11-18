@@ -1,0 +1,156 @@
+name: Ops Heartbeat
+# 三家运营商（电信/联通/广电）的自续心跳，作用与 Mobile Heartbeat 相同：
+# 绕开 GitHub schedule 对本仓库的丢触发/数小时延迟。
+#
+# 实测（2026-11-18 全日）：schedule 只让三家各跑成 1 轮（电信/广电本应 6 轮、
+# 联通 4 轮），其余 cron 点全部被跳过，数据因此只能靠偶发延迟放行的那轮更新。
+# 本工作流常驻循环：按线上 <op>/data/latest.json 的时间戳判断数据是否够旧，
+# 够旧且该管线没有正在跑/排队的运行就 dispatch 一轮，跑完再继续等。
+# 单次运行接近 runner 上限前用 workflow_dispatch 续期，循环永续。
+
+on:
+  workflow_run:
+    workflows: ["Telecom Fetch & Build", "GB Fetch & Build", "Unicom Fetch & Build"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  actions: write
+
+concurrency:
+  group: ops-heartbeat
+  cancel-in-progress: true
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - name: 循环驱动三家抓取
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # 超过该时长未更新就补触发（秒）。电信约 9 分钟一轮、广电约 40 分钟、
+          # 联通约 75 分钟，阈值按各自节拍留足余量。
+          TH_TELECOM: "14400"
+          TH_GB: "21600"
+          TH_UNICOM: "36000"
+        run: |
+          set -e
+          DEADLINE=$(( $(date -u +%s) + 320 * 60 ))
+          MIN_GAP=900
+          LAST_DISPATCH=0
+
+          gh_api() {
+            local out i
+            for i in 1 2 3; do
+              if out=$(gh api "$@" 2>/dev/null); then printf '%s' "$out"; return 0; fi
+              echo "[warn] gh api 失败（$i/3），10s 后重试" >&2
+              sleep 10
+            done
+            return 1
+          }
+
+          RENEWED=0
+          renew() {
+            [ "$RENEWED" = "1" ] && return 0
+            RENEWED=1
+            if gh_api -X POST \
+                "repos/${GITHUB_REPOSITORY}/actions/workflows/ops-heartbeat.yml/dispatches" \
+                -f ref=main >/dev/null; then
+              echo "已续期新心跳 $(date -u +%FT%TZ)"
+            else
+              echo "::warning::心跳续期失败，等待 build-watchdog 兜底"
+            fi
+          }
+          trap renew EXIT
+
+          latest_updated() {
+            curl -fsSL -H 'Cache-Control: no-cache' \
+              "https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/main/$1/data/latest.json" \
+              | jq -r '.updated // empty' 2>/dev/null || true
+          }
+
+          data_age() {
+            local u
+            u=$(latest_updated "$1")
+            [ -n "$u" ] || { echo 999999; return 0; }
+            local t
+            t=$(date -u -d "$u" +%s 2>/dev/null) || { echo 999999; return 0; }
+            echo $(( $(date -u +%s) - t ))
+          }
+
+          count_active() {
+            local j
+            j=$(gh_api "repos/${GITHUB_REPOSITORY}/actions/workflows/$1/runs?per_page=5" || true)
+            [ -n "$j" ] || { echo 1; return 0; }
+            printf '%s' "$j" | jq '[.workflow_runs[] | select(.status == "in_progress" or .status == "queued" or .status == "waiting")] | length'
+          }
+
+          dispatch() {
+            if gh_api -X POST \
+                "repos/${GITHUB_REPOSITORY}/actions/workflows/$1.yml/dispatches" \
+                -f ref=main >/dev/null; then
+              echo "已触发 $1 $(date -u +%FT%TZ)"
+              return 0
+            fi
+            echo "::warning::触发 $1 失败，等下一轮循环"
+            return 1
+          }
+
+          # 三家（工作流名, 数据目录, 阈值秒）
+          OPS="telecom-build gb-build unicom-build"
+
+          while :; do
+            LEFT=$(( DEADLINE - $(date -u +%s) ))
+            [ "$LEFT" -le 0 ] && break
+
+            STALE=""
+            for op in $OPS; do
+              dir=$(echo "$op" | sed 's/-build//')
+              age=$(data_age "$dir")
+              case "$dir" in
+                telecom) th=$TH_TELECOM ;;
+                gb)      th=$TH_GB ;;
+                unicom)  th=$TH_UNICOM ;;
+              esac
+              printf '[%s] 数据距今 %s 分钟（阈值 %s 分钟）' "$dir" "$((age/60))" "$((th/60))"
+              active=$(count_active "$op")
+              if [ "$age" -ge "$th" ] && [ "$active" = "0" ]; then
+                STALE="$STALE $op"
+                printf ' → 触发\n'
+              else
+                printf ' → 无需触发\n'
+              fi
+            done
+
+            if [ -n "$STALE" ]; then
+              DISPATCHED=0
+              for op in $STALE; do
+                if [ $(( $(date -u +%s) - LAST_DISPATCH )) -ge "$MIN_GAP" ] && dispatch "$op"; then
+                  LAST_DISPATCH=$(date -u +%s)
+                  DISPATCHED=1
+                fi
+              done
+              if [ "$DISPATCHED" = "1" ]; then
+                # 等这些管线跑完再进入下一轮，避免重复排队
+                while [ "$(date -u +%s)" -lt "$DEADLINE" ]; do
+                  sleep 60
+                  ACTIVE=0
+                  for op in $OPS; do
+                    a=$(count_active "$op")
+                    [ "$a" = "0" ] || ACTIVE=1
+                  done
+                  [ "$ACTIVE" = "0" ] && break
+                done
+                continue
+              fi
+            fi
+
+            # 没触发就睡 5 分钟，或睡到预算用尽
+            SLEEP=$(( LEFT < 300 ? LEFT : 300 ))
+            echo "=== 睡眠 $((SLEEP/60)) 分钟至 $(date -u -d "+$SLEEP seconds" +%FT%TZ) ==="
+            sleep "$SLEEP"
+          done
+
+          echo "时间预算用尽 $(date -u +%FT%TZ)"
+          renew

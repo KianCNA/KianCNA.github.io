@@ -72,3 +72,37 @@ jobs:
           gh api -X POST "repos/${GITHUB_REPOSITORY}/actions/workflows/mobile-build.yml/dispatches" \
             -f ref=main
           echo "已触发"
+
+      - name: 三家运营商数据过期时补触发
+        # 与移动同理：schedule 对本仓库丢触发严重，电信/广电/联通的定时运行
+        # 实测每天只落地 1~2 轮。这里按各自阈值检查线上 latest.json，
+        # 过期且没有正在跑/排队的运行就补一次手动触发，心跳断链时兜底。
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          check() {
+            local wf=$1 dir=$2 th=$3
+            local u
+            u=$(curl -fsSL "https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/main/${dir}/data/latest.json" \
+                | jq -r '.updated // empty') || u=""
+            if [ -z "$u" ]; then echo "[${dir}] 取不到 updated，跳过"; return 0; fi
+            local age
+            age=$(( $(date -u +%s) - $(date -u -d "$u" +%s) ))
+            echo "[${dir}] 数据距今 $((age/60)) 分钟"
+            if [ "$age" -lt "$th" ]; then return 0; fi
+            local active
+            active=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/${wf}.yml/runs?per_page=5" \
+                     | jq '[.workflow_runs[] | select(.status == "in_progress" or .status == "queued" or .status == "waiting")] | length')
+            if [ "$active" != "0" ]; then
+              echo "[${dir}] 有 $active 个运行在进行/排队，不重复触发"
+              return 0
+            fi
+            echo "::warning::[${dir}] 数据已过期 $((age/3600)) 小时，自动补触发 ${wf}"
+            gh api -X POST "repos/${GITHUB_REPOSITORY}/actions/workflows/${wf}.yml/dispatches" \
+              -f ref=main || echo "[${dir}] 触发失败"
+          }
+          check telecom-build telecom 14400
+          check gb-build gb 21600
+          check unicom-build unicom 36000
+          echo "三家检查完成"
