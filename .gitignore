@@ -13,3 +13,6 @@ tg_run.log
 
 # 诊断输出：移动管线每轮重写，仅供排查用
 _diag.json
+
+# 公告抓取诊断日志：由 workflow 生成，仅供排查用，不入库
+probe/
