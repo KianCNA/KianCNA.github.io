@@ -1,7 +1,17 @@
 {
- "updated": "2026-11-18 16:05",
+ "updated": "2026-11-18 18:07",
  "count": 176,
  "items": [
+  {
+   "id": "56193",
+   "prov": "tianjin",
+   "prov_name": "天津",
+   "title": "关于个人信息保护负责人联系方式的公告",
+   "date": "2026-11-18",
+   "summary": "尊敬的客户： 为更好地保护您的个人信息安全，根据国家相关法律法规的要求，本公司已设立个人信息保护负责人，负责监督和管理本公司个人信息保护相关工作。如您对本公司个",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/tj/index_220_220_detail_56193.html",
+   "status": "on"
+  },
   {
    "id": "56192",
    "prov": "tianjin",
@@ -993,16 +1003,6 @@
    "status": "on"
   },
   {
-   "id": "55652",
-   "prov": "tianjin",
-   "prov_name": "天津",
-   "title": "关于面向移动客户提供“关闭国际及港澳台来话接听、国际及港澳台短信接收”功能服务的公告",
-   "date": "2026-08-14",
-   "summary": "尊敬的客户: 您好！ 为落实工信部“跨境业务按需办理”便民服务相关要求及反诈工作部署，净化通信环境，切实保障人民财产安全，降低被跨境诈骗电话及诈骗短信侵害风险，",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/tj/index_220_220_detail_55652.html",
-   "status": "on"
-  },
-  {
    "id": "55633",
    "prov": "jiangxi",
    "prov_name": "江西",
@@ -1775,10 +1775,10 @@
   {
    "section": "tianjin",
    "name": "天津",
-   "count": 44,
-   "active": 44,
+   "count": 45,
+   "active": 45,
    "removed": 0,
-   "updated": "2026-11-17 01:37"
+   "updated": "2026-11-18 18:07"
   },
   {
    "section": "hebei",

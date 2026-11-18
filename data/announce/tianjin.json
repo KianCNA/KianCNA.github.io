@@ -1,7 +1,18 @@
 {
- "updated": "2026-11-17 01:37",
- "count": 44,
+ "updated": "2026-11-18 18:07",
+ "count": 45,
  "items": [
+  {
+   "id": "56193",
+   "title": "关于个人信息保护负责人联系方式的公告",
+   "date": "2026-11-18",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/tj/index_220_220_detail_56193.html",
+   "status": "on",
+   "first_seen": "2026-11-18 18:06",
+   "summary": "尊敬的客户： 为更好地保护您的个人信息安全，根据国家相关法律法规的要求，本公司已设立个人信息保护负责人，负责监督和管理本公司个人信息保护相关工作。如您对本公司个人信息保护政策或措施有任何疑问、意见或建议，欢迎通过以下方式与个人信息保护负责人",
+   "content": "<p style=\"text-align:justify\"><br>\n</p>\n<p style=\"text-align:justify\"><p>尊敬的客户：</p>\n<p style=\"background-image:initial;background-position:initial;background-size:initial;background-repeat:initial;background-attachment:initial;background-origin:initial;background-clip:initial\">为更好地保护您的个人信息安全，根据国家相关法律法规的要求，本公司已设立个人信息保护负责人，负责监督和管理本公司个人信息保护相关工作。如您对本公司个人信息保护政策或措施有任何疑问、意见或建议，欢迎通过以下方式与个人信息保护负责人联系。</p>\n<p>联系方式：grxxbh@tj.chinamobile.com</p>\n<p>感谢您一直以来对天津移动的信任与支持！</p>\n<p> </p>\n<p> </p>\n<p style=\"text-align:right\">中国移动通信集团天津有限公司</p>\n<p style=\"text-align:right\">2026年11月18日</p>\n</p>\n<p><br>\n</p>",
+   "attachments": []
+  },
   {
    "id": "56192",
    "title": "关于算力豆产品向MobileAI产品迁移的公告",
@@ -378,6 +389,6 @@
  ],
  "section": "tianjin",
  "name": "天津",
- "active": 44,
+ "active": 45,
  "removed": 0
 }
