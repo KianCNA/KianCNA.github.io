@@ -7,6 +7,10 @@ name: Ops Heartbeat
 # 本工作流常驻循环：按线上 <op>/data/latest.json 的时间戳判断数据是否够旧，
 # 够旧且该管线没有正在跑/排队的运行就 dispatch 一轮，跑完再继续等。
 # 单次运行接近 runner 上限前用 workflow_dispatch 续期，循环永续。
+#
+# 说明：与 API 的交互一律用 curl + GITHUB_TOKEN（不依赖 gh）。此前版本用
+# gh api，在 runner 上全部失败且错误被 2>/dev/null 吞掉，心跳因此永远判定
+# 「有运行在跑」而不敢触发，等于空转。
 
 on:
   workflow_run:
@@ -29,8 +33,6 @@ jobs:
       - name: 循环驱动三家抓取
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # 超过该时长未更新就补触发（秒）。电信约 9 分钟一轮、广电约 40 分钟、
-          # 联通约 75 分钟，阈值按各自节拍留足余量。
           TH_TELECOM: "14400"
           TH_GB: "21600"
           TH_UNICOM: "36000"
@@ -40,11 +42,34 @@ jobs:
           MIN_GAP=900
           LAST_DISPATCH=0
 
-          gh_api() {
-            local out i
+          # 统一带重试的 API 调用；错误可见，不再静默吞掉
+          api() {
+            local url="$1" i out
             for i in 1 2 3; do
-              if out=$(gh api "$@" 2>/dev/null); then printf '%s' "$out"; return 0; fi
-              echo "[warn] gh api 失败（$i/3），10s 后重试" >&2
+              if out=$(curl -fsSL --max-time 30 \
+                -H "Authorization: Bearer ${GH_TOKEN}" \
+                -H "Accept: application/vnd.github+json" \
+                -H "User-Agent: ops-heartbeat" "$url" 2>/tmp/api_err); then
+                printf '%s' "$out"; return 0
+              fi
+              echo "[warn] API 调用失败（$i/3，$url）：$(head -c 120 /tmp/api_err)" >&2
+              sleep 10
+            done
+            return 1
+          }
+
+          api_post() {
+            local url="$1" i out
+            for i in 1 2 3; do
+              if out=$(curl -fsS --max-time 30 -X POST \
+                -H "Authorization: Bearer ${GH_TOKEN}" \
+                -H "Accept: application/vnd.github+json" \
+                -H "User-Agent: ops-heartbeat" \
+                -H "Content-Type: application/json" \
+                -d '{"ref":"main"}' "$url" 2>/tmp/api_err); then
+                printf '%s' "$out"; return 0
+              fi
+              echo "[warn] 触发失败（$i/3，$url）：$(head -c 120 /tmp/api_err)" >&2
               sleep 10
             done
             return 1
@@ -54,9 +79,7 @@ jobs:
           renew() {
             [ "$RENEWED" = "1" ] && return 0
             RENEWED=1
-            if gh_api -X POST \
-                "repos/${GITHUB_REPOSITORY}/actions/workflows/ops-heartbeat.yml/dispatches" \
-                -f ref=main >/dev/null; then
+            if api_post "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/ops-heartbeat.yml/dispatches" >/dev/null; then
               echo "已续期新心跳 $(date -u +%FT%TZ)"
             else
               echo "::warning::心跳续期失败，等待 build-watchdog 兜底"
@@ -65,31 +88,32 @@ jobs:
           trap renew EXIT
 
           latest_updated() {
-            curl -fsSL -H 'Cache-Control: no-cache' \
-              "https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/main/$1/data/latest.json" \
-              | jq -r '.updated // empty' 2>/dev/null || true
+            local u
+            u=$(curl -fsSL --max-time 20 -H 'Cache-Control: no-cache' \
+                "https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/main/$1/data/latest.json" \
+                | jq -r '.updated // empty' 2>/dev/null) || u=""
+            printf '%s' "$u"
           }
 
           data_age() {
-            local u
+            local u t
             u=$(latest_updated "$1")
             [ -n "$u" ] || { echo 999999; return 0; }
-            local t
             t=$(date -u -d "$u" +%s 2>/dev/null) || { echo 999999; return 0; }
             echo $(( $(date -u +%s) - t ))
           }
 
+          # 运行在跑/排队的数量。API 取不到时按 0 处理（宁可多触发一次，
+          # 由各管线的并发组与数据阈值兜住，心跳不能因此永远空转）。
           count_active() {
-            local j
-            j=$(gh_api "repos/${GITHUB_REPOSITORY}/actions/workflows/$1/runs?per_page=5" || true)
-            [ -n "$j" ] || { echo 1; return 0; }
-            printf '%s' "$j" | jq '[.workflow_runs[] | select(.status == "in_progress" or .status == "queued" or .status == "waiting")] | length'
+            local out n
+            out=$(api "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/$1.yml/runs?per_page=5") || { echo 0; return 0; }
+            n=$(printf '%s' "$out" | jq '[.workflow_runs[] | select(.status == "in_progress" or .status == "queued" or .status == "waiting")] | length' 2>/dev/null) || n=0
+            echo "$n"
           }
 
           dispatch() {
-            if gh_api -X POST \
-                "repos/${GITHUB_REPOSITORY}/actions/workflows/$1.yml/dispatches" \
-                -f ref=main >/dev/null; then
+            if api_post "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/$1.yml/dispatches" >/dev/null; then
               echo "已触发 $1 $(date -u +%FT%TZ)"
               return 0
             fi
@@ -97,7 +121,6 @@ jobs:
             return 1
           }
 
-          # 三家（工作流名, 数据目录, 阈值秒）
           OPS="telecom-build gb-build unicom-build"
 
           while :; do
@@ -113,8 +136,8 @@ jobs:
                 gb)      th=$TH_GB ;;
                 unicom)  th=$TH_UNICOM ;;
               esac
-              printf '[%s] 数据距今 %s 分钟（阈值 %s 分钟）' "$dir" "$((age/60))" "$((th/60))"
               active=$(count_active "$op")
+              printf '[%s] 数据距今 %s 分钟（阈值 %s 分钟），运行数 %s' "$dir" "$((age/60))" "$((th/60))" "$active"
               if [ "$age" -ge "$th" ] && [ "$active" = "0" ]; then
                 STALE="$STALE $op"
                 printf ' → 触发\n'
@@ -132,7 +155,6 @@ jobs:
                 fi
               done
               if [ "$DISPATCHED" = "1" ]; then
-                # 等这些管线跑完再进入下一轮，避免重复排队
                 while [ "$(date -u +%s)" -lt "$DEADLINE" ]; do
                   sleep 60
                   ACTIVE=0
@@ -146,7 +168,6 @@ jobs:
               fi
             fi
 
-            # 没触发就睡 5 分钟，或睡到预算用尽
             SLEEP=$(( LEFT < 300 ? LEFT : 300 ))
             echo "=== 睡眠 $((SLEEP/60)) 分钟至 $(date -u -d "+$SLEEP seconds" +%FT%TZ) ==="
             sleep "$SLEEP"
