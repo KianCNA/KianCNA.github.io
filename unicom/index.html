@@ -1195,8 +1195,6 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
     <button class="tab" data-v="quanguo">全国资费</button>
     <button class="tab" data-v="prov">省份资费</button>
     <button class="tab" data-v="history">变化历史</button>
-    <button class="tab" data-v="announce"><span id="anTabTxt">联通公告</span><span class="an-dot" id="anDot"></span></button>
-    <button class="tab" data-v="about">关于</button>
   </nav>
   <span class="tabs-edge l"></span><span class="tabs-edge r"></span>
   </div>
@@ -1280,30 +1278,6 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
       </div>
     </section>
 
-    <section class="view" id="v-announce">
-      <div class="panel glass">
-        <div class="ph"><h2 class="pt" id="anTitle">湖南移动公告</h2><span class="ps" id="anDesc">来源：官网公告</span><button class="an-refresh" id="anRefresh" type="button" title="重新拉取最新公告">刷新</button></div>
-        <div class="an" id="anBox"></div>
-      </div>
-    </section>
-
-    <section class="view" id="v-about">
-      <div class="panel glass">
-        <div class="ph"><h2 class="pt">关于本页</h2></div>
-        <div class="ab">
-          <p>本页面展示中国联通「全网资费」及各省（默认北京）的公开资费资料，数据由自动监控程序定期抓取官网并存入代码仓库，再发布为静态网页。</p>
-          <ul>
-            <li><b>数据来源：</b>中国联通官网公开资费专区（湖南 + 全国，31 省可选）</li>
-            <li><b>页面版本：</b>2026-09-27（看到这一行说明是最新版；看不到就是手机缓存，请清缓存或用无痕模式打开）</li>
-            <li><b>省份切换：</b>「省份资费」页可自助选择其他省份，默认北京；变化历史同样按省份标注</li>
-            <li><b>更新方式：</b>自动定时抓取比对，有变化即刷新本页</li>
-            <li><b>数据口径：</b>以官网「适用地区」「适用范围」字段为准，仅供参考</li>
-            <li><b>运营商：</b>顶部可切换运营商主题，目前仅中国移动已接入抓取数据</li>
-            <li><b>免责声明：</b>展示内容可能存在延迟或误差，办理业务请以营业厅 / 官方客服信息为准</li>
-          </ul>
-        </div>
-      </div>
-    </section>
   </main>
 </div>
 
@@ -1467,7 +1441,7 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
 <script>
 "use strict";
 var D = { updated:"", stats:{}, sections:[], prov_stats:{}, hunan_dist:{}, quanguo_dist:{},
-            items:[], qitems:null, history:[], announce:{updated:"",count:0,items:[]} };
+            items:[], qitems:null, history:[] };
 var DATA_BASE = "./data/";
 var CK_WF = "unicom-fetch.yml";
 var REAL_OK = false;
@@ -1613,10 +1587,9 @@ function __fail(e){
 }
 function __bootReal(){
   return Promise.all([
-    __j(DATA_BASE + "latest.json"),
-    __j(DATA_BASE + "announce.json").catch(function(){ return {updated:"",count:0,items:[]}; })
+    __j(DATA_BASE + "latest.json")
   ]).then(function(rs){
-    var latest = rs[0] || {}, hist = [], ann = rs[1] || {};
+    var latest = rs[0] || {}, hist = [];
     D.updated = latest.updated || "";
     var ps = latest.prov_stats || {};
     var def = latest.default || "beijing";
@@ -1641,7 +1614,6 @@ function __bootReal(){
     D.hunan_dist = hd;
     D.quanguo_dist = latest.prov_dist || {};
     D.history = hist || [];
-    D.announce = (ann && ann.items) ? ann : {updated:"", count:0, items:[]};
     /* 部分站点(联通/电信/广电) 只有 onsale+total，无 personal/gq；dist 为一级结构。
        这里在内存中补齐，保证统计卡与分布图有数据，不改动任何原始数据文件 */
     (function(){
@@ -1687,7 +1659,6 @@ function __bootReal(){
     REAL_OK = true;
     /* 单处渲染异常不应阻断后续流程，尤其是历史记录的异步加载 */
     try { boot(); } catch(e) { if(window.console){ console.error(e); } }
-    try { paintAnnDot(); } catch(e) {}
     /* history.json 体积较大（近 9MB），改为首屏渲染完成后异步加载，
        避免与资费列表争抢主线程，导致点开页面长时间卡顿 */
     setTimeout(function(){ loadHistory(); }, 40);
@@ -2254,33 +2225,9 @@ function histToggleAll(){
   var tg2 = document.getElementById("hTogAll");
   if(tg2){ tg2.textContent = HIST_ALL ? "全部收起" : "全部展开"; }
 }
-function renderAnnounce(){
-  var a = D.announce || {};
-  var box = document.getElementById("anBox"), desc = document.getElementById("anDesc");
-  var op = OP_MAP[state.op];
-  document.getElementById("anTitle").textContent = hasData() ? "湖南移动公告" : (op.name + "公告");
-  document.getElementById("anTabTxt").textContent = hasData() ? "湖南公告" : (op.short + "公告");
-  if(!hasData()){
-    desc.textContent = "暂无接入";
-    box.innerHTML = emptyBox(op.name + "公告源待接入");
-    return;
-  }
-  desc.textContent = "来源：湖南移动官网公告 · 更新于 " + (a.updated || "—");
-  var items = a.items || [];
-  if(!items.length){ box.innerHTML = '<div style="color:var(--tx3);font-size:13px">暂无公告</div>'; return; }
-  box.innerHTML = items.map(function(x, i){
-    return '<div class="ai" data-ai="' + i + '" role="button" tabindex="0">' +
-      '<div class="ai-t">' + esc(x.title) + "</div>" +
-      '<div class="ai-d">' + esc(x.date || "") + "</div>" +
-      '<div class="ai-s">' + esc(x.summary || "") + "</div>" +
-      '<div class="ai-more">查看完整内容 ›</div></div>';
-  }).join("");
-}
-
 /* ---------- 视图切换 ---------- */
 function setView(v){
   state.view = v;
-  if(v === "announce"){ markAnnRead(); }
   var tabs = document.querySelectorAll(".tab");
   for(var i=0;i<tabs.length;i++){
     var on = tabs[i].getAttribute("data-v") === v;
@@ -2291,7 +2238,6 @@ function setView(v){
   for(var j=0;j<vs.length;j++){ vs[j].classList.toggle("on", vs[j].id === "v-" + v); }
   if(v === "overview"){ renderOverview(); }
   if(v === "history"){ HIST_INIT = false; renderHistory(); }
-  if(v === "announce"){ renderAnnounce(); }
   window.scrollTo({ top:0, behavior:"smooth" });
 }
 /* 仅在切换 tab / 尺寸变化时居中；滚动时不再回拉，避免滑动被锁死 */
@@ -3429,7 +3375,7 @@ function applyOp(key){
   renderOpGrid();
   renderOverview();
   renderList("q"); renderList("p");
-  renderHistory(); renderAnnounce();
+  renderHistory();
   var on = document.querySelector(".tab.on");
   if(on){ moveInd(on, false); }
   toast(o.ready ? ("已切换到" + o.name) : (o.name + "：界面已就绪，暂无抓取数据"));
@@ -4046,69 +3992,12 @@ function boot(){
   renderList("q");
   renderList("p");
   renderHistory();
-  renderAnnounce();
   setTimeout(function(){
     var on = document.querySelector(".tab.on");
     if(on){ moveInd(on, false); }
   }, 60);
 }
 
-/* ---------- 公告未读红点 ---------- */
-function annItems(){ return (D.announce && D.announce.items) ? D.announce.items : []; }
-function __ls(k, v){
-  try{
-    if(v === undefined){ return localStorage.getItem(k); }
-    localStorage.setItem(k, v);
-  }catch(e){}
-  return null;
-}
-function annUnread(){
-  var its = annItems();
-  if(!its.length){ return 0; }
-  var last = __ls("ann_last_" + state.op) || "";
-  var n = 0;
-  for(var i=0;i<its.length;i++){
-    if(String(its[i].id) === last){ break; }
-    n++;
-  }
-  return n;
-}
-function markAnnRead(){
-  var its = annItems();
-  if(its.length){ __ls("ann_last_" + state.op, String(its[0].id)); }
-  paintAnnDot();
-}
-function paintAnnDot(){
-  var d = document.getElementById("anDot");
-  if(!d){ return; }
-  var n = annUnread();
-  if(n > 0){ d.textContent = n > 99 ? "99+" : String(n); d.style.display = ""; }
-  else { d.style.display = "none"; d.textContent = ""; }
-}
-function openAnn(i){
-  var x = annItems()[i];
-  if(!x){ return; }
-  // 公告正文来自抓取，直接拼进 innerHTML 就是注入点；去标签后按纯文本转义输出
-  var _txt = plain(x.content || x.summary || "");
-  var body = '<div class="an-dv">' +
-    '<div class="an-dv-d">' + esc(x.date || "") + "</div>" +
-    '<div class="an-dv-c"' + (_txt ? ' style="white-space:pre-wrap"' : "") + ">" +
-      (_txt ? esc(_txt) : '<div class="dfnone">该公告正文需在官网查看（源站接口未开放正文抓取）</div>') + "</div>" +
-    (x.page_url ? '<div class="an-dv-l"><a href="' + esc(x.page_url) + '" target="_blank" rel="noopener">查看原文 ↗</a></div>' : "") +
-    "</div>";
-  document.getElementById("mTitle").textContent = x.title || "公告详情";
-  document.getElementById("mBody").innerHTML = body;
-  var cp = document.getElementById("mCopy");
-  if(cp){ cp.style.display = "none"; }
-  document.getElementById("mask").classList.add("on");
-}
-document.addEventListener("click", function(e){
-  var ai = e.target && e.target.closest ? e.target.closest(".ai") : null;
-  if(ai){
-    openAnn(parseInt(ai.getAttribute("data-ai"), 10));
-    return;
-  }
-}, true);
 
 if(document.readyState === "loading"){
   document.addEventListener("DOMContentLoaded", __bootReal);
@@ -4156,38 +4045,6 @@ if(document.readyState === "loading"){
   setInterval(check, 120000);   // 每 2 分钟静默比对一次
 })();
 
-/* ② 公告刷新按钮：直接重拉 announce.json 并重渲染，不必整页刷新 */
-(function(){
-  function bind(){
-    var btn = document.getElementById("anRefresh");
-    if(!btn || btn.__bound) return;
-    btn.__bound = 1;
-    btn.addEventListener("click", function(){
-      var old = btn.textContent;
-      btn.classList.add("loading");
-      btn.textContent = "拉取中";
-      var u = (window.DATA_BASE || "./data/") + "announce.json";
-      fetch(u + "?_t=" + Date.now(), {cache:"no-store"})
-        .then(function(r){ return r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status)); })
-        .then(function(j){
-          if(!D) return;
-          D.announce = (j && j.items) ? j : {updated:"",count:0,items:[]};
-          if(typeof renderAnnounce === "function") renderAnnounce();
-          btn.textContent = "已更新";
-          setTimeout(function(){ btn.classList.remove("loading"); btn.textContent = old; }, 1200);
-        })
-        .catch(function(e){
-          btn.classList.remove("loading");
-          btn.textContent = "失败";
-          setTimeout(function(){ btn.textContent = old; }, 1800);
-        });
-    });
-  }
-  if(document.readyState === "loading")
-    document.addEventListener("DOMContentLoaded", bind);
-  else bind();
-  setTimeout(bind, 800);
-})();
 
 </script>
 <div id="newTip"></div>
