@@ -1,7 +1,17 @@
 {
- "updated": "2026-11-19 23:37",
+ "updated": "2026-11-20 01:44",
  "count": 176,
  "items": [
+  {
+   "id": "56194",
+   "prov": "hubei",
+   "prov_name": "湖北",
+   "title": "湖北移动系统升级公告",
+   "date": "2026-11-20",
+   "summary": "尊敬的中国移动湖北公司客户： 为向客户提供更优质的服务，湖北移动将于2026年11月20日0：00至11月20日07：30进行网络系统升级工作。在此期间，将影响",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hb/index_270_270_detail_56194.html",
+   "status": "on"
+  },
   {
    "id": "56193",
    "prov": "tianjin",
@@ -710,16 +720,6 @@
    "date": "2026-10-21",
    "summary": "尊敬的中国移动湖北公司客户： 为向客户提供更优质的服务，湖北移动将于2026年10月22日22：30至10月23日07：30进行网络系统升级工作。在此期间，将影",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/hb/index_270_270_detail_56042.html",
-   "status": "on"
-  },
-  {
-   "id": "56041",
-   "prov": "hubei",
-   "prov_name": "湖北",
-   "title": "湖北移动系统升级公告",
-   "date": "2026-10-21",
-   "summary": "尊敬的中国移动湖北公司客户： 为向客户提供更优质的服务，湖北移动将于2026年10月21日22：30至10月22日07：30进行网络系统升级工作。在此期间，将影",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hb/index_270_270_detail_56041.html",
    "status": "on"
   },
   {
@@ -1895,10 +1895,10 @@
   {
    "section": "hubei",
    "name": "湖北",
-   "count": 1327,
-   "active": 1327,
+   "count": 1328,
+   "active": 1328,
    "removed": 0,
-   "updated": "2026-11-09 15:47"
+   "updated": "2026-11-20 01:44"
   },
   {
    "section": "hunan",
