@@ -526,75 +526,16 @@ body{
 .ckbox{padding:2px 2px 4px}
 /* ---- 最新检测卡片 ---- */
 .ldp{border:1px solid var(--bd2)}
-.ldp.flash{animation:ldflash 1.6s ease}
 @keyframes ldflash{0%{box-shadow:0 0 0 0 rgba(52,211,153,.55)}100%{box-shadow:0 0 0 14px rgba(52,211,153,0)}}
-.ldbox{margin:10px auto 0;max-width:340px;border-radius:12px;border:1px solid var(--bd2);
-  background:var(--glass2);padding:10px 12px;text-align:left}
-.ldbox.flash{animation:ldflash 1.6s ease}
-.ldhd{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px}
-.ldhd-t{font-size:11.5px;font-weight:800;color:var(--tx2);letter-spacing:.2px;flex:none}
-.ldhd-s{font-size:11px;font-weight:700;color:var(--op1);text-align:right;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ldbody2{min-height:40px;min-width:0}
-.ldsum{font-size:12.5px;font-weight:700;color:var(--tx2);margin-bottom:6px;font-variant-numeric:tabular-nums}
-.ldsum b{font-weight:800;margin-right:1px}
-.ldsum b.a{color:var(--ok)} .ldsum b.d{color:var(--bad)} .ldsum b.m{color:var(--warn)} .ldsum b.z{color:var(--tx3)}
-.ldbody{min-height:64px}
-.ldempty{font-size:12.5px;color:var(--tx2);text-align:center;padding:16px 8px}
-.ldrow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
-.ldc{flex:1 1 86px;min-width:86px;border-radius:10px;padding:9px 10px;background:var(--glass2);border:1px solid var(--bd);text-align:center}
-.ldc .n{font-size:20px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
-.ldc .l{font-size:11px;color:var(--tx2);margin-top:2px;font-weight:600}
-.ldc.a .n{color:var(--ok)} .ldc.d .n{color:var(--bad)} .ldc.m .n{color:var(--warn)}
-.ldts{font-size:11.5px;color:var(--tx2);margin-bottom:8px;font-variant-numeric:tabular-nums}
-.ldts b{color:var(--tx)}
 .ldsec{font-size:11.5px;font-weight:700;color:var(--tx2);margin:8px 0 5px}
-.ldchips{display:flex;flex-wrap:wrap;gap:5px}
-.ldchip{font-size:11.5px;padding:4px 9px;border-radius:9px;background:var(--glass2);border:1px solid var(--bd);color:var(--tx);font-weight:600}
-.ldchip.a{border-color:rgba(52,211,153,.4);color:#7ff0c4}
-.ldchip.d{border-color:rgba(251,113,133,.4);color:#ff97a8}
-.ldchip.m{border-color:rgba(251,191,36,.4);color:#fcd34d}
-.ldmore{font-size:11.5px;color:var(--tx2);margin-top:6px}
-.ckprov{display:flex;align-items:center;gap:8px;justify-content:center;margin:0 auto 10px;padding:8px 10px;max-width:320px;
-  border-radius:10px;background:var(--glass2);border:1px solid var(--bd)}
-.ckpl{font-size:12px;font-weight:700;color:var(--tx2);flex:0 0 auto}
-.ckpsel{flex:1 1 auto;min-width:0;font-size:13px;font-weight:700;color:var(--tx);font-family:inherit;
-.ckpsel-btn{display:flex;align-items:center;gap:7px;cursor:pointer;text-align:left;
-  padding:8px 11px;border-radius:11px;border:1px solid var(--bd2);background:var(--glass2);
-  transition:border-color .18s,background .18s}
-.ckpsel-btn:hover{border-color:var(--ac)}
-.ckpsel-btn:active{transform:scale(.98)}
-.ckpv-dot{width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 1px 3px rgba(0,0,0,.25)}
-.ckpv-nm{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13.5px;font-weight:800}
-.ckpv-ar{flex:none;font-style:normal;color:var(--tx3);font-size:12px}
-[data-theme="light"] .ckpsel-btn{background:#fff;border-color:#dbe6f5}
-  padding:5px 8px;border-radius:8px;background:var(--bg2);border:1px solid var(--bd2);outline:none}
-.ck-wait{font-size:11.5px;color:var(--tx2);text-align:center;margin:6px 0 2px;font-variant-numeric:tabular-nums}
-.ck-logs{margin:8px auto 0;max-width:300px;text-align:left}
-.cklog{font-size:11px;color:var(--tx2);line-height:1.6;padding:3px 8px;border-radius:7px;background:var(--glass2);border:1px solid var(--bd);margin-bottom:4px}
-.cklog span{font-weight:700;color:var(--op1);margin-right:5px;font-variant-numeric:tabular-nums}
-.cklog.bad{color:var(--bad);border-color:rgba(251,113,133,.3)}
-.cklog.bad span{color:var(--bad)}
-.ckspin{width:46px;height:46px;margin:8px auto 14px;position:relative}
-.ckspin i{position:absolute;inset:0;border-radius:50%;border:3px solid var(--bd2);
-  border-top-color:var(--op1);border-right-color:var(--op2);animation:ckspin .9s linear infinite}
 @keyframes ckspin{to{transform:rotate(360deg)}}
-.ckspin.done i{animation:none;border-color:var(--op3);border-top-color:var(--op3);border-right-color:var(--op3)}
-.ckspin.done::after{content:'\2713';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:22px;font-weight:800;color:var(--op3)}
-.ckstat{text-align:center;font-size:14.5px;font-weight:700;color:var(--tx);line-height:1.65}
 .ckmeta{margin-top:8px;text-align:center;font-size:12.5px;color:var(--tx2);line-height:1.8}
 .ckmeta b{color:var(--op2);font-weight:700}
-.ckbar{margin:16px 0 2px;height:6px;border-radius:99px;background:var(--bg2);overflow:hidden;border:1px solid var(--bd2)}
-.ckbar>span{display:block;height:100%;width:0;border-radius:99px;
-  background:linear-gradient(90deg,var(--op1),var(--op2));transition:width .45s ease}
 .cktips{margin:14px 0 0;padding:12px 14px;border-radius:12px;background:var(--bg2);border:1px solid var(--bd2);
   font-size:12.5px;color:var(--tx2);line-height:1.9}
 .cktips li{margin-left:16px}
 @media (max-width:600px){
-  .ckstat{font-size:13.5px}
   .cktips{font-size:12px;padding:10px 12px}
-  #ckMask .mf{flex-wrap:wrap}
-  #ckMask .mf .btn{flex:1 1 auto;justify-content:center;min-width:0;padding-left:8px;padding-right:8px}
 }
 
 @keyframes fin{from{opacity:0}to{opacity:1}}
@@ -757,9 +698,6 @@ body{
 [data-theme="light"] .pv.on{border-color:var(--ica)}
 /* ---- 站点一次性公告 ---- */
 .pk-sum-h{margin-top:6px;font-size:11px;color:var(--tx3);line-height:1.5}
-.ldnote{margin-top:8px;padding:8px 10px;border-radius:9px;background:var(--glass2);border:1px solid var(--bd);
-  font-size:11px;line-height:1.65;color:var(--tx2)}
-.ldnote b{color:var(--tx)}
 .ntbox{font-size:13px;line-height:1.75}
 .ntv{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:999px;font-size:11px;
   font-weight:800;color:#fff;background:linear-gradient(135deg,var(--op1),var(--op2));margin-bottom:10px}
@@ -1308,45 +1246,6 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
 </div>
 
 <!-- 详情弹窗 -->
-<!-- 检测弹窗 -->
-<div class="mask" id="ckMask">
-  <div class="modal">
-    <div class="mh"><h3 id="ckTitle">检测最新资费 <span id="ckVer" class="ntv" style="margin:0 0 0 6px;font-size:10px;padding:2px 8px">v10</span></h3><button class="mx" id="ckX">×</button></div>
-    <div class="mb">
-      <div class="ckbox">
-        <div class="ckprov">
-          <span class="ckpl">检测范围</span>
-          <button type="button" id="ckProvBtn" class="ckpsel ckpsel-btn">
-            <span class="ckpv-dot" id="ckProvDot"></span>
-            <span class="ckpv-nm" id="ckProvNm">北京</span>
-            <i class="ckpv-ar">▾</i>
-          </button>
-        </div>
-        <div class="ckspin" id="ckSpin"><i></i></div>
-        <div class="ckstat" id="ckStat">正在读取线上数据…</div>
-        <div class="ckmeta" id="ckMeta"></div>
-        <div class="ck-wait" id="ckWait"></div>
-        <div class="ldbox" id="ldBox">
-          <div class="ldhd"><span class="ldhd-t">最新一次资费变化</span><span class="ldhd-s" id="ldDesc">读取中…</span></div>
-          <div class="ldbody2" id="ldBody"><div class="ldempty">正在读取最近一次变化…</div></div>
-        </div>
-        <div class="ck-logs" id="ckLog"></div>
-        <div class="ckbar"><span id="ckBar"></span></div>
-        <ul class="cktips">
-          <li>每 15 秒查询一次<b>所选省份</b>的在架数与更新时间，<b>有变化自动刷新</b></li>
-          <li>切换省份会立即以该省为基线重新检测（记住上次选择）</li>
-          <li>想自定义推送渠道 / 运营商 / 省份，点下方「自定义推送」</li>
-        </ul>
-      </div>
-    </div>
-    <div class="mf">
-      <button class="btn" id="ckStop">停止检测</button>
-      <button class="btn" id="ckOk">后台继续检测</button>
-      <button class="btn pri" id="ckPush">自定义推送</button>
-    </div>
-  </div>
-</div>
-
 <!-- 自定义推送弹窗 -->
 <div class="mask" id="psMask">
   <div class="modal" style="width:min(520px,100%)">
@@ -2365,413 +2264,6 @@ function dvHtml(it){
   return html;
 }
 function closeModal(){ document.getElementById("mask").classList.remove("on"); }
-/* ---------- 检测最新资费 ---------- */
-var CK = { t:null, cd:null, n:0, base:"", max:40, left:15, paused:false, prov:"", baseU:"", baseT:0 };
-function ckGhUrl(){
-  return "https://github.com/WoShiYiGeManHuaJia/hunan-tariff-site/actions/workflows/" + CK_WF;
-}
-/* ---- 单省份检测：只盯所选省份的在架数与更新时间 ----
-   注意：这里只改「检测弹窗」的比对维度；
-   站点原有的全量定时抓取（云端 cron）不做任何改动。 */
-function ckProvKey(){
-  try{ return "ckProv__" + (typeof CK_WF !== "undefined" ? CK_WF : "site"); }catch(e){ return "ckProv__site"; }
-}
-function ckProvList(){
-  // 复用自定义推送那一份省份表，避免两处维护
-  if(typeof PS_PROV !== "undefined" && PS_PROV && PS_PROV.length){ return PS_PROV; }
-  return [["全国","quanguo"],["湖南","hunan"],["广东","guangdong"]];
-}
-function ckProvName(k){
-  var L = ckProvList();
-  for(var i=0;i<L.length;i++){ if(L[i][1] === k){ return L[i][0]; } }
-  return k || "未知";
-}
-function ckSecOf(j, k){
-  var arr = (j && j.sections) ? j.sections : [];
-  for(var i=0;i<arr.length;i++){ if(arr[i] && arr[i].section === k){ return arr[i]; } }
-  return null;
-}
-function ckProvPaint(){
-  var nm = document.getElementById("ckProvNm");
-  var dot = document.getElementById("ckProvDot");
-  if(nm){ nm.textContent = ckProvName(CK.prov || "beijing"); }
-  if(dot){
-    var c = null;
-    try{ c = (typeof PROV_REGION !== "undefined" && typeof REGION_COLOR !== "undefined")
-      ? (REGION_COLOR[PROV_REGION[ckProvName(CK.prov || "beijing")]] || REGION_COLOR["其他"]) : null; }catch(e){ c = null; }
-    if(c && c.length >= 2){
-      dot.style.display = "";
-      dot.style.background = "linear-gradient(135deg," + c[0] + "," + c[1] + ")";
-    }else{ dot.style.display = "none"; }
-  }
-}
-function ckProvInit(){
-  var btn = document.getElementById("ckProvBtn");
-  var sel = document.getElementById("ckProv");
-  var L = ckProvList(), cur = "";
-  try{ cur = localStorage.getItem(ckProvKey()) || ""; }catch(e){}
-  if(!cur){ cur = "beijing"; }
-  var hit = false;
-  for(var i=0;i<L.length;i++){ if(L[i][1] === cur){ hit = true; break; } }
-  if(!hit){ cur = "beijing"; }
-  CK.prov = cur;
-  ckProvPaint();
-  // 兼容：若页面上仍是旧的 <select>，照旧填充
-  if(sel && sel.tagName === "SELECT"){
-    var h = "";
-    for(var j=0;j<L.length;j++){
-      h += '<option value="' + L[j][1] + '"' + (L[j][1] === cur ? " selected" : "") + '>' + L[j][0] + '</option>';
-    }
-    sel.innerHTML = h;
-    sel.onchange = function(){ ckProvSet(sel.value); };
-  }
-  if(btn){
-    btn.onclick = function(){
-      // 打开前先把 history 拉到手，否则「最新变化次数」会是空的
-      try{ ldRefresh(function(){ ckProvOpen(L); }); }catch(e){ ckProvOpen(L); }
-    };
-  }
-}
-function ckProvOpen(L){
-  try{
-      var opts = [];
-      for(var k=0;k<L.length;k++){
-        var nm = L[k][0], sec = L[k][1], m = null;
-        try{ m = (typeof provMeta !== "undefined") ? provMeta(nm) : null; }catch(e){ m = null; }
-        // 这里是「资费检测」入口：显示该省【最新一次变化的次数】，
-        // 不是首页那个「在架条数」，两套口径分开，不要混用
-        var ch = null;
-        try{ ch = (typeof ldLatestChange === "function") ? ldLatestChange(sec) : null; }catch(e){ ch = null; }
-        var tot = ch ? ch.tot : 0;
-        var tip = nm + (ch ? ("　最新变化 " + ch.ts + "：新增" + ch.added + " / 下架" + ch.removed + " / 修改" + ch.modified)
-                           : "　暂无变化记录");
-        opts.push({ value:sec, label:nm, title:tip,
-          abbr: (m && m.abbr) || nm.slice(0,1),
-          region: (m && m.region) || "其他",
-          ca: (m && m.ca) || "#64748b", cb: (m && m.cb) || "#94a3b8",
-          total: tot, sub: "无变化", pct: 0 });
-      }
-      var mx = 0;
-      opts.forEach(function(o){ if(o.total > mx){ mx = o.total; } });
-      opts.forEach(function(o){ o.pct = mx ? Math.max(6, Math.round(o.total / mx * 100)) : 0; });
-      openPicker({ title:"选择检测省份 · v6", value: CK.prov, options: opts, groupBy: true,
-        sumUnit:"次变化", hint:"数字为该省<b>最新一次</b>资费变化的条数（新增+下架+修改），非在架总数",
-        onPick: function(v){ ckProvSet(v); } });
-  }catch(e){ /* 兜底：出错也至少能选 */ }
-}
-function ckProvSet(k){
-  CK.prov = k;
-  LD.prov = k;
-  try{ localStorage.setItem(ckProvKey(), k); }catch(e){}
-  ckProvPaint();
-  ldRefresh();
-  ckRestart();
-}
-function ckRestart(){
-  // 换省份 = 换基线，从头开始检测
-  ckStopTimer();
-  CK.n = 0; CK.left = 15;
-  var s0 = ckSecOf(D, CK.prov);
-  CK.baseU = (s0 && s0.updated) || D.updated || "";
-  CK.baseT = (s0 && s0.total) || 0;
-  var lg = document.getElementById("ckLog");
-  if(lg){ lg.innerHTML = ""; }
-  var b = document.getElementById("ckBar"); if(b){ b.style.width = "0%"; }
-  var sp = document.getElementById("ckSpin"); if(sp){ sp.classList.remove("done"); }
-  CK.t = setInterval(ckTick, 15000);
-  ckStartCd();
-  ckTick();
-}
-function ckDelta(pname, u, tt){
-  // 变化后再拉一次历史，补上「新增/下架/修改」明细
-  var st = document.getElementById("ckStat"), mt = document.getElementById("ckMeta");
-  fetch(DATA_BASE + "history.json?_=" + Date.now(), {cache:"no-store"}).then(function(r){
-    return r.ok ? r.json() : null;
-  }).then(function(h){
-    var v = null;
-    if(h && h.length){ var last = h[h.length - 1]; v = last[CK.prov] || null; }
-    var a = (v && v.added) || 0, rm = (v && v.removed) || 0, md = (v && v.modified) || 0;
-    var d = (a || rm || md) ? ("<br>最新一轮：新增 " + a + "、下架 " + rm + "、修改 " + md) : "";
-    if(st){ st.textContent = "「" + pname + "」有更新：在架 " + (CK.baseT || 0) + " → " + tt + " 条"; }
-    if(mt){ mt.innerHTML = "数据更新于 <b>" + (u || "未知") + "</b>" + d; }
-    // 先把最新检测结果写进首页卡片，再刷新页面（刷新后卡片也保持最新）
-    ldRefresh(function(){ ldFlash(); });
-    setTimeout(function(){ location.href = location.pathname + "?_=" + Date.now(); }, 1500);
-  }).catch(function(){
-    if(st){ st.textContent = "「" + pname + "」有更新，正在刷新页面…"; }
-    setTimeout(function(){ location.href = location.pathname + "?_=" + Date.now(); }, 800);
-  });
-}
-function ckOpen(){
-  var m = document.getElementById("ckMask");
-  if(!m){ return; }
-  ckProvInit();
-  LD.prov = CK.prov;
-  var s0 = ckSecOf(D, CK.prov);
-  CK.baseU = (s0 && s0.updated) || D.updated || "";
-  CK.baseT = (s0 && s0.total) || 0;
-  CK.base = CK.baseU;
-  var lg = document.getElementById("ckLog"); if(lg){ lg.innerHTML = ""; }
-  document.getElementById("ckStat").textContent = "正在读取「" + ckProvName(CK.prov) + "」线上数据…";
-  document.getElementById("ckMeta").innerHTML = "基线：在架 <b>" + (CK.baseT || 0) + "</b> 条 · 更新于 <b>" + (CK.baseU || "未知") + "</b>";
-  document.getElementById("ckBar").style.width = "0%";
-  document.getElementById("ckSpin").classList.remove("done");
-  m.classList.add("on");
-  ldSetDesc("");
-  ldRefresh();
-  ckStopTimer();
-  CK.n = 0;
-  CK.left = 15;
-  CK.t = setInterval(ckTick, 15000);
-  ckStartCd();
-  ckTick();
-}
-function ldSetDesc(t){ var d = document.getElementById("ldDesc"); if(d){ d.textContent = t || "读取中…"; } }
-function ckStartCd(){
-  ckStopCd();
-  CK.cd = setInterval(function(){
-    CK.left = (CK.left || 15) - 3;
-    if(CK.left <= 0){ CK.left = 15; }
-    ckCountdown();
-  }, 3000);
-  ckCountdown();
-}
-function ckStopCd(){ if(CK.cd){ clearInterval(CK.cd); CK.cd = null; } }
-function ckStopTimer(){ if(CK.t){ clearInterval(CK.t); CK.t = null; } ckStopCd(); }
-function ckStop(){
-  ckStopTimer();
-  var s = document.getElementById("ckStat");
-  if(s){ s.textContent = "已停止检测（数据更新于 " + (CK.base || "未知") + "）"; }
-  var b = document.getElementById("ckStop");
-  if(b){ b.style.display = "none"; }
-}
-function ckClose(){ ckStopTimer(); document.getElementById("ckMask").classList.remove("on"); }
-function ckMin(){
-  document.getElementById("ckMask").classList.remove("on");
-  if(!CK.t){ CK.t = setInterval(ckTick, 15000); }
-  toast("已在后台继续检测，有更新会自动刷新");
-}
-function ckPause(){
-  // 只停轮询，不清 CK.n / CK.base，恢复后接着跑
-  if(CK.t){ clearInterval(CK.t); CK.t = null; ckStopCd(); CK.paused = true; var w=document.getElementById("ckWait"); if(w){ w.textContent = "已暂停（配置弹窗打开中）"; } }
-}
-function ckResume(){
-  if(CK.paused && !CK.t){
-    CK.paused = false;
-    CK.t = setInterval(ckTick, 15000);
-    ckStartCd();
-    ckTick();
-  }
-}
-function ckCountdown(){
-  // 每 3 秒提示一次「距下次检测还有几秒」，让等待有明确反馈
-  if(!CK.t) return;
-  var el = document.getElementById("ckWait");
-  if(!el){ return; }
-  var s = CK.left || 15;
-  if(s <= 0){ el.textContent = "正在请求…"; return; }
-  el.textContent = "距下次检测 " + s + " 秒（第 " + CK.n + " / " + CK.max + " 次）";
-}
-/* ---- 最新检测卡片：显示所选省份最近一次的变化，检测到更新即替换 ---- */
-var LD = { prov:"", ts:"", q:null, hist:null };
-// 取某省「最新一次」有变化的记录：返回 {tot, added, removed, modified, ts}
-// 注意：这里算的是变化次数，跟首页省份卡片的「在架条数」不是一回事，两者不要混用
-// 统计某省【连续多少轮无变化】+ 最后一次变化的记录（用于区分「没抓」和「抓了但没变」）
-function ldNoChangeStreak(prov){
-  var h = LD.hist;
-  if(!h || !h.length){ return { rounds:0, lastTs:"", lastAgo:"" }; }
-  var rounds = 0, lastTs = "";
-  for(var i = h.length - 1; i >= 0; i--){
-    var e = h[i], pv = e[prov];
-    var t = pv ? ((pv.added||0) + (pv.removed||0) + (pv.modified||0)) : 0;
-    if(t > 0){ lastTs = e.ts || ""; break; }
-    rounds++;
-  }
-  var ago = "";
-  if(lastTs){
-    try{
-      var d = new Date(String(lastTs).replace(" ", "T"));
-      if(!isNaN(d.getTime())){
-        var hrs = Math.floor((Date.now() - d.getTime()) / 3600000);
-        ago = hrs < 1 ? "不到 1 小时" : (hrs < 48 ? hrs + " 小时" : Math.floor(hrs/24) + " 天");
-      }
-    }catch(e){}
-  }
-  return { rounds:rounds, lastTs:lastTs, lastAgo:ago };
-}
-function ldLatestChange(prov){
-  var h = LD.hist;
-  if(!h || !h.length){ return null; }
-  for(var i = h.length - 1; i >= 0; i--){
-    var e = h[i], pv = e[prov];
-    if(pv){
-      var a = pv.added || 0, d = pv.removed || 0, m = pv.modified || 0, t = a + d + m;
-      if(t > 0){ return { tot:t, added:a, removed:d, modified:m, ts:e.ts || "" }; }
-    }
-  }
-  return null;
-}
-function ldKey(){ try{ return "ldProv__" + (typeof CK_WF !== "undefined" ? CK_WF : "site"); }catch(e){ return "ldProv__site"; } }
-function ldProvInit(){
-  var cur = "";
-  try{ cur = localStorage.getItem(ldKey()) || ""; }catch(e){}
-  if(!cur){ cur = (typeof CK !== "undefined" && CK.prov) ? CK.prov : "beijing"; }
-  LD.prov = cur;
-}
-function ldSetProv(k){
-  LD.prov = k;
-  try{ localStorage.setItem(ldKey(), k); }catch(e){}
-  if(typeof CK !== "undefined"){ CK.prov = k; try{ localStorage.setItem(ckProvKey(), k); }catch(e2){} }
-  var sel = document.getElementById("ckProv"); if(sel){ sel.value = k; }
-  ldRefresh();
-}
-function ldEsc(s){ return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-function ldChips(names, cls, cap){
-  if(!names || !names.length){ return ""; }
-  var h = "", lim = Math.min(names.length, cap || 8);
-  for(var i=0;i<lim;i++){ h += '<span class="ldchip ' + cls + '">' + ldEsc(names[i]) + '</span>'; }
-  var more = names.length - lim;
-  if(more > 0){ h += '<span class="ldmore">…还有 ' + more + ' 个</span>'; }
-  return h;
-}
-function ldRender(v, ts){
-  var box = document.getElementById("ldBody");
-  var desc = document.getElementById("ldDesc");
-  if(!box){ return; }
-  var pname = ckProvName(LD.prov);
-  if(!v){
-    box.innerHTML = '<div class="ldempty">「' + ldEsc(pname) + '」暂无变化记录</div>';
-    ldSetDesc("暂无变化");
-    return;
-  }
-  var a = v.added || 0, d = v.removed || 0, m = v.modified || 0;
-  var tot = a + d + m;
-  var h = '<div class="ldts">记录时间 <b>' + ldEsc(ts || v.ts || "未知") + '</b></div>';
-  if(tot === 0){
-    h += '<div class="ldsum"><b class="z">0</b> 新增 · <b class="z">0</b> 下架 · <b class="z">0</b> 修改</div>';
-    var sk = { rounds:0, lastTs:"", lastAgo:"" };
-    try{ sk = (typeof ldNoChangeStreak === "function") ? ldNoChangeStreak(LD.prov) : sk; }catch(e){}
-    h += '<div class="ldempty" style="padding:6px">该轮无变化</div>';
-    // 关键提示：区分「程序没抓」和「抓了但源站没变」
-    h += '<div class="ldnote">' + (sk.lastTs
-        ? ('源站自 <b>' + ldEsc(sk.lastTs) + '</b> 起未再变动，距今 <b>' + ldEsc(sk.lastAgo || "—") + '</b>；'
-           + '已连续 <b>' + sk.rounds + '</b> 轮无变化。<br>抓取照常在跑，只是该省资费本身没有更新。')
-        : ('已连续 <b>' + sk.rounds + '</b> 轮无变化，且未找到该省历史变动记录。')) + '</div>';
-    box.innerHTML = h;
-    ldSetDesc("连续 " + sk.rounds + " 轮无变化");
-    return;
-  }
-  h += '<div class="ldsum"><b class="a">+' + a + '</b> 新增 · <b class="d">-' + d + '</b> 下架 · <b class="m">~' + m + '</b> 修改</div>';
-  var an = v.added_names || [], dn = v.removed_names || [], mn = v.modified_names || [];
-  var pick = [];
-  if(an.length){ pick.push(["新增", an, "a"]); }
-  if(dn.length){ pick.push(["下架", dn, "d"]); }
-  if(mn.length){ pick.push(["修改", mn, "m"]); }
-  for(var i = 0; i < pick.length; i++){
-    h += '<div class="ldsec">' + pick[i][0] + '</div><div class="ldchips">' + ldChips(pick[i][1], pick[i][2], 4) + '</div>';
-  }
-  box.innerHTML = h;
-  ldSetDesc("+" + a + " / -" + d + " / ~" + m);
-}
-function ldFlash(){
-  var b = document.getElementById("ldBox");
-  if(!b){ return; }
-  b.classList.remove("flash");
-  void b.offsetWidth;
-  b.classList.add("flash");
-}
-function ldRefresh(cb){
-  if(LD.q){ LD.q.push(cb); return; }
-  LD.q = [cb];
-  fetch(DATA_BASE + "history.json?_=" + Date.now(), {cache:"no-store"}).then(function(r){
-    return r.ok ? r.json() : null;
-  }).then(function(h){
-    LD.hist = h || null;          // 缓存：检测弹窗的省份选择器要用「最新一次变化次数」
-    var v = null, ts = "";
-    if(h && h.length){
-      // 从最新往前找第一条该省有变化的记录
-      for(var i = h.length - 1; i >= 0; i--){
-        var e = h[i], pv = e[LD.prov];
-        if(pv && ((pv.added||0) + (pv.removed||0) + (pv.modified||0)) > 0){ v = pv; ts = e.ts || ""; break; }
-      }
-      if(!v){ var last = h[h.length - 1]; v = last[LD.prov] || null; ts = last.ts || ""; }
-    }
-    ldRender(v, ts);
-    var q = LD.q || []; LD.q = null;
-    q.forEach(function(f){ if(f) f(v); });
-  }).catch(function(){
-    ldRender(null, "");
-    var q = LD.q || []; LD.q = null;
-    q.forEach(function(f){ if(f) f(null); });
-  });
-}
-function ckLogAdd(log, hm, txt, bad){
-  if(!log){ return; }
-  var li = document.createElement("div");
-  li.className = "cklog" + (bad ? " bad" : "");
-  li.innerHTML = '<span>' + hm + '</span> ' + txt;
-  log.insertBefore(li, log.firstChild);
-  while(log.children.length > 4){ log.removeChild(log.lastChild); }
-}
-function ckTick(){
-  if(!document.getElementById("ckMask")) { ckStopTimer(); return; }
-  CK.n++;
-  var st = document.getElementById("ckStat");
-  var mt = document.getElementById("ckMeta");
-  var bar = document.getElementById("ckBar");
-  var log = document.getElementById("ckLog");
-  var t0 = (window.performance && performance.now) ? performance.now() : Date.now();
-  if(bar){ bar.style.width = Math.min(100, Math.round(CK.n / CK.max * 100)) + "%"; }
-  var pname = ckProvName(CK.prov);
-  if(st){ st.textContent = "正在查询「" + pname + "」…（第 " + CK.n + " / " + CK.max + " 次）"; }
-  fetch(DATA_BASE + "latest.json?_=" + Date.now(), {cache:"no-store"}).then(function(r){
-    if(!r.ok){ throw new Error("HTTP " + r.status); }
-    return r.json();
-  }).then(function(j){
-    var ms = Math.round(((window.performance && performance.now) ? performance.now() : Date.now()) - t0);
-    var sec = ckSecOf(j, CK.prov);
-    var now = new Date();
-    var hm = ("0"+now.getHours()).slice(-2) + ":" + ("0"+now.getMinutes()).slice(-2) + ":" + ("0"+now.getSeconds()).slice(-2);
-    if(!sec){
-      // 该运营商没有这个板块（例如某省未开通），明确说出来而不是空转
-      ckLogAdd(log, hm, "本运营商暂无「" + pname + "」板块", true);
-      ckStopTimer();
-      if(st){ st.textContent = "本运营商暂无「" + pname + "」板块，已停止"; }
-      if(mt){ mt.innerHTML = "请切换其它省份，或选择 <b>全国</b>"; }
-      return;
-    }
-    var u = sec.updated || "", tt = sec.total || 0;
-    ckLogAdd(log, hm, "已查 " + pname + " · 在架 " + tt + " 条 · 更新于 " + (u || "未知") + " · " + ms + "ms", false);
-    var changed = (CK.baseU && u && u !== CK.baseU) || (CK.baseT && tt && tt !== CK.baseT);
-    if(changed){
-      ckStopTimer();
-      if(st){ st.textContent = "「" + pname + "」检测到更新，正在读取明细…"; }
-      if(mt){ mt.innerHTML = "<b>" + pname + "</b> 数据更新于 <b>" + (u || "未知") + "</b>"; }
-      document.getElementById("ckSpin").classList.add("done");
-      if(bar){ bar.style.width = "100%"; }
-      ckDelta(pname, u, tt);
-      return;
-    }
-    if(CK.n >= CK.max){
-      ckStopTimer();
-      if(st){ st.textContent = "本次未检测到「" + pname + "」的变化"; }
-      if(mt){ mt.innerHTML = "线上仍为 <b>" + (u || "未知") + "</b> · " + tt + " 条，定时任务执行后会自动刷新"; }
-      document.getElementById("ckSpin").classList.add("done");
-      return;
-    }
-    if(st){ st.textContent = pname + " · 在架 " + tt + " 条（第 " + CK.n + " / " + CK.max + " 次）"; }
-    if(mt){ mt.innerHTML = "基线 <b>" + (CK.baseU || "未知") + "</b> · " + CK.baseT + " 条 ｜ 线上 <b>" + (u || "未知") + "</b> · " + tt + " 条 ｜ " + ms + "ms"; }
-  }).catch(function(e){
-    var hm2 = new Date();
-    var hms = ("0"+hm2.getHours()).slice(-2)+":"+("0"+hm2.getMinutes()).slice(-2)+":"+("0"+hm2.getSeconds()).slice(-2);
-    ckLogAdd(log, hms, "请求失败：" + (e && e.message ? e.message : e), true);
-    if(CK.n >= CK.max){ ckStop(); return; }
-    if(st){ st.textContent = "网络请求失败，15 秒后重试…（第 " + CK.n + " 次）"; }
-  });
-}
-
-
-
 /* ---------- 一键触发云端抓取（令牌仅存本机 localStorage） ---------- */
 var CK_OWNER = "WoShiYiGeManHuaJia";
 var CK_REPO  = "hunan-tariff-site";
@@ -2802,14 +2294,15 @@ function ckTrigger(){
   if(!tk){ ckTkOpen(""); return; }
   ckDispatch(tk);
 }
-function ckSetStat(txt){ var s=document.getElementById("ckStat"); if(s){ s.textContent = txt; } }
-function ckSetMeta(html){ var m=document.getElementById("ckMeta"); if(m){ m.innerHTML = html; } }
-function ckSetBar(p){ var b=document.getElementById("ckBar"); if(b){ b.style.width = p + "%"; } }
+function ckGhUrl(){ return "https://github.com/WoShiYiGeManHuaJia/hunan-tariff-site/actions/workflows/" + CK_WF; }
+/* 抓取进度用提示条呈现（原检测弹窗已移除） */
+function ckSetStat(txt){ try{ toast(String(txt || "").replace(/<[^>]+>/g, "")); }catch(e){} }
+function ckSetMeta(){}
+function ckSetBar(){}
 function ckHdr(tk){
   return { "Accept":"application/vnd.github+json", "Authorization":"Bearer " + tk, "Content-Type":"application/json" };
 }
 function ckDispatch(tk){
-  ckStopTimer();
   ckSetStat("正在触发云端抓取…");
   ckSetMeta("工作流 <b>" + CK_WF + "</b>");
   ckSetBar(5);
@@ -2852,7 +2345,6 @@ function ckPollRun(tk, t0){
                            : (s === "in_progress" ? "运行中" : "排队中")) + "</b>");
       if(s === "completed"){
         clearInterval(timer);
-        var sp = document.getElementById("ckSpin"); if(sp){ sp.classList.add("done"); }
         if(c === "success"){
           ckSetStat("抓取完成，正在刷新页面…");
           setTimeout(function(){ location.href = location.pathname + "?_=" + Date.now(); }, 900);
@@ -3558,10 +3050,6 @@ function psTest(){
   });
 }
 function psOpen(){
-  // 打开配置时把「检测最新资费」的轮询停掉。
-  // 否则 15 秒一次的 fetch + 整页重绘会在配置弹窗下面继续跑，
-  // 手机上一边轮询网络一边渲染两层弹窗，就是卡顿的直接来源。
-  ckPause();
 psLoad();
   psRenderAll();
   var m = document.getElementById("psMask");
@@ -3572,7 +3060,6 @@ psLoad();
 }
 function psClose(){
   var m = document.getElementById("psMask"); if(m){ m.classList.remove("on"); }
-  ckResume();   // 关掉配置后，之前在后台跑的检测恢复
 }
   /* ---------- 站点一次性公告：每个版本只在每台设备弹一次 ---------- */
 var SITE_NOTICE = {
@@ -3626,9 +3113,6 @@ function ntAuto(){
 }
 psLoad();
 try{ setTimeout(ntAuto, 700); }catch(e){}   // 一次性公告：延后弹，避免跟首屏加载抢资源
-// 最新检测卡片：页面载入即渲染所选省份最近一次变化
-try{ ldProvInit(); ldRefresh(); }catch(e){}
-try{ ckProvInit(); }catch(e){}   // 载入即绑定省份按钮，不必等检测弹窗打开
 // 监听挂在弹窗容器上（而不是 document 捕获阶段）。
 // 之前页面任何一次点击都要跑 3 次 closest，等于给整站点击都加了税。
 var psBox = document.getElementById("psMask");
@@ -3699,7 +3183,6 @@ document.addEventListener("click", function(e){
   }
   var act = (b && b.getAttribute("data-act")) || (el.getAttribute ? el.getAttribute("data-act") : null);
   if(act){
-    if(act === "check"){ ckOpen(); return; }
     if(act === "op"){ renderOpGrid(); document.getElementById("opMask").classList.add("on"); return; }
   }
   /* 关闭按钮 */
@@ -3769,9 +3252,6 @@ document.addEventListener("click", function(e){
     return;
   }
   if(el.id === "pkX"){ closePicker(); return; }
-  if(el.id === "ckX"){ ckClose(); return; }
-  if(el.id === "ckOk"){ ckMin(); return; }
-  if(el.id === "ckStop"){ ckStop(); toast("已停止自动检测"); return; }
       if(el.id === "tkX"){ ckTkClose(); return; }
     if(el.id === "tkSave"){ ckTkSave(); return; }
     if(el.id === "tkClear"){ ckTkSet(""); var ip=document.getElementById("tkInput"); if(ip){ ip.value=""; } toast("已清除本机令牌"); return; }
@@ -3785,7 +3265,6 @@ document.addEventListener("click", function(e){
     else if(mkEl.id === "pkMask"){ closePicker(); }
     else if(mkEl.id === "opMask"){ document.getElementById("opMask").classList.remove("on"); }
     else if(mkEl.id === "hmMask"){ closeHist(); }
-    else if(mkEl.id === "ckMask"){ ckMin(); }
       else if(mkEl.id === "tkMask"){ ckTkClose(); }
     return;
   }
