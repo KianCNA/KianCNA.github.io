@@ -148,7 +148,7 @@ jobs:
         run: |
           set -e
           cd "$GITHUB_WORKSPACE"
-          # 静态页面（index.html / app.js / style.css / common-extras.js）
+          # 静态页面（index.html、nav.html、push-center.html、三个子站，样式与逻辑均内联）
           # 不再从 _site 复制回根目录：_site 里的其实是 site/ 旧副本，
           # 覆盖回去会把根目录已修好的版本回滚（如「无变化不占位」）。
           # 根目录文件即 Pages 部署源，由 git 维护。

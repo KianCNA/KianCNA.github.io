@@ -79,8 +79,7 @@ def main():
 ## 目录
 
     pipelines/           四家抓取管线（mobile / unicom / telecom / gb）
-    scripts/             站点构建 build_site.py、汇总推送 dingtalk_summary.py、
-                         一致性校验 check_frontend_sync.py
+    scripts/             站点构建 build_site.py、自检 selfcheck.py、汇总推送 dingtalk_summary.py
     .github/workflows/   云端定时抓取与推送配置
 
 ## 跑法
@@ -102,12 +101,10 @@ def main():
     DINGTALK_SECRET       钉钉加签密钥
     FEISHU_WEBHOOK        飞书机器人 webhook
 
-## 改完前端记得校验
+## 改前端
 
-    python3 scripts/check_frontend_sync.py
-
-app.js 有四份活跃副本（根/unicom/telecom/gb）+ 一份遗留副本（site/），
-改公共逻辑容易漏改，退出码 1 即表示有副本缺失修复点。
+四个站点（根 / unicom / telecom / gb）的样式与逻辑全部内联在各自的 index.html 里，
+直接改对应文件即可；没有额外的 app.js / style.css 需要同步。
 """
         z.writestr("怎么用.txt", readme)
         count += 1

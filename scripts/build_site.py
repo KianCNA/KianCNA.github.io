@@ -23,7 +23,7 @@ SNAP = os.path.join(ROOT, "snapshots")
 PREV = os.path.join(ROOT, "_prev")
 SITE = os.path.join(ROOT, "_site")
 # 注：原 SITE_SRC（site/ 目录）已移除。
-# site/ 是历史遗留的静态页面副本，内容比仓库根目录的 index.html/app.js 旧
+# site/ 是历史遗留的静态页面副本，内容比仓库根目录的 index.html 旧
 # （例：根目录已修「变化历史里无变化板块不占位」，site/ 仍是旧逻辑）。
 # 而 build 流程会把 site/ -> _site/ -> 覆盖根目录，等于每次构建都把修复回滚。
 # 根目录文件才是Pages 部署源（source: main /），故不再从 site/ 复制。
@@ -569,7 +569,7 @@ def main():
         sections = ["quanguo"]
 
     # 0) 静态页面不再从 site/ 复制（见文件顶部说明）：
-    #    根目录 index.html / app.js / style.css 即部署源，由 git 直接维护，
+    #    根目录 index.html 即部署源，由 git 直接维护，
     #    避免旧副本在每次构建时把它们覆盖回去。
 
     # 1) 复制当前快照到站点 data/
