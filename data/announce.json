@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20 23:55",
+ "updated": "2026-11-21 00:34",
  "count": 176,
  "items": [
   {
@@ -10,6 +10,16 @@
    "date": "2026-11-26",
    "summary": "尊敬的用户，您好！因业务发展调整，2026年12月31日24时起福建省内中国移动CMCC、CMCC-WEB、CMCC-FJ、CMCC-EDU网络将停止服务，已订",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/fj/index_591_591_detail_56216.html",
+   "status": "on"
+  },
+  {
+   "id": "56243",
+   "prov": "shanghai",
+   "prov_name": "上海",
+   "title": "业务系统升级公告",
+   "date": "2026-11-21",
+   "summary": "尊敬的客户： 您好，为进一步提升客户服务质量，我公司计划于2026年11月21日23:00至11月22日7:00对业务系统进行升级，届时我公司所有服务渠道将暂停",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sh/index_210_210_detail_56243.html",
    "status": "on"
   },
   {
@@ -830,16 +840,6 @@
    "date": "2026-10-21",
    "summary": "尊敬的中国移动湖北公司客户： 为向客户提供更优质的服务，湖北移动将于2026年10月22日22：30至10月23日07：30进行网络系统升级工作。在此期间，将影",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/hb/index_270_270_detail_56042.html",
-   "status": "on"
-  },
-  {
-   "id": "56034",
-   "prov": "shanghai",
-   "prov_name": "上海",
-   "title": "关于动感地带芒果卡（校园版）专属活动优惠调整的公告",
-   "date": "2026-10-21",
-   "summary": "尊敬的用户： 根据我司业务升级安排，算力豆套餐于2026年10月23日起停止新增办理，将同步对2026年动感地带芒果卡（校园版）专属活动以及新版2025年动感地",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sh/index_210_210_detail_56034.html",
    "status": "on"
   },
   {
@@ -1831,10 +1831,10 @@
   {
    "section": "shanghai",
    "name": "上海",
-   "count": 196,
-   "active": 196,
+   "count": 197,
+   "active": 197,
    "removed": 0,
-   "updated": "2026-11-03 13:50"
+   "updated": "2026-11-21 00:34"
   },
   {
    "section": "jiangsu",

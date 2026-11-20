@@ -1,7 +1,18 @@
 {
- "updated": "2026-11-03 13:50",
- "count": 196,
+ "updated": "2026-11-21 00:34",
+ "count": 197,
  "items": [
+  {
+   "id": "56243",
+   "title": "业务系统升级公告",
+   "date": "2026-11-21",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sh/index_210_210_detail_56243.html",
+   "status": "on",
+   "first_seen": "2026-11-21 00:33",
+   "summary": "尊敬的客户： 您好，为进一步提升客户服务质量，我公司计划于2026年11月21日23:00至11月22日7:00对业务系统进行升级，届时我公司所有服务渠道将暂停业务查询、办理、充值及各类提醒等服务，但不影响正常通信。由此给您带来的不便，我们",
+   "content": "<p>尊敬的客户：</p>\n<p>      您好，为进一步提升客户服务质量，我公司计划于<a date=\"1795222800000\"Microsoft YaHei\"; font-size: medium; white-space: normal; color: inherit; border-bottom: 1px dashed rgb(153, 153, 153); cursor: pointer;\">2026年11月21日</a>23:00至11月22日7:00对业务系统进行升级，届时我公司所有服务渠道将暂停业务查询、办理、充值及各类提醒等服务，但不影响正常通信。由此给您带来的不便，我们深表歉意，敬请谅解。</p>\n<p>      特此通知。</p>\n<p><br>\n</p>\n<p><br>\n</p>\n<p><br>\n</p>\n<p><br>\n</p>\n<p style=\"text-align:right\">中国移动通信集团上海有限公司</p>\n<p style=\"text-align:right\"><a date=\"1750208400000\" style=\"color:inherit\"> </a><a date=\"1774227600000\" style=\"color:inherit\">2026年11月21日</a></p>",
+   "attachments": []
+  },
   {
    "id": "56102",
    "title": "业务下线公告 （2026年10月批）",
@@ -1627,6 +1638,6 @@
  ],
  "section": "shanghai",
  "name": "上海",
- "active": 196,
+ "active": 197,
  "removed": 0
 }
