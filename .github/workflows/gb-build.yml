@@ -1,8 +1,9 @@
 name: GB Fetch & Build
 # 中国广电资费抓取（全国 + 31 省 + 深圳），产物提交到 gb/data
+#
+# 定时：跟随主站（mobile-build.yml）的节拍，由主站 subsites 作业一并派发；
+# 这里保留 workflow_dispatch 供手动 / 心跳 / 看门狗调用。
 on:
-  schedule:
-    - cron: "50 */4 * * *"    # 每 4 小时（错开移动与电信）
   workflow_dispatch:
 
 permissions:

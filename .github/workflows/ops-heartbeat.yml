@@ -2,6 +2,9 @@ name: Ops Heartbeat
 # 三家运营商（电信/联通/广电）的自续心跳，作用与 Mobile Heartbeat 相同：
 # 绕开 GitHub schedule 对本仓库的丢触发/数小时延迟。
 #
+# 2026-11-20：三家已改为跟随主站节拍（mobile-build 每轮派发），
+# 本工作流降为兜底：数据超过 3 小时未更新且没有运行在跑时才补触发。
+#
 # 实测（2026-11-18 全日）：schedule 只让三家各跑成 1 轮（电信/广电本应 6 轮、
 # 联通 4 轮），其余 cron 点全部被跳过，数据因此只能靠偶发延迟放行的那轮更新。
 # 本工作流常驻循环：按线上 <op>/data/latest.json 的时间戳判断数据是否够旧，
@@ -33,9 +36,9 @@ jobs:
       - name: 循环驱动三家抓取
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TH_TELECOM: "14400"
-          TH_GB: "14400"
-          TH_UNICOM: "21600"
+          TH_TELECOM: "10800"
+          TH_GB: "10800"
+          TH_UNICOM: "10800"
         run: |
           set -e
           DEADLINE=$(( $(date -u +%s) + 320 * 60 ))

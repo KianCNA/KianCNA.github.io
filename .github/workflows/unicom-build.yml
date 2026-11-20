@@ -1,8 +1,10 @@
 name: Unicom Fetch & Build
 # 中国联通资费抓取（全国 + 31 省），产物提交到 unicom/data
+#
+# 定时：不再单独看 cron。联通跟随主站（mobile-build.yml）的节拍，
+# 每轮移动抓取开始时由主站的 subsites 作业一并派发；这里保留
+# workflow_dispatch 供手动 / 心跳 / 看门狗调用。
 on:
-  schedule:
-    - cron: "10 */6 * * *"    # 每 6 小时（联通抓取最重，单轮耗时长）
   workflow_dispatch:
 
 permissions:
@@ -22,6 +24,16 @@ jobs:
         with:
           python-version: '3.11'
 
+      # 累积池 _pool.json 约 68MB，是跨轮对比的基线：改由 Actions 缓存保存，
+      # 不再每轮入库。
+      - name: 还原联通累积池
+        uses: actions/cache/restore@v4
+        with:
+          path: unicom/data/_pool.json
+          key: unicom-pool-${{ github.run_id }}
+          restore-keys: |
+            unicom-pool-
+
       - name: 抓取联通资费（全国 + 31 省）
         run: |
           set -e
@@ -31,6 +43,13 @@ jobs:
           python3 -u unicom_pipeline.py --prev-dir ../unicom/data --out-dir ../unicom/data 2>&1 | tail -150
           python3 -c "import json;d=json.load(open('../unicom/data/latest.json',encoding='utf-8'));print('[联通] updated =',d.get('updated'),'| 板块 =',len(d.get('sections',[])))"
 
+      - name: 保存联通累积池
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: unicom/data/_pool.json
+          key: unicom-pool-${{ github.run_id }}
+
       - name: 提交
         if: success()
         run: |
@@ -38,6 +57,8 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           rm -rf /tmp/art && mkdir -p /tmp/art
           cp -a unicom/data /tmp/art/data || { echo "::error::产物缺失"; exit 1; }
+          # 池文件已由缓存接管，不再入库
+          rm -f /tmp/art/data/_pool.json
           git config user.name "tariff-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           for i in 1 2 3 4 5; do

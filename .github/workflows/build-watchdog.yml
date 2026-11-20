@@ -74,9 +74,8 @@ jobs:
           echo "已触发"
 
       - name: 三家运营商数据过期时补触发
-        # 与移动同理：schedule 对本仓库丢触发严重，电信/广电/联通的定时运行
-        # 实测每天只落地 1~2 轮。这里按各自阈值检查线上 latest.json，
-        # 过期且没有正在跑/排队的运行就补一次手动触发，心跳断链时兜底。
+        # 与移动同理：三家已跟随主站节拍（mobile-build 每轮派发），
+        # 这里只在主站派发链断掉时兜底：数据超 3 小时未更新且无运行在跑就补一次。
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -102,7 +101,7 @@ jobs:
             gh api -X POST "repos/${GITHUB_REPOSITORY}/actions/workflows/${wf}.yml/dispatches" \
               -f ref=main || echo "[${dir}] 触发失败"
           }
-          check telecom-build telecom 14400
-          check gb-build gb 21600
-          check unicom-build unicom 36000
+          check telecom-build telecom 10800
+          check gb-build gb 10800
+          check unicom-build unicom 10800
           echo "三家检查完成"

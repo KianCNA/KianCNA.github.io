@@ -19,6 +19,7 @@ on:
 
 permissions:
   contents: write
+  actions: write      # subsites 作业需要派发三家子站工作流
 
 concurrency:
   # 与 dingtalk-summary.yml 共用同一 group：两个 workflow 都会跑 build_site.py，
@@ -286,3 +287,52 @@ jobs:
               exit 1
             fi
           fi
+
+  # 主站是四站的统一节拍器：每轮移动抓取一开始，就同步派发联通 / 电信 / 广电，
+  # 让三家保持与主站相同的刷新频率（不再各自依赖 GitHub schedule）。
+  # 只跳过「已有运行在跑/排队」的站点，避免并发组的 cancel-in-progress
+  # 把进行中的抓取（联通单轮约 75 分钟）打断。
+  subsites:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: 派发三家子站跟随本轮刷新
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          api() {
+            curl -fsSL --max-time 30 \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "User-Agent: tariff-subsites" "$1"
+          }
+          dispatch() {
+            curl -fsS --max-time 30 -X POST \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "User-Agent: tariff-subsites" \
+              -H "Content-Type: application/json" \
+              -d '{"ref":"main"}' \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/$1.yml/dispatches" >/dev/null
+          }
+          active() {
+            local j n
+            j=$(api "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/$1.yml/runs?per_page=5") || { echo 0; return 0; }
+            n=$(printf '%s' "$j" | jq '[.workflow_runs[] | select(.status == "in_progress" or .status == "queued" or .status == "waiting")] | length') || n=0
+            echo "$n"
+          }
+          for wf in unicom-build telecom-build gb-build; do
+            n=$(active "$wf")
+            if [ "$n" != "0" ]; then
+              echo "[$wf] 已有 $n 个运行在进行/排队，跳过"
+              continue
+            fi
+            ok=0
+            for i in 1 2 3; do
+              if dispatch "$wf"; then ok=1; echo "[$wf] 已派发 $(date -u +%FT%TZ)"; break; fi
+              echo "::warning::派发 $wf 失败（$i/3），10s 后重试"
+              sleep 10
+            done
+            [ "$ok" = "1" ] || echo "::warning::$wf 本轮未派发，由看门狗 / 心跳兜底"
+          done
