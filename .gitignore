@@ -20,3 +20,4 @@ probe/
 # 联通累积池（约 68MB）：跨轮状态改由 Actions 缓存保存，
 # 每轮入库会让仓库每天膨胀，这里排除
 unicom/data/_pool.json
+unicom/_pool.json.gz

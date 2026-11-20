@@ -24,15 +24,27 @@ jobs:
         with:
           python-version: '3.11'
 
-      # 累积池 _pool.json 约 68MB，是跨轮对比的基线：改由 Actions 缓存保存，
-      # 不再每轮入库。
+      # 累积池 _pool.json 约 68MB，是跨轮对比的基线：压缩后放 Actions 缓存，
+      # 不再每轮入库。缓存不可用时只丢一轮变化检测，不影响数据更新。
       - name: 还原联通累积池
+        continue-on-error: true
         uses: actions/cache/restore@v4
         with:
-          path: unicom/data/_pool.json
-          key: unicom-pool-${{ github.run_id }}
+          path: unicom/_pool.json.gz
+          key: unicom-poolgz-${{ github.run_id }}
           restore-keys: |
-            unicom-pool-
+            unicom-poolgz-
+
+      - name: 解压累积池
+        continue-on-error: true
+        run: |
+          if [ -f unicom/_pool.json.gz ]; then
+            mkdir -p unicom/data
+            gunzip -cf unicom/_pool.json.gz > unicom/data/_pool.json
+            echo "已还原累积池 $(du -h unicom/data/_pool.json | cut -f1)"
+          else
+            echo "无缓存池，本轮从仓库现有池 / 空池开始"
+          fi
 
       - name: 抓取联通资费（全国 + 31 省）
         run: |
@@ -45,10 +57,19 @@ jobs:
 
       - name: 保存联通累积池
         if: always()
+        continue-on-error: true
+        run: |
+          if [ -f unicom/data/_pool.json ]; then
+            gzip -9cf unicom/data/_pool.json > unicom/_pool.json.gz
+            echo "池已压缩 $(du -h unicom/_pool.json.gz | cut -f1)"
+          fi
+      - name: 写入缓存
+        if: always()
+        continue-on-error: true
         uses: actions/cache/save@v4
         with:
-          path: unicom/data/_pool.json
-          key: unicom-pool-${{ github.run_id }}
+          path: unicom/_pool.json.gz
+          key: unicom-poolgz-${{ github.run_id }}
 
       - name: 提交
         if: success()
