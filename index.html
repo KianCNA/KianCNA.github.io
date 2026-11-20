@@ -30,7 +30,7 @@
 /* ===== 老入口自升级（2026-10-19）=====
    旧 HTML 被 CDN 缓存时，靠它自己跳到最新版：
    请求 version.json 带时间戳（CDN 必回源），版本号不同则 replace 到带时间戳的新 URL。 */
-var BUILD_VER = "20261120c";
+var BUILD_VER = "20261120d";
 (function(){
   function base(){
     var m = location.pathname.match(/^(.*)\/[^\/]*$/);
@@ -1182,6 +1182,13 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
   color:var(--tx);font-family:inherit;text-align:left;cursor:pointer;
   transition:transform .18s,border-color .18s,box-shadow .18s}
 .cu-row:hover{transform:translateY(-2px);border-color:var(--ac);box-shadow:var(--sh)}
+/* 从「全部订阅动态」定位到具体某轮记录：高亮闪一下，避免用户找不到落点 */
+.ti.cu-focus{animation:cuflash 1.8s ease}
+@keyframes cuflash{
+  0%{border-color:var(--ac);box-shadow:0 0 0 0 rgba(52,211,153,.55)}
+  55%{box-shadow:0 0 0 10px rgba(52,211,153,0)}
+  100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}
+}
 .cu-rb{font-size:11px;font-weight:800;color:#fff;padding:3px 8px;border-radius:7px;white-space:nowrap;
   background:linear-gradient(135deg,var(--ica,#6366f1),var(--icb,#8b8cf7))}
 .cu-rp{font-size:12.5px;font-weight:800;white-space:nowrap}
@@ -1245,6 +1252,17 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
 .pager > * + *{margin-left:6px}
 .mini-bars > * + *{margin-left:3px}
 .bars > * + *{margin-top:11px}
+/* 旧内核不支持 flex gap：自定义区的间距用 margin 兜底 */
+.cu-lines > * + *{margin-top:9px}
+.cu-line > * + *{margin-left:7px}
+.cu-tag > * + *{margin-left:6px}
+.cu-op > * + *{margin-left:6px}
+.cu-pvs > * + *{margin-left:6px}
+.cu-pv > * + *{margin-left:6px}
+.cu-all > * + *{margin-top:7px}
+.cu-rs > * + *{margin-left:5px}
+.cu-chip > * + *{margin-left:6px}
+.cu-mbar > * + *{margin-left:8px}
 </style>
 </head>
 <body>
@@ -3747,7 +3765,7 @@ var CU = {
   det:{}, detP:{},
   op:"mobile", prov:"",
   draft:null, draftOp:"mobile", draftKw:"",
-  open:{}, allShow:12, histShow:12
+  open:{}, allShow:12, histShow:12, focus:null, hl:"", hlUntil:0
 };
 function cuLoad(){
   var raw = null;
@@ -3920,7 +3938,7 @@ function cuRender(){
       var st = cuProvStat(o.key, sec);
       return '<button class="cu-tag" data-cu-jump="' + o.key + "|" + esc(sec) + '"' +
         ' style="--ica:' + m.ca + ';--icb:' + m.cb + '">' +
-        '<span class="d"></span>' + esc(cuProvName(o.key, sec)) +
+        '<span class="d"></span><span class="nm">' + esc(cuProvName(o.key, sec)) + '</span>' +
         (st ? '<em>' + st.n + '</em>' : '') + "</button>";
     }).join("");
     lines += '<div class="cu-line"><span class="cu-opn">' + esc(o.short) + '</span>' + tags + "</div>";
@@ -3944,7 +3962,7 @@ function cuRender(){
       var st = cuProvStat(CU.op, sec);
       return '<button class="cu-pv' + (sec === CU.prov ? " on" : "") + '" data-cu-prov="' + esc(sec) + '"' +
         ' style="--ica:' + m.ca + ';--icb:' + m.cb + '">' +
-        '<span class="d"></span>' + esc(cuProvName(CU.op, sec)) +
+        '<span class="d"></span><span class="nm">' + esc(cuProvName(CU.op, sec)) + '</span>' +
         '<em>' + (st ? st.n : "—") + '</em></button>';
     }).join("");
   }
@@ -3999,7 +4017,8 @@ function cuRenderAll(){
   var show = items.slice(0, CU.allShow);
   var html = show.map(function(x){
     var c = x.c, names = cuAllNames(c), n = names.length;
-    return '<button class="cu-row" data-cu-jump="' + x.op.key + "|" + esc(c.prov) + '">' +
+    return '<button class="cu-row" data-cu-jump="' + x.op.key + "|" + esc(c.prov) + '"' +
+      ' data-cu-ts="' + esc(x.r.ts) + '">' +
       '<span class="cu-rb" style="--ica:' + x.op.ca + ';--icb:' + x.op.cb + '">' + esc(x.op.short) + '</span>' +
       '<span class="cu-rp">' + esc(c.name) + '</span>' +
       '<span class="cu-rt">' + esc(bjTime(x.r.ts)) + '</span>' +
@@ -4055,7 +4074,8 @@ function cuRecHtml(op, r, c, first){
   var key = op + "|" + r.ts;
   if(first && CU.open[key] === undefined){ CU.open[key] = true; }
   var open = !!CU.open[key];
-  return '<div class="ti' + (open ? " open" : "") + '">' +
+  var hl = (CU.hl === key && Date.now() < CU.hlUntil) ? " cu-focus" : "";
+  return '<div class="ti' + (open ? " open" : "") + hl + '">' +
     '<div class="ti-hd" data-cu-tog="rec" data-ts="' + esc(r.ts) + '">' +
       '<span class="ti-ar"></span><span class="ti-ti">资费变更</span>' +
       '<span class="ti-ts">' + esc(bjTime(r.ts)) + '</span>' +
@@ -4171,20 +4191,53 @@ function cuSetProv(sec){
   cuSave();
   cuRender();
 }
-function cuJump(op, sec){
+function cuJump(op, sec, ts){
   if(!op || !CU_MAP[op]){ return; }
   if((CU.sel[op] || []).indexOf(sec) < 0){ return; }
   CU.op = op;
   CU.prov = sec;
   CU.last[op] = sec;
   CU.histShow = 12;
+  CU.focus = ts ? { op:op, ts:ts } : null;
   cuSave();
   cuRender();
   cuEnsure();
+  if(ts && CU.focus){ cuFocusRec(op, ts); }
+  else if(!ts){ cuScrollPanel(); }
+}
+/* 从动态列表定位到具体某轮记录：切好省份、展开该条，再滚到它 */
+function cuScrollTo(top){
+  window.scrollTo(0, Math.max(0, top));
+}
+function cuScrollPanel(){
   var panel = document.getElementById("cuTlPanel");
-  if(panel){
-    var top = panel.getBoundingClientRect().top + (window.scrollY || 0) - 86;
-    window.scrollTo({ top:top, behavior:"smooth" });
+  if(!panel){ return; }
+  cuScrollTo(panel.getBoundingClientRect().top + (window.scrollY || 0) - 86);
+}
+function cuFocusRec(op, ts){
+  var arr = CU.hist[op];
+  if(!arr){ return; }              // 历史还在加载，等 cuEnsure 的回调再定位
+  var idx = -1;
+  for(var i = 0; i < arr.length; i++){
+    if(String(arr[i].ts) === String(ts)){ idx = i; break; }
+  }
+  CU.focus = null;
+  if(idx < 0){ cuScrollPanel(); return; }
+  CU.open[op + "|" + ts] = true;
+  if(idx + 1 > CU.histShow){ CU.histShow = idx + 1; }
+  CU.hl = op + "|" + ts;
+  CU.hlUntil = Date.now() + 2200;
+  cuRenderTl();
+  cuScrollRec(ts);
+}
+function cuScrollRec(ts){
+  var hds = document.querySelectorAll("#cuTl [data-cu-tog]");
+  for(var i = 0; i < hds.length; i++){
+    if(hds[i].getAttribute("data-ts") !== ts){ continue; }
+    var rec = hds[i].closest ? hds[i].closest(".ti") : null;
+    if(!rec){ return; }
+    cuScrollTo(rec.getBoundingClientRect().top + (window.scrollY || 0) - 96);
+    return;
   }
 }
 function cuClear(){
@@ -4205,6 +4258,7 @@ function cuEnsure(){
     });
     cuHist(o.key, function(){
       if(state.view === "custom"){ cuRender(); }
+      if(CU.focus && CU.focus.op === o.key){ cuFocusRec(o.key, CU.focus.ts); }
     });
   });
 }
@@ -4348,7 +4402,7 @@ document.addEventListener("click", function(e){
   if((x = t.closest("[data-cu-prov]"))){ cuSetProv(x.getAttribute("data-cu-prov")); return; }
   if((x = t.closest("[data-cu-jump]"))){
     var v = String(x.getAttribute("data-cu-jump")).split("|");
-    cuJump(v[0], v[1]);
+    cuJump(v[0], v[1], x.getAttribute("data-cu-ts") || "");
     return;
   }
   if((x = t.closest("[data-cu-tog]"))){ cuToggleRec(x.getAttribute("data-ts")); return; }
