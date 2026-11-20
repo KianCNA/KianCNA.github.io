@@ -1,7 +1,29 @@
 {
- "updated": "2026-11-10 10:15",
- "count": 1142,
+ "updated": "2026-11-20 11:33",
+ "count": 1145,
  "items": [
+  {
+   "id": "56231",
+   "title": "北京移动关于公众 WLAN 业务下线的公告",
+   "date": "2026-11-19",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/bj/index_100_100_detail_56231.html",
+   "status": "on",
+   "first_seen": "2026-11-20 11:33",
+   "summary": "尊敬的用户，您好！ 因业务发展调整，2026 年 12 月 15 日起，北京市内中国移动 CMCC和 CMCC-WEB 网络将逐步停止服务。2026 年 12 月 31 日 24 时起，北京市内中国移动CMCC 和 CMCC-WEB 网络将",
+   "content": "<p>尊敬的用户，您好！</p>\n<p>&nbsp; &nbsp; &nbsp; 因业务发展调整，2026 年 12 月 15 日起，北京市内中国移动 CMCC和 CMCC-WEB 网络将逐步停止服务。2026 年 12 月 31 日 24 时起，北京市内中国移动CMCC 和 CMCC-WEB 网络将全面停止服务，已订购相关业务将统一终止，自 2027 年 1月 1 日起不再产生订购关系，不再产生相关费用。为保障您的上网需求，您可以登录中国移动 APP 选购流量产品满足上网需求。感谢您对中国移动的支持！详情请咨询 10086。<br>\n<div style=\"color:rgb(51, 51, 51);background-color:rgb(255, 255, 255);text-align:right\">中国移动通信集团北京有限公司</div><div style=\"color:rgb(51, 51, 51);background-color:rgb(255, 255, 255);text-align:right\">2026 年 11 月19 日</div></p>",
+   "attachments": []
+  },
+  {
+   "id": "56230",
+   "title": "关于 2025 价值优惠方案-29 元档活动下线的公告",
+   "date": "2026-11-12",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/bj/index_100_100_detail_56230.html",
+   "status": "on",
+   "first_seen": "2026-11-20 11:33",
+   "summary": "尊敬的客户： 您好！ 2026 年11月12日起，2025 价值优惠方案-29 元档活动下线，届时下线后各渠道均无法办理，建议有以上业务需求的客户，在业务下线日期前到北京移动营业厅或拨打 10086 完成办理。由此给您带来的不便敬请谅解，感",
+   "content": "<div>尊敬的客户： </div><div>&nbsp; &nbsp; &nbsp; 您好！ </div><div>&nbsp; &nbsp; &nbsp; &nbsp;2026 年11月12日起，2025 价值优惠方案-29 元档活动下线，届时下线后各渠道均无法办理，建议有以上业务需求的客户，在业务下线日期前到北京移动营业厅或拨打 10086 完成办理。由此给您带来的不便敬请谅解，感谢您的理解与支持!</div><div>&nbsp; &nbsp; &nbsp; 特此公告。 </div><div style=\"text-align:right\">中国移动通信集团北京有限公司 </div><div style=\"text-align:right\">2026 年11月 12 日 </div>",
+   "attachments": []
+  },
   {
    "id": "56177",
    "title": "关于本地流量统付业务下线的公告",
@@ -45,6 +67,14 @@
    "summary": "尊敬的客户： 您好！ 为回馈广大客户，带来更好的业务体验，现对 49 元“动感地带校园专属套餐”中的国内通用流量进行免费升级扩容，扩容前套内流量资源：20GB 国内通用流量+20GB 校园区域流量，扩容后套内流量资源：80GB 国内通用流量",
    "content": "<div>尊敬的客户： </div><div>&nbsp; &nbsp; &nbsp; 您好！ </div><div>&nbsp; &nbsp; &nbsp; 为回馈广大客户，带来更好的业务体验，现对 49 元“动感地带校园专属套餐”中的国内通用流量进行免费升级扩容，扩容前套内流量资源：20GB 国内通用流量+20GB 校园区域流量，扩容后套内流量资源：80GB 国内通用流量+20GB 校园区域流量（均不含港澳台）。2026 年 11 月 1 日开始生效，升级后套餐内包含国内通用流量使用规则、套餐月费和包含其他内容均保持不变。北京移动秉承“客户为根、服务为本”的服务理念，持续改善产品质量和服务水平。我们百倍努力，为您 10 分满意!</div><div>&nbsp; &nbsp; &nbsp; 特此公告。 </div><div style=\"text-align:right\">中国移动通信集团北京有限公司 </div><div style=\"text-align:right\">2026 年 10 月 28 日</div>",
    "attachments": []
+  },
+  {
+   "id": "56229",
+   "title": "关于公开基站电磁辐射环境监测结果的公告",
+   "date": "2026-10-26",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/bj/index_100_100_detail_56229.html",
+   "status": "on",
+   "first_seen": "2026-11-20 11:33"
   },
   {
    "id": "55974",
@@ -9176,6 +9206,6 @@
  ],
  "section": "beijing",
  "name": "北京",
- "active": 1142,
+ "active": 1145,
  "removed": 0
 }

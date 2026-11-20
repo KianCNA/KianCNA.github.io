@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20 10:40",
+ "updated": "2026-11-20 11:33",
  "count": 176,
  "items": [
   {
@@ -10,6 +10,16 @@
    "date": "2026-11-26",
    "summary": "尊敬的用户，您好！因业务发展调整，2026年12月31日24时起福建省内中国移动CMCC、CMCC-WEB、CMCC-FJ、CMCC-EDU网络将停止服务，已订",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/fj/index_591_591_detail_56216.html",
+   "status": "on"
+  },
+  {
+   "id": "56233",
+   "prov": "guangxi",
+   "prov_name": "广西",
+   "title": "关于集团彩铃业务下线的公告",
+   "date": "2026-11-20",
+   "summary": "尊敬的客户: 您好！因我公司业务调整，2026年12月15日起集团彩铃业务将停止服务，业务下线时已订购对应业务的用户，会自动失效并退订，也不再收取费用，若您希望",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/gx/index_771_771_detail_56233.html",
    "status": "on"
   },
   {
@@ -110,6 +120,26 @@
    "date": "2026-11-20",
    "summary": "尊敬的中国移动湖北公司客户： 为向客户提供更优质的服务，湖北移动将于2026年11月20日0：00至11月20日07：30进行网络系统升级工作。在此期间，将影响",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/hb/index_270_270_detail_56194.html",
+   "status": "on"
+  },
+  {
+   "id": "56231",
+   "prov": "beijing",
+   "prov_name": "北京",
+   "title": "北京移动关于公众 WLAN 业务下线的公告",
+   "date": "2026-11-19",
+   "summary": "尊敬的用户，您好！ 因业务发展调整，2026 年 12 月 15 日起，北京市内中国移动 CMCC和 CMCC-WEB 网络将逐步停止服务。2026 年 12 ",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/bj/index_100_100_detail_56231.html",
+   "status": "on"
+  },
+  {
+   "id": "56228",
+   "prov": "anhui",
+   "prov_name": "安徽",
+   "title": "关于合肥移动VIP售后服务厅信息更新的公示",
+   "date": "2026-11-19",
+   "summary": "尊敬的客户： 为提供更加优质、便捷的服务，合肥移动在全市设立VIP售后服务中心，VIP售后服务中心提供开户、销户、业务订购、业务退订、解约等综合业务服务。首批V",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/ah/index_551_551_detail_56228.html",
    "status": "on"
   },
   {
@@ -283,13 +313,33 @@
    "status": "on"
   },
   {
-   "id": "56218",
-   "prov": "guangxi",
-   "prov_name": "广西",
-   "title": "关于广西移动公司和多号等业务下线的公告",
+   "id": "56227",
+   "prov": "anhui",
+   "prov_name": "安徽",
+   "title": "关于阜阳移动宽带销户服务流程及营业厅的公示",
+   "date": "2026-11-13",
+   "summary": "一、阜阳移动宽带销户厅信息 阜阳移动各区县主厅均具备宽带销户权限，同时基于渠道服务能力评估，动态开放部分合作营业厅办理权限，具体服务网点将根据区域分布、业务承载",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/ah/index_551_551_detail_56227.html",
+   "status": "on"
+  },
+  {
+   "id": "56230",
+   "prov": "beijing",
+   "prov_name": "北京",
+   "title": "关于 2025 价值优惠方案-29 元档活动下线的公告",
    "date": "2026-11-12",
-   "summary": "尊敬的客户: 您好！由于我公司业务调整，“和多号10元套餐*”、“和多号-免功能费”、“优选PLUS会员-守机宝电池保障连续月包”、“飞信基础业务”、“折页开通",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/gx/index_771_771_detail_56218.html",
+   "summary": "尊敬的客户： 您好！ 2026 年11月12日起，2025 价值优惠方案-29 元档活动下线，届时下线后各渠道均无法办理，建议有以上业务需求的客户，在业务下线日",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/bj/index_100_100_detail_56230.html",
+   "status": "on"
+  },
+  {
+   "id": "56232",
+   "prov": "anhui",
+   "prov_name": "安徽",
+   "title": "关于全球通生日免单权益中下线公众WLAN业务的公告",
+   "date": "2026-11-11",
+   "summary": "尊敬的全球通客户： 您好！安徽省公众WLAN业务（CMCC、CMCC-WEB）将于2026年12月1日0时起停止服务，自停止服务之日起，您生日当天可享的国内基础",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/ah/index_551_551_detail_56232.html",
    "status": "on"
   },
   {
@@ -703,16 +753,6 @@
    "status": "on"
   },
   {
-   "id": "56054",
-   "prov": "anhui",
-   "prov_name": "安徽",
-   "title": "关于千兆提速主题日营销活动停止运营的公告",
-   "date": "2026-10-23",
-   "summary": "尊敬的移动用户： 感谢您长期以来对我们服务的支持和使用，因近期活动调整，千兆提速主题日营销活动将于2026年10月31日24:00正式下线，对应活动名称及公示备",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/ah/index_551_551_detail_56054.html",
-   "status": "on"
-  },
-  {
    "id": "56053",
    "prov": "shanghai",
    "prov_name": "上海",
@@ -763,16 +803,6 @@
    "status": "on"
   },
   {
-   "id": "56049",
-   "prov": "anhui",
-   "prov_name": "安徽",
-   "title": "关于合肥移动VIP售后服务厅信息更新的公示",
-   "date": "2026-10-21",
-   "summary": "尊敬的客户： 为提供更加优质、便捷的服务，合肥移动在全市设立VIP售后服务中心，VIP售后服务中心提供开户、销户、业务订购、业务退订、解约等综合业务服务。首批V",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/ah/index_551_551_detail_56049.html",
-   "status": "on"
-  },
-  {
    "id": "56042",
    "prov": "hubei",
    "prov_name": "湖北",
@@ -813,16 +843,6 @@
    "status": "on"
   },
   {
-   "id": "56009",
-   "prov": "anhui",
-   "prov_name": "安徽",
-   "title": "关于公众WLAN业务下线的公告",
-   "date": "2026-10-19",
-   "summary": "尊敬的客户: 您好！因业务发展调整，2026年12月1日00时起安徽省内中国移动CMCC、CMCC-WEB、CMCC-EDU网络将停止服务，已订购相应业务的用户",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/ah/index_551_551_detail_56009.html",
-   "status": "on"
-  },
-  {
    "id": "55987",
    "prov": "zhejiang",
    "prov_name": "浙江",
@@ -833,16 +853,6 @@
    "status": "on"
   },
   {
-   "id": "55974",
-   "prov": "beijing",
-   "prov_name": "北京",
-   "title": "关于元气卡产品下线的公告",
-   "date": "2026-10-14",
-   "summary": "尊敬的客户: 2026年10月15日起，所有渠道停止销售59/79/109元元气卡。此后，各渠道均无法再办理该产品。此前已经成功办理的用户，可按照原有业务规则继",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/bj/index_100_100_detail_55974.html",
-   "status": "on"
-  },
-  {
    "id": "55970",
    "prov": "tianjin",
    "prov_name": "天津",
@@ -850,16 +860,6 @@
    "date": "2026-10-13",
    "summary": "尊敬的客户： 您好！ 感谢您对手机报业务的支持与使用。因业务调整，山西日报手机报等122项手机报产品拟于2026年11月15日停止服务并下线。下线后将停止内容更",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/tj/index_220_220_detail_55970.html",
-   "status": "on"
-  },
-  {
-   "id": "55969",
-   "prov": "beijing",
-   "prov_name": "北京",
-   "title": "关于 8 元 4G 飞享卡下线的公告",
-   "date": "2026-10-13",
-   "summary": "尊敬的客户： 感谢您一直以来的陪伴与信赖！自 2026 年 10 月 19 日起，8 元 4G 飞享卡下线，届时将无法进行该业务的办理。我们为您准备了其他丰富的",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/bj/index_100_100_detail_55969.html",
    "status": "on"
   },
   {
@@ -1767,10 +1767,10 @@
   {
    "section": "beijing",
    "name": "北京",
-   "count": 1142,
-   "active": 1142,
+   "count": 1145,
+   "active": 1145,
    "removed": 0,
-   "updated": "2026-11-10 10:15"
+   "updated": "2026-11-20 11:33"
   },
   {
    "section": "tianjin",
@@ -1855,10 +1855,10 @@
   {
    "section": "anhui",
    "name": "安徽",
-   "count": 388,
-   "active": 388,
+   "count": 391,
+   "active": 391,
    "removed": 0,
-   "updated": "2026-11-09 11:02"
+   "updated": "2026-11-20 11:33"
   },
   {
    "section": "fujian",
@@ -1919,10 +1919,10 @@
   {
    "section": "guangxi",
    "name": "广西",
-   "count": 1382,
-   "active": 1382,
+   "count": 1383,
+   "active": 1383,
    "removed": 0,
-   "updated": "2026-11-20 10:37"
+   "updated": "2026-11-20 11:33"
   },
   {
    "section": "hainan",
