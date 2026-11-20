@@ -1,7 +1,23 @@
 {
- "updated": "2026-11-09 08:59",
- "count": 59,
+ "updated": "2026-11-20 10:37",
+ "count": 60,
  "items": [
+  {
+   "id": "56216",
+   "title": "公众WLAN业务下线公告",
+   "date": "2026-11-26",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/fj/index_591_591_detail_56216.html",
+   "status": "on",
+   "first_seen": "2026-11-20 10:37",
+   "summary": "尊敬的用户，您好！因业务发展调整，2026年12月31日24时起福建省内中国移动CMCC、CMCC-WEB、CMCC-FJ、CMCC-EDU网络将停止服务，已订购相关业务将自停服日统一终止，不再产生订购关系，不再产生相关费用。为保障您的上网",
+   "content": "<p>&nbsp; &nbsp; &nbsp; &nbsp;尊敬的用户，您好！因业务发展调整，2026年12月31日24时起福建省内中国移动CMCC、CMCC-WEB、CMCC-FJ、CMCC-EDU网络将停止服务，已订购相关业务将自停服日统一终止，不再产生订购关系，不再产生相关费用。为保障您的上网需求，您可以登录中国移动APP选购流量产品满足上网需求。感谢您对中国移动的支持！详情请咨询10086。</p>\n<p style=\"text-align:left\">&nbsp;</p>\n<p><br>\n</p>\n<p><a href=\"https://www.10086.cn/uploadBaseDir/content/xlsx/20261120/20261120101310581xaI.xlsx\" target=\"_blank\" download=\"\"></a></p>\n<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 中国移动通信集团福建有限公司<br>\n&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;2026年11月26日</p>\n<br>",
+   "attachments": [
+    {
+     "name": "20261120101310581xaI.xlsx",
+     "url": "https://www.10086.cn/uploadBaseDir/content/xlsx/20261120/20261120101310581xaI.xlsx"
+    }
+   ]
+  },
   {
    "id": "56140",
    "title": "关于安防业务四档产品包下线的公告",
@@ -532,6 +548,6 @@
  ],
  "section": "fujian",
  "name": "福建",
- "active": 59,
+ "active": 60,
  "removed": 0
 }

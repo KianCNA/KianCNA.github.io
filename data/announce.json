@@ -1,7 +1,107 @@
 {
- "updated": "2026-11-20 08:34",
+ "updated": "2026-11-20 10:37",
  "count": 176,
  "items": [
+  {
+   "id": "56216",
+   "prov": "fujian",
+   "prov_name": "福建",
+   "title": "公众WLAN业务下线公告",
+   "date": "2026-11-26",
+   "summary": "尊敬的用户，您好！因业务发展调整，2026年12月31日24时起福建省内中国移动CMCC、CMCC-WEB、CMCC-FJ、CMCC-EDU网络将停止服务，已订",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/fj/index_591_591_detail_56216.html",
+   "status": "on"
+  },
+  {
+   "id": "56217",
+   "prov": "guangxi",
+   "prov_name": "广西",
+   "title": "2026年11月割接业务公告",
+   "date": "2026-11-20",
+   "summary": "尊敬的客户： 为了给您提供更好的服务，我公司定于11月26日23:00至次日07:00进行支撑系统升级，在此期间将可能影响全区缴费、业务办理和业务查询结果。 给",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/gx/index_771_771_detail_56217.html",
+   "status": "on"
+  },
+  {
+   "id": "56214",
+   "prov": "shandong",
+   "prov_name": "山东",
+   "title": "关于山东移动11月23日晚系统维护公告",
+   "date": "2026-11-20",
+   "summary": "尊敬的移动用户： 您好！ 为提升系统性能给客户提供更好的服务，2026年11月23日晚22:00至次日7:00我公司将进行系统紧急维护升级，升级期间会停止营业厅",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sd/index_531_531_detail_56214.html",
+   "status": "on"
+  },
+  {
+   "id": "56211",
+   "prov": "shandong",
+   "prov_name": "山东",
+   "title": "关于个人信息保护负责人联系方式的公告",
+   "date": "2026-11-20",
+   "summary": "尊敬的移动用户： 您好！ 为进一步保障您的个人信息安全，依据国家相关法律法规规定，我公司已依法设立个人信息保护负责人，专门负责本公司个人信息保护相关工作的监管与",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sd/index_531_531_detail_56211.html",
+   "status": "on"
+  },
+  {
+   "id": "56210",
+   "prov": "jiangsu",
+   "prov_name": "江苏",
+   "title": "关于副卡开通余额（含营销返款）转移功能的公告",
+   "date": "2026-11-20",
+   "summary": "尊敬的客户： 为进一步提升副卡客户使用体验，满足副卡用户资金使用便利需求，我司拟为部分副卡用户同步开通余额（含营销返款）转移功能。相关事项公告如下： 一、调整范",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56210.html",
+   "status": "on"
+  },
+  {
+   "id": "56209",
+   "prov": "neimenggu",
+   "prov_name": "内蒙古",
+   "title": "中国移动内蒙古有限公司巴彦淖尔分公司关于对全市16个自控厅店招商项目-招商公告",
+   "date": "2026-11-20",
+   "summary": "中国移动内蒙古有限公司巴彦淖尔分公司关于对全市16个自控厅店招商项目，进行招商。招商人为中国移动内蒙古有限公司巴彦淖尔市临河、五原、前旗、磴口、中旗、杭后、后旗",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/nm/index_471_471_detail_56209.html",
+   "status": "on"
+  },
+  {
+   "id": "56207",
+   "prov": "jiangsu",
+   "prov_name": "江苏",
+   "title": "和教育业务若干资费套餐停售和下线的公告",
+   "date": "2026-11-20",
+   "summary": "尊敬的客户： 为进一步简化资费结构，为您提供更优质的资费服务，大有百科等54个业务资费套餐于2026年11月30日停售，停售期间不能新增办理，存量用户不受影响；",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56207.html",
+   "status": "on"
+  },
+  {
+   "id": "56202",
+   "prov": "neimenggu",
+   "prov_name": "内蒙古",
+   "title": "中国移动通信集团内蒙古有限公司阿拉善分公司2026年自营厅引商入柜及自有产权房屋招商成交候选人公示",
+   "date": "2026-11-20",
+   "summary": "中国移动通信集团内蒙古有限公司阿拉善分公司2026年自营厅引商入柜及自有产权房屋招商于2026年11月13日10：30分开标,已按招商文件规定的评选方法及相关规",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/nm/index_471_471_detail_56202.html",
+   "status": "on"
+  },
+  {
+   "id": "56201",
+   "prov": "neimenggu",
+   "prov_name": "内蒙古",
+   "title": "中国移动包头分公司2026年部分自有房屋引商招募公告",
+   "date": "2026-11-20",
+   "summary": "本项目由中国移动通信集团内蒙古有限公司包头分公司组织实施。包头分公司现启动昆区等5处自有房屋引商项目招募工作，自治区范围内符合资格要求的意向合作商均可报名参与竞",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/nm/index_471_471_detail_56201.html",
+   "status": "on"
+  },
+  {
+   "id": "56195",
+   "prov": "hunan",
+   "prov_name": "湖南",
+   "title": "系统升级通知",
+   "date": "2026-11-20",
+   "summary": "为提升服务水平，我公司将于2026年11月25日23:00至11月26日7:00期间对业务系统进行升级。届时，营业厅、银行代收、短信营业厅、网上营业厅、中国移动",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hn/index_731_731_detail_56195.html",
+   "status": "on"
+  },
   {
    "id": "56194",
    "prov": "hubei",
@@ -10,6 +110,96 @@
    "date": "2026-11-20",
    "summary": "尊敬的中国移动湖北公司客户： 为向客户提供更优质的服务，湖北移动将于2026年11月20日0：00至11月20日07：30进行网络系统升级工作。在此期间，将影响",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/hb/index_270_270_detail_56194.html",
+   "status": "on"
+  },
+  {
+   "id": "56208",
+   "prov": "heilongjiang",
+   "prov_name": "黑龙江",
+   "title": "关于黑龙江移动系统升级优化的公告（2026-11）",
+   "date": "2026-11-19",
+   "summary": "尊敬的客户： 您好！为了向您提供更为优质的服务，我公司将于2026年11月23日22:00至2026年11月24日07:00，进行系统升级，期间将暂停（影响或部",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56208.html",
+   "status": "on"
+  },
+  {
+   "id": "56206",
+   "prov": "jiangsu",
+   "prov_name": "江苏",
+   "title": "2026年11月26日系统升级公告",
+   "date": "2026-11-19",
+   "summary": "尊敬的客户： 为给客户提供更优质的服务，我公司将于2026年11月26日22:00至次日10:00进行业务支撑系统升级，调整期间，全省营业系统、10086系统业",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56206.html",
+   "status": "on"
+  },
+  {
+   "id": "56205",
+   "prov": "jiangsu",
+   "prov_name": "江苏",
+   "title": "2026年11月25日系统升级公告",
+   "date": "2026-11-19",
+   "summary": "尊敬的客户： 为给客户提供更优质的服务，我公司将于2026年11月25日22:00至次日10:00进行业务支撑系统升级，调整期间，全省营业系统、10086系统业",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56205.html",
+   "status": "on"
+  },
+  {
+   "id": "56204",
+   "prov": "jiangsu",
+   "prov_name": "江苏",
+   "title": "2026年11月23日系统升级公告",
+   "date": "2026-11-19",
+   "summary": "尊敬的客户： 为给客户提供更优质的服务，我公司将于2026年11月23日22:00至次日10:00进行业务支撑系统升级，调整期间，全省营业系统、10086系统业",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56204.html",
+   "status": "on"
+  },
+  {
+   "id": "56203",
+   "prov": "jiangsu",
+   "prov_name": "江苏",
+   "title": "2026年11月22日系统升级公告",
+   "date": "2026-11-19",
+   "summary": "尊敬的客户： 为给客户提供更优质的服务，我公司将于2026年11月22日22:00至次日10:00进行业务支撑系统升级，调整期间，全省营业系统、10086系统业",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56203.html",
+   "status": "on"
+  },
+  {
+   "id": "56200",
+   "prov": "heilongjiang",
+   "prov_name": "黑龙江",
+   "title": "关于黑龙江移动系统升级优化的公告（2026-11）",
+   "date": "2026-11-19",
+   "summary": "尊敬的客户： 您好！为了向您提供更为优质的服务，我公司将于2026年11月27日0:00至6:00进行系统升级，期间可能影响大庆钻探工程公司地质录井一公司120",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56200.html",
+   "status": "on"
+  },
+  {
+   "id": "56224",
+   "prov": "hainan",
+   "prov_name": "海南",
+   "title": "关于我司将于2026年11月23日00：00-07：00进行系统升级的公告",
+   "date": "2026-11-18",
+   "summary": "尊敬的客户： 您好！为给客户提供更优质的服务，我公司将于2026年11月23日00：00-07：00进行系统升级，升级期间，全省营业系统、10086系统业务办理",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hi/index_898_898_detail_56224.html",
+   "status": "on"
+  },
+  {
+   "id": "56223",
+   "prov": "hainan",
+   "prov_name": "海南",
+   "title": "关于我司将于2026年11月20日、12月9日00:00-05:00进行系统升级的公告",
+   "date": "2026-11-18",
+   "summary": "尊敬的客户： 您好！为了提供更优质的服务，我公司将于2026年11月20日、12月9日00:00-05:00进行系统升级，届时全省4/5G TOC及物联网部分用",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hi/index_898_898_detail_56223.html",
+   "status": "on"
+  },
+  {
+   "id": "56221",
+   "prov": "guangxi",
+   "prov_name": "广西",
+   "title": "关于中国移动广西公司2026年集团类客户DICT联盟合作伙伴 （第十九批）入围结果的公示",
+   "date": "2026-11-18",
+   "summary": "根据2025年12月31日在中国移动官方网站（http://www.10086.cn）发布《中国移动广西公司2026年集团类客户DICT联盟合作伙伴招募邀请函》",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/gx/index_771_771_detail_56221.html",
    "status": "on"
   },
   {
@@ -23,6 +213,56 @@
    "status": "on"
   },
   {
+   "id": "56222",
+   "prov": "guangxi",
+   "prov_name": "广西",
+   "title": "2026年第47周割接业务公告",
+   "date": "2026-11-17",
+   "summary": "尊敬的客户： 为了给您提供更好的服务，我公司定于以下时间进行网络升级： 一、2026年11月20日0:00-7:00，在此期间会影响南宁市部分专线约30分钟。影",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/gx/index_771_771_detail_56222.html",
+   "status": "on"
+  },
+  {
+   "id": "56220",
+   "prov": "guangxi",
+   "prov_name": "广西",
+   "title": "关于广西移动公司部分业务下线公告",
+   "date": "2026-11-17",
+   "summary": "尊敬的客户: 您好！由于我公司业务调整，“爱豆来电豪华版”等17项业务（业务清单详见附件），即将停止提供服务，计划于2026年12月20日进行下线处理，业务下线",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/gx/index_771_771_detail_56220.html",
+   "status": "on"
+  },
+  {
+   "id": "56219",
+   "prov": "guangxi",
+   "prov_name": "广西",
+   "title": "关于算力豆业务下线的公告",
+   "date": "2026-11-17",
+   "summary": "尊敬的客户: 您好！由于我公司业务调整，“算力豆套餐-5元-月包、算力豆套餐-10元-月包、算力豆套餐-20元-月包、算力豆套餐-40元-月包、算力豆套餐-10",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/gx/index_771_771_detail_56219.html",
+   "status": "on"
+  },
+  {
+   "id": "56199",
+   "prov": "heilongjiang",
+   "prov_name": "黑龙江",
+   "title": "关于对佳缘咪咕中级会员等45款资费停止服务的公告",
+   "date": "2026-11-17",
+   "summary": "尊敬的客户： 您好！ 由于公司内业务调整，佳缘咪咕中级会员等45款资费产品将逐步进行下线。佳缘咪咕中级会员等45款资费产品将于2026年11月30日24:00正",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56199.html",
+   "status": "on"
+  },
+  {
+   "id": "56198",
+   "prov": "heilongjiang",
+   "prov_name": "黑龙江",
+   "title": "关于黑龙江移动系统升级优化的公告（2026-11）",
+   "date": "2026-11-17",
+   "summary": "尊敬的客户： 您好！为了向您提供更为优质的服务，我公司将于2026年11月20日、25日、27日，12月2日、4日、9日0:00至5:00进行设备升级，期间将可",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56198.html",
+   "status": "on"
+  },
+  {
    "id": "56192",
    "prov": "tianjin",
    "prov_name": "天津",
@@ -33,23 +273,33 @@
    "status": "on"
   },
   {
-   "id": "56185",
-   "prov": "jiangsu",
-   "prov_name": "江苏",
-   "title": "2026年11月24日系统升级公告",
+   "id": "56196",
+   "prov": "henan",
+   "prov_name": "河南",
+   "title": "公众WLAN业务下线公告",
    "date": "2026-11-16",
-   "summary": "尊敬的客户： 为给客户提供更优质的服务，我公司将于2026年11月24日0:00至6:00进行相关网络调整工作，届时可能会影响全省移动用户的语音、手机上网业务的",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56185.html",
+   "summary": "尊敬的用户，您好！ 因业务发展调整，2026年12月31日24时起河南省内中国移动CMCC和CMCC-WEB网络将停止服务，已订购相关业务将自停服日统一终止，不",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/ha/index_371_371_detail_56196.html",
    "status": "on"
   },
   {
-   "id": "56184",
-   "prov": "jiangsu",
-   "prov_name": "江苏",
-   "title": "2026年11月20日系统升级公告",
-   "date": "2026-11-16",
-   "summary": "尊敬的客户： 为给客户提供更优质的服务，我公司将于2026年11月20日0:00至6:00进行相关网络调整工作，届时可能会影响全省移动用户的语音、手机上网、互联",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56184.html",
+   "id": "56218",
+   "prov": "guangxi",
+   "prov_name": "广西",
+   "title": "关于广西移动公司和多号等业务下线的公告",
+   "date": "2026-11-12",
+   "summary": "尊敬的客户: 您好！由于我公司业务调整，“和多号10元套餐*”、“和多号-免功能费”、“优选PLUS会员-守机宝电池保障连续月包”、“飞信基础业务”、“折页开通",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/gx/index_771_771_detail_56218.html",
+   "status": "on"
+  },
+  {
+   "id": "56197",
+   "prov": "heilongjiang",
+   "prov_name": "黑龙江",
+   "title": "关于黑龙江移动系统升级优化的公告（2026-11）",
+   "date": "2026-11-11",
+   "summary": "尊敬的客户： 您好！为了向您提供更为优质的服务，我公司将于2026年11月20日、25日、27日，12月2日、4日、9日、11日、16日、18日、23日、25日",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56197.html",
    "status": "on"
   },
   {
@@ -80,56 +330,6 @@
    "date": "2026-11-09",
    "summary": "尊敬的客户，因业务调整，北京移动本地流量统付业务于 2026 年 11月 30 日下线，如给您造成不便敬请谅解。如有疑问请致电 10086。感谢您的理解与支持！",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/bj/index_100_100_detail_56177.html",
-   "status": "on"
-  },
-  {
-   "id": "56176",
-   "prov": "guangxi",
-   "prov_name": "广西",
-   "title": "关于广西移动公司15元2G流量叠加包等业务下线的公告",
-   "date": "2026-11-09",
-   "summary": "尊敬的客户: 您好！由于我公司业务调整，“15元2G流量叠加包”等27项业务（详见附件），即将停止提供服务，计划于2026年12月15日和12月20日起陆续进行",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/gx/index_771_771_detail_56176.html",
-   "status": "on"
-  },
-  {
-   "id": "56175",
-   "prov": "guangxi",
-   "prov_name": "广西",
-   "title": "关于广西移动公司业务下线的公告",
-   "date": "2026-11-09",
-   "summary": "尊敬的客户: 您好！由于我公司业务调整，部分咪咕业务、独家快报、文艺时讯、商机商情等194项业务（业务清单详见附件），即将停止提供服务，计划于2026年12月1",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/gx/index_771_771_detail_56175.html",
-   "status": "on"
-  },
-  {
-   "id": "56174",
-   "prov": "guangxi",
-   "prov_name": "广西",
-   "title": "关于广西移动公司4个移动看家业务下线的公告",
-   "date": "2026-11-09",
-   "summary": "尊敬的客户: 您好！由于我公司业务调整，“场景智能安防包”、“实时告警包20元”、“和目7天24小时云存储年包”、“基础智能安防包（烟火检测）-体验版”等业务（",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/gx/index_771_771_detail_56174.html",
-   "status": "on"
-  },
-  {
-   "id": "56173",
-   "prov": "guangxi",
-   "prov_name": "广西",
-   "title": "关于广西移动公司天气预报等32项新业务下线的公告",
-   "date": "2026-11-09",
-   "summary": "尊敬的客户: 您好！由于我公司业务调整，部分“天气预报”等32项新业务，即将停止提供服务，计划于2026年12月10日完成下线处理，业务下线时已订购对应业务的用",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/gx/index_771_771_detail_56173.html",
-   "status": "on"
-  },
-  {
-   "id": "56162",
-   "prov": "jiangsu",
-   "prov_name": "江苏",
-   "title": "关于“健康无忧”、“萌宠无忧”系列保障服务产品更名的公告",
-   "date": "2026-11-09",
-   "summary": "尊敬的客户： 为统一产品品牌，提升服务体验，自2026年11月19日起，“健康无忧”系列产品正式更名为“出行宝”、“萌宠无忧”系列产品正式更名为“萌宠宝”。具体",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56162.html",
    "status": "on"
   },
   {
@@ -193,16 +393,6 @@
    "status": "on"
   },
   {
-   "id": "56149",
-   "prov": "guangxi",
-   "prov_name": "广西",
-   "title": "2026年第46周割接业务公告",
-   "date": "2026-11-06",
-   "summary": "尊敬的客户： 为了给您提供更好的服务，我公司定于2026年11月9日0:00- 5:00进行网络升级，在此期间会影响南宁市4G用户使用业务约10分钟。 给您带来",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/gx/index_771_771_detail_56149.html",
-   "status": "on"
-  },
-  {
    "id": "56146",
    "prov": "fujian",
    "prov_name": "福建",
@@ -220,16 +410,6 @@
    "date": "2026-11-06",
    "summary": "本项目为中国移动通信集团山西有限公司【大同】分公司（以下简称：【大同】移动）集中评估引入，评估引入主体为中国移动通信集团山西有限公司【大同】分公司。该项目具备引",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/sx/index_351_351_detail_56142.html",
-   "status": "on"
-  },
-  {
-   "id": "56145",
-   "prov": "guangxi",
-   "prov_name": "广西",
-   "title": "关于广西移动公司彩信等业务下线的公告",
-   "date": "2026-11-05",
-   "summary": "尊敬的客户: 您好！由于我公司业务调整，部分“彩信套餐\"、“被叫优惠”等223项业务（业务清单详见附件），即将停止提供服务，计划于2026年12月15日进行下线",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/gx/index_771_771_detail_56145.html",
    "status": "on"
   },
   {
@@ -260,26 +440,6 @@
    "date": "2026-11-05",
    "summary": "尊敬的客户：您好！ 为持续优化宽带业务结构，推进产品迭代升级，我公司将于2026年11月6日起下架部分宽带业务。由于业务调整给您带来的不便敬请谅解，感谢您对中国",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/hn/index_731_731_detail_56138.html",
-   "status": "on"
-  },
-  {
-   "id": "56136",
-   "prov": "heilongjiang",
-   "prov_name": "黑龙江",
-   "title": "关于黑龙江移动系统升级优化的公告（2026-11）",
-   "date": "2026-11-05",
-   "summary": "尊敬的客户： 您好！为了向您提供更为优质的服务，我公司将在2026年11月6日、20日、24日、25日、27日 00:00-05:00对集中化彩铃进行系统升级优",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56136.html",
-   "status": "on"
-  },
-  {
-   "id": "56135",
-   "prov": "jiangsu",
-   "prov_name": "江苏",
-   "title": "中国移动通信集团江苏有限公司Token生态合作伙伴招募结果公示",
-   "date": "2026-11-05",
-   "summary": "为丰富江苏移动Token产品供给，我公司2026年10月12日发布江苏移动Token生态合作伙伴招募公告。经资格审核、评审等程序，现将拟入选服务商名单予以公示。",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56135.html",
    "status": "on"
   },
   {
@@ -333,16 +493,6 @@
    "status": "on"
   },
   {
-   "id": "56128",
-   "prov": "heilongjiang",
-   "prov_name": "黑龙江",
-   "title": "关于黑龙江移动系统升级优化的公告（2026-11）",
-   "date": "2026-11-04",
-   "summary": "尊敬的客户： 您好！为了向您提供更为优质的服务，我公司将于2026年11月6日、2026年11月20日、2026年11月25日、2026年11月27日0:00至",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56128.html",
-   "status": "on"
-  },
-  {
    "id": "56127",
    "prov": "guizhou",
    "prov_name": "贵州",
@@ -363,36 +513,6 @@
    "status": "on"
   },
   {
-   "id": "56119",
-   "prov": "heilongjiang",
-   "prov_name": "黑龙江",
-   "title": "中国移动通信集团黑龙江有限公司个人信息处理规则公示",
-   "date": "2026-11-03",
-   "summary": "一、处理目的 办理入网手续 业务受理、计费及服务提供 优化网络服务质量 客户服务与体验调研 网络安全保障 个性化推荐商品和服务 二、处理方式 通过业务系统登记、",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56119.html",
-   "status": "on"
-  },
-  {
-   "id": "56118",
-   "prov": "heilongjiang",
-   "prov_name": "黑龙江",
-   "title": "中国移动通信集团黑龙江有限公司个人信息处理规则",
-   "date": "2026-11-03",
-   "summary": "1.您的通信自由和通信秘密不受侵犯，我们对您的资料和通信信息负有保密义务。但根据法律、行政法规规定，司法、行政机关依法要求我们提供协助和配合，我们应给予协助和配",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56118.html",
-   "status": "on"
-  },
-  {
-   "id": "56117",
-   "prov": "neimenggu",
-   "prov_name": "内蒙古",
-   "title": "中国移动内蒙古公司呼和浩特分公司2026年东影路营业厅合作运营项目竞谈引入公告",
-   "date": "2026-11-03",
-   "summary": "根据区公司《关于修订中国移动通信集团内蒙古有限公司营业厅终端特许经营管理办法》（市场（品牌）通〔2026〕48号）相关文件规定，为推进营业厅市场化运营转型，搭建",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/nm/index_471_471_detail_56117.html",
-   "status": "on"
-  },
-  {
    "id": "56116",
    "prov": "hunan",
    "prov_name": "湖南",
@@ -400,16 +520,6 @@
    "date": "2026-11-02",
    "summary": "尊敬的用户： 您好！ 2026年8月27日我司发布《关于部分宽带业务优惠延续的说明》，经核查发现存在异常，针对前期已到期需按标准资费收取费用的客户添加的优惠活动",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/hn/index_731_731_detail_56116.html",
-   "status": "on"
-  },
-  {
-   "id": "56114",
-   "prov": "neimenggu",
-   "prov_name": "内蒙古",
-   "title": "中国移动通信集团内蒙古有限通辽分公司2026年自控厅店引入合作伙伴项目公告 （第四期）",
-   "date": "2026-11-02",
-   "summary": "我公司计划对全市3家自控厅店开展引入合作商家工作，具体如下： 一、引入合作厅店范围 通辽科区分公司共3处自控房产引入合作商家，分别为火车站房屋、西拉木伦房屋、万",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/nm/index_471_471_detail_56114.html",
    "status": "on"
   },
   {
@@ -423,16 +533,6 @@
    "status": "on"
   },
   {
-   "id": "56112",
-   "prov": "heilongjiang",
-   "prov_name": "黑龙江",
-   "title": "关于黑龙江移动系统升级优化的公告（2026-11）",
-   "date": "2026-11-02",
-   "summary": "尊敬的客户： 您好！为了向您提供更为优质的服务，我公司将于2026年11月2日0:00至6:00、2026年11月4日0:00至6:00、2026年11月5日0",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56112.html",
-   "status": "on"
-  },
-  {
    "id": "56110",
    "prov": "tianjin",
    "prov_name": "天津",
@@ -440,26 +540,6 @@
    "date": "2026-11-02",
    "summary": "尊敬的客户： 您好！感谢您对公众WLAN业务的支持与使用。因业务发展调整，自2026年11月30日24时起天津市域中国移动CMCC和CMCC-WEB网络将停止服",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/tj/index_220_220_detail_56110.html",
-   "status": "on"
-  },
-  {
-   "id": "56086",
-   "prov": "hunan",
-   "prov_name": "湖南",
-   "title": "关于部分校园产品暂停销售的说明",
-   "date": "2026-11-02",
-   "summary": "尊敬的湖南移动用户: 感谢您长期以来对我司业务的支持和信任。因校园市场产品升级及权益优化调整。湖南移动将于2026年11月10日0点开始对部分历史不适用产品暂停",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hn/index_731_731_detail_56086.html",
-   "status": "on"
-  },
-  {
-   "id": "56147",
-   "prov": "jiangsu",
-   "prov_name": "江苏",
-   "title": "关于“安家无忧”等保障服务产品停售的公告",
-   "date": "2026-11-01",
-   "summary": "尊敬的客户： 因我公司业务调整，将于2026年11月5日停售“安家无忧20元月包、基金通会员10元版（升级版月包）、爱宠服务包20元、爱宠服务包30元”产品，原",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56147.html",
    "status": "on"
   },
   {
@@ -480,16 +560,6 @@
    "date": "2026-11-01",
    "summary": "尊敬的用户，您好！ 因业务发展调整，浙江省内中国移动CMCC和CMCC-WEB公众WLAN网络将于2026年12月31日24时正式全面停止服务，届时将无法登录使",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/zj/index_571_571_detail_56082.html",
-   "status": "on"
-  },
-  {
-   "id": "56105",
-   "prov": "jiangsu",
-   "prov_name": "江苏",
-   "title": "2026年11月5日系统升级公告",
-   "date": "2026-10-31",
-   "summary": "尊敬的客户： 为给客户提供更优质的服务，我公司将于2026年11月5日22:00至次日10:00进行业务支撑系统升级，调整期间，全省营业系统、10086系统业务",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/js/index_250_250_detail_56105.html",
    "status": "on"
   },
   {
@@ -663,16 +733,6 @@
    "status": "on"
   },
   {
-   "id": "56051",
-   "prov": "neimenggu",
-   "prov_name": "内蒙古",
-   "title": "科右前旗分公司2026年额尔格图委托加盟店引入项目结果公示",
-   "date": "2026-10-23",
-   "summary": "科右前旗分公司2026年额尔格图委托加盟店引入项目于2026年10月22日8：30开始竞争性谈判，现将中选候选人公示如下： 标段：科右前旗分公司2026年额尔格",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/nm/index_471_471_detail_56051.html",
-   "status": "on"
-  },
-  {
    "id": "53548",
    "prov": "fujian",
    "prov_name": "福建",
@@ -733,16 +793,6 @@
    "status": "on"
   },
   {
-   "id": "56027",
-   "prov": "hainan",
-   "prov_name": "海南",
-   "title": "关于我司将于2026年10月22日00：00-07：00进行系统升级的公告",
-   "date": "2026-10-20",
-   "summary": "尊敬的客户： 您好！为给客户提供更优质的服务，我公司将于2026年10月22日00：00-07：00进行系统升级，升级期间，全省营业系统、10086系统业务办理",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hi/index_898_898_detail_56027.html",
-   "status": "on"
-  },
-  {
    "id": "56022",
    "prov": "zhejiang",
    "prov_name": "浙江",
@@ -770,16 +820,6 @@
    "date": "2026-10-19",
    "summary": "尊敬的客户: 您好！因业务发展调整，2026年12月1日00时起安徽省内中国移动CMCC、CMCC-WEB、CMCC-EDU网络将停止服务，已订购相应业务的用户",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/ah/index_551_551_detail_56009.html",
-   "status": "on"
-  },
-  {
-   "id": "56007",
-   "prov": "hainan",
-   "prov_name": "海南",
-   "title": "中国移动通信集团海南有限公司厅店进驻商公开招募公告",
-   "date": "2026-10-18",
-   "summary": "尊敬的客户： 为进一步提升我司业务运营、客户服务、市场拓展能力，拟引入优秀营业厅进驻经营合作伙伴，我司现就营业厅进驻向社会公开招募合作方，欢迎符合条件单位参与应",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hi/index_898_898_detail_56007.html",
    "status": "on"
   },
   {
@@ -920,16 +960,6 @@
    "date": "2026-09-15",
    "summary": "尊敬的客户： 为进一步优化产品服务体验、统一业务服务体系，自2026年10月15日起，我司将陆续对原“和留言”“音频秘书”“和留言升级版”三项业务整合升级为“移",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/zj/index_571_571_detail_55819.html",
-   "status": "on"
-  },
-  {
-   "id": "55805",
-   "prov": "fujian",
-   "prov_name": "福建",
-   "title": "关于饿了么随心享会员包等13个业务下线的公告",
-   "date": "2026-09-11",
-   "summary": "尊敬的客户您好： 因业务调整，我公司将分批于2026年11月1日0时起、12月1日0时起停止部分“饿了么随心享会员包、爱奇艺黄金月会员包月版”等13个业务的服务",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/fj/index_591_591_detail_55805.html",
    "status": "on"
   },
   {
@@ -1433,16 +1463,6 @@
    "status": "on"
   },
   {
-   "id": "51417",
-   "prov": "shandong",
-   "prov_name": "山东",
-   "title": "携号转网营业厅公示",
-   "date": "2024-12-12",
-   "summary": "",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sd/index_531_531_detail_51417.html",
-   "status": "on"
-  },
-  {
    "id": "50867",
    "prov": "liaoning",
    "prov_name": "辽宁",
@@ -1460,26 +1480,6 @@
    "date": "2024-10-22",
    "summary": "中国移动通信集团辽宁有限公司 2024年10月22日",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/ln/index_240_240_detail_50860.html",
-   "status": "on"
-  },
-  {
-   "id": "50520",
-   "prov": "shandong",
-   "prov_name": "山东",
-   "title": "携号转网服务工作行业自律公约",
-   "date": "2024-09-04",
-   "summary": "为方便查询附近可办理携转业务的营业网点，请点击下面按钮进行查看",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sd/index_531_531_detail_50520.html",
-   "status": "on"
-  },
-  {
-   "id": "50548",
-   "prov": "henan",
-   "prov_name": "河南",
-   "title": "关于补换卡费用调整的公告",
-   "date": "2024-08-31",
-   "summary": "尊敬的河南移动客户： 感谢您长期以来的支持与信赖，为给您提供更优质的服务，自2024年10月1日（含）起，在河南移动营业网点、电子渠道办理补卡、换卡业务，及外省",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/ha/index_371_371_detail_50548.html",
    "status": "on"
   },
   {
@@ -1799,10 +1799,10 @@
   {
    "section": "neimenggu",
    "name": "内蒙古",
-   "count": 75,
-   "active": 75,
+   "count": 78,
+   "active": 78,
    "removed": 0,
-   "updated": "2026-11-10 10:15"
+   "updated": "2026-11-20 10:37"
   },
   {
    "section": "liaoning",
@@ -1823,10 +1823,10 @@
   {
    "section": "heilongjiang",
    "name": "黑龙江",
-   "count": 101,
-   "active": 101,
+   "count": 106,
+   "active": 106,
    "removed": 0,
-   "updated": "2026-11-05 16:32"
+   "updated": "2026-11-20 10:37"
   },
   {
    "section": "shanghai",
@@ -1839,10 +1839,10 @@
   {
    "section": "jiangsu",
    "name": "江苏",
-   "count": 4327,
-   "active": 4327,
+   "count": 4333,
+   "active": 4333,
    "removed": 0,
-   "updated": "2026-11-16 16:11"
+   "updated": "2026-11-20 10:37"
   },
   {
    "section": "zhejiang",
@@ -1863,10 +1863,10 @@
   {
    "section": "fujian",
    "name": "福建",
-   "count": 59,
-   "active": 59,
+   "count": 60,
+   "active": 60,
    "removed": 0,
-   "updated": "2026-11-09 08:59"
+   "updated": "2026-11-20 10:37"
   },
   {
    "section": "jiangxi",
@@ -1879,18 +1879,18 @@
   {
    "section": "shandong",
    "name": "山东",
-   "count": 21,
-   "active": 21,
+   "count": 23,
+   "active": 23,
    "removed": 0,
-   "updated": "2026-10-31 09:52"
+   "updated": "2026-11-20 10:37"
   },
   {
    "section": "henan",
    "name": "河南",
-   "count": 65,
-   "active": 65,
+   "count": 66,
+   "active": 66,
    "removed": 0,
-   "updated": "2026-10-27 22:09"
+   "updated": "2026-11-20 10:37"
   },
   {
    "section": "hubei",
@@ -1903,10 +1903,10 @@
   {
    "section": "hunan",
    "name": "湖南",
-   "count": 62,
-   "active": 62,
+   "count": 63,
+   "active": 63,
    "removed": 0,
-   "updated": "2026-11-05 22:54"
+   "updated": "2026-11-20 10:37"
   },
   {
    "section": "guangdong",
@@ -1919,18 +1919,18 @@
   {
    "section": "guangxi",
    "name": "广西",
-   "count": 1375,
-   "active": 1375,
+   "count": 1382,
+   "active": 1382,
    "removed": 0,
-   "updated": "2026-11-09 20:12"
+   "updated": "2026-11-20 10:37"
   },
   {
    "section": "hainan",
    "name": "海南",
-   "count": 634,
-   "active": 634,
+   "count": 636,
+   "active": 636,
    "removed": 0,
-   "updated": "2026-11-09 17:47"
+   "updated": "2026-11-20 10:37"
   },
   {
    "section": "chongqing",

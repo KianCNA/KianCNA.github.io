@@ -1,7 +1,18 @@
 {
- "updated": "2026-10-27 22:09",
- "count": 65,
+ "updated": "2026-11-20 10:37",
+ "count": 66,
  "items": [
+  {
+   "id": "56196",
+   "title": "公众WLAN业务下线公告",
+   "date": "2026-11-16",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/ha/index_371_371_detail_56196.html",
+   "status": "on",
+   "first_seen": "2026-11-20 10:37",
+   "summary": "尊敬的用户，您好！ 因业务发展调整，2026年12月31日24时起河南省内中国移动CMCC和CMCC-WEB网络将停止服务，已订购相关业务将自停服日统一终止，不再产生订购关系，不再产生相关费用。为保障您的上网需求，您可以登录中国移动APP选",
+   "content": "<p>尊敬的用户，您好！</p>\n<p>&nbsp; &nbsp; &nbsp; &nbsp; 因业务发展调整，2026年12月31日24时起河南省内中国移动CMCC和CMCC-WEB网络将停止服务，已订购相关业务将自停服日统一终止，不再产生订购关系，不再产生相关费用。为保障您的上网需求，您可以登录中国移动APP选购流量产品满足上网需求。感谢您对中国移动的支持！详情请咨询10086。</p>\n<p><br>\n</p>\n<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 中国移动通信集团河南有限公司</p>\n<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2026年11月16日</p>",
+   "attachments": []
+  },
   {
    "id": "55745",
    "title": "关于部分资费套内流量扩容的公告",
@@ -542,6 +553,6 @@
  ],
  "section": "henan",
  "name": "河南",
- "active": 65,
+ "active": 66,
  "removed": 0
 }

@@ -1,7 +1,29 @@
 {
- "updated": "2026-11-09 17:47",
- "count": 634,
+ "updated": "2026-11-20 10:37",
+ "count": 636,
  "items": [
+  {
+   "id": "56224",
+   "title": "关于我司将于2026年11月23日00：00-07：00进行系统升级的公告",
+   "date": "2026-11-18",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hi/index_898_898_detail_56224.html",
+   "status": "on",
+   "first_seen": "2026-11-20 10:37",
+   "summary": "尊敬的客户： 您好！为给客户提供更优质的服务，我公司将于2026年11月23日00：00-07：00进行系统升级，升级期间，全省营业系统、10086系统业务办理将出现中断情况；网上营业厅、掌上营业厅、短信营业厅、自助终端等所有渠道充值、查询",
+   "content": "<p>尊敬的客户：&nbsp;</p>\n<p>&nbsp; &nbsp; &nbsp; &nbsp;您好！为给客户提供更优质的服务，我公司将于<a data-cal-date=\"2026-11-23 09:00\" style=\"background-color:rgb(255, 255, 255);color:inherit\">2026年11月23日</a>00：00-07：00进行系统升级，升级期间，全省营业系统、10086系统业务办理将出现中断情况；网上营业厅、掌上营业厅、短信营业厅、自助终端等所有渠道充值、查询、受理业务将出现中断情况。 给您带来不便，敬请谅解。 咨询电话:10086</p>\n<p></p>\n<p style=\"color:rgb(51, 51, 51);text-align:right;background-color:rgb(255, 255, 255)\">中国移动通信集团海南有限公司</p>\n<p style=\"color:rgb(51, 51, 51);text-align:right;background-color:rgb(255, 255, 255)\">2026年11月18日</p>\n<br>\n<p><br>\n</p>",
+   "attachments": []
+  },
+  {
+   "id": "56223",
+   "title": "关于我司将于2026年11月20日、12月9日00:00-05:00进行系统升级的公告",
+   "date": "2026-11-18",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hi/index_898_898_detail_56223.html",
+   "status": "on",
+   "first_seen": "2026-11-20 10:37",
+   "summary": "尊敬的客户： 您好！为了提供更优质的服务，我公司将于2026年11月20日、12月9日00:00-05:00进行系统升级，届时全省4/5G TOC及物联网部分用户的上网业务和语音业务将受影响，影响时长约为15分钟，给您带来的不便，敬请谅解。",
+   "content": "<p>尊敬的客户：&nbsp;</p>\n<p>&nbsp; &nbsp; &nbsp; &nbsp;您好！为了提供更优质的服务，我公司将于<a data-cal-date=\"2026-11-20 09:00\" style=\"background-color:rgb(255, 255, 255);color:inherit\">2026年11月20日</a>、<a data-cal-date=\"2026-12-09 09:00\" style=\"background-color:rgb(255, 255, 255);color:inherit\">12月9日</a>00:00-05:00进行系统升级，届时全省<a data-cal-date=\"2026-04-05 09:00\" style=\"background-color:rgb(255, 255, 255);color:inherit\">4/5</a>G TOC及物联网部分用户的上网业务和语音业务将受影响，影响时长约为15分钟，给您带来的不便，敬请谅解。</p>\n<p><p style=\"color:rgb(51, 51, 51);text-align:right;background-color:rgb(255, 255, 255)\">中国移动通信集团海南有限公司</p>\n<p style=\"color:rgb(51, 51, 51);text-align:right;background-color:rgb(255, 255, 255)\">2026年11月18日</p>\n<br>\n</p>",
+   "attachments": []
+  },
   {
    "id": "56163",
    "title": "关于移动58元套餐等套餐宽带速率升级通知的公告",
@@ -5111,6 +5133,6 @@
  ],
  "section": "hainan",
  "name": "海南",
- "active": 634,
+ "active": 636,
  "removed": 0
 }

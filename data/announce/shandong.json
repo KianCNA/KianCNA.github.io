@@ -1,7 +1,29 @@
 {
- "updated": "2026-10-31 09:52",
- "count": 21,
+ "updated": "2026-11-20 10:37",
+ "count": 23,
  "items": [
+  {
+   "id": "56214",
+   "title": "关于山东移动11月23日晚系统维护公告",
+   "date": "2026-11-20",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sd/index_531_531_detail_56214.html",
+   "status": "on",
+   "first_seen": "2026-11-20 10:37",
+   "summary": "尊敬的移动用户： 您好！ 为提升系统性能给客户提供更好的服务，2026年11月23日晚22:00至次日7:00我公司将进行系统紧急维护升级，升级期间会停止营业厅、客服、短信营业厅、中国移动APP、微信营业厅、空中充值、移动商城等所有自助业务",
+   "content": "尊敬的移动用户：<br>\n&nbsp; &nbsp; &nbsp; &nbsp;您好！<br>\n&nbsp; &nbsp; &nbsp; &nbsp;为提升系统性能给客户提供更好的服务，2026年11月23日晚22:00至次日7:00我公司将进行系统紧急维护升级，升级期间会停止营业厅、客服、短信营业厅、中国移动APP、微信营业厅、空中充值、移动商城等所有自助业务。<br>\n&nbsp; &nbsp; &nbsp; &nbsp;感谢您一直以来对我们的支持，如给您带来不便，敬请谅解！<br>\n&nbsp; &nbsp; &nbsp;<br>\n<div style=\"text-align:right\">中国移动通信集团山东有限公司</div><div style=\"text-align:right\">2026年11月20日</div><br>",
+   "attachments": []
+  },
+  {
+   "id": "56211",
+   "title": "关于个人信息保护负责人联系方式的公告",
+   "date": "2026-11-20",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sd/index_531_531_detail_56211.html",
+   "status": "on",
+   "first_seen": "2026-11-20 10:37",
+   "summary": "尊敬的移动用户： 您好！ 为进一步保障您的个人信息安全，依据国家相关法律法规规定，我公司已依法设立个人信息保护负责人，专门负责本公司个人信息保护相关工作的监管与管理。若您对本公司的个人信息保护政策、措施存有任何疑问、意见或建议，欢迎通过以下",
+   "content": "尊敬的移动用户：<br>\n       您好！<br>\n       为进一步保障您的个人信息安全，依据国家相关法律法规规定，我公司已依法设立个人信息保护负责人，专门负责本公司个人信息保护相关工作的监管与管理。若您对本公司的个人信息保护政策、措施存有任何疑问、意见或建议，欢迎通过以下方式与我公司个人信息保护负责人联系。<br>\n<div>       联系方式：grxxbh@sd.chinamobile.com</div>       感谢您一直以来对山东移动的信任与支持！<br>\n     <br>\n<div style=\"text-align:right\">中国移动通信集团山东有限公司</div><div style=\"text-align:right\">2026年11月20日</div><br>",
+   "attachments": []
+  },
   {
    "id": "56073",
    "title": "关于山东移动10月30日晚系统维护公告",
@@ -188,6 +210,6 @@
  ],
  "section": "shandong",
  "name": "山东",
- "active": 21,
+ "active": 23,
  "removed": 0
 }
