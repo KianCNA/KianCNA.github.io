@@ -292,7 +292,8 @@ def build_latest(scopes, datadir):
     # 局部抓取（--scopes）时 scopes 只含本轮板块；直接据此重建 latest 会让其它
     # 省份从仪表盘列表里消失（数据文件还在）。故范围取「本轮板块 ∪ 已有 latest 板块」
     # 的并集，并只收录实际存在数据文件的板块。
-    _old = load(os.path.join(datadir, "latest.json")) or {}
+    _lp = os.path.join(datadir, "latest.json")
+    _old = (load(_lp) if os.path.exists(_lp) else {}) or {}
     _kept = [x.get("section") for x in (_old.get("sections") or [])
              if isinstance(x, dict) and x.get("section")]
     for sc in list(dict.fromkeys(list(scopes) + _kept)):

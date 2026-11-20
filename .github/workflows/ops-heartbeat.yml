@@ -34,7 +34,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TH_TELECOM: "14400"
-          TH_GB: "21600"
+          TH_GB: "14400"
           TH_UNICOM: "36000"
         run: |
           set -e
