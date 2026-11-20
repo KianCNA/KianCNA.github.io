@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20 13:26",
+ "updated": "2026-11-20 15:09",
  "count": 176,
  "items": [
   {
@@ -10,6 +10,36 @@
    "date": "2026-11-26",
    "summary": "尊敬的用户，您好！因业务发展调整，2026年12月31日24时起福建省内中国移动CMCC、CMCC-WEB、CMCC-FJ、CMCC-EDU网络将停止服务，已订",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/fj/index_591_591_detail_56216.html",
+   "status": "on"
+  },
+  {
+   "id": "56236",
+   "prov": "heilongjiang",
+   "prov_name": "黑龙江",
+   "title": "关于黑龙江移动系统升级优化的公告（2026-11）",
+   "date": "2026-11-20",
+   "summary": "尊敬的客户： 您好！为了向您提供更为优质的服务，我公司将分别于2026年11月26日、28日、12月1日、3日、5日、9日、11日、15日、17日00:00至5",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56236.html",
+   "status": "on"
+  },
+  {
+   "id": "56235",
+   "prov": "heilongjiang",
+   "prov_name": "黑龙江",
+   "title": "关于黑龙江移动系统升级优化的公告（2026-11）",
+   "date": "2026-11-20",
+   "summary": "尊敬的客户： 您好！为了向您提供更为优质的服务，我公司将于2026年11月25日、11月27日、12月2日、12月4日、12月9日、12月11日每日凌晨0:00",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56235.html",
+   "status": "on"
+  },
+  {
+   "id": "56234",
+   "prov": "heilongjiang",
+   "prov_name": "黑龙江",
+   "title": "关于黑龙江移动系统升级优化的公告（2026-11）",
+   "date": "2026-11-20",
+   "summary": "尊敬的客户： 您好！为了向您提供更为优质的服务，我公司将于2026年11月25日、27日每日凌晨0:00至5:00进行系统升级，期间有可能影响黑河5G物联网业务",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56234.html",
    "status": "on"
   },
   {
@@ -283,16 +313,6 @@
    "status": "on"
   },
   {
-   "id": "56198",
-   "prov": "heilongjiang",
-   "prov_name": "黑龙江",
-   "title": "关于黑龙江移动系统升级优化的公告（2026-11）",
-   "date": "2026-11-17",
-   "summary": "尊敬的客户： 您好！为了向您提供更为优质的服务，我公司将于2026年11月20日、25日、27日，12月2日、4日、9日0:00至5:00进行设备升级，期间将可",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56198.html",
-   "status": "on"
-  },
-  {
    "id": "56192",
    "prov": "tianjin",
    "prov_name": "天津",
@@ -340,16 +360,6 @@
    "date": "2026-11-11",
    "summary": "尊敬的全球通客户： 您好！安徽省公众WLAN业务（CMCC、CMCC-WEB）将于2026年12月1日0时起停止服务，自停止服务之日起，您生日当天可享的国内基础",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/ah/index_551_551_detail_56232.html",
-   "status": "on"
-  },
-  {
-   "id": "56197",
-   "prov": "heilongjiang",
-   "prov_name": "黑龙江",
-   "title": "关于黑龙江移动系统升级优化的公告（2026-11）",
-   "date": "2026-11-11",
-   "summary": "尊敬的客户： 您好！为了向您提供更为优质的服务，我公司将于2026年11月20日、25日、27日，12月2日、4日、9日、11日、16日、18日、23日、25日",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56197.html",
    "status": "on"
   },
   {
@@ -470,16 +480,6 @@
    "date": "2026-11-05",
    "summary": "为提升服务水平，我公司将于2026年11月8日23:00至11月9日7:00期间对业务系统进行升级。届时，营业厅、银行代收、短信营业厅、网上营业厅、中国移动AP",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/hn/index_731_731_detail_56141.html",
-   "status": "on"
-  },
-  {
-   "id": "56139",
-   "prov": "heilongjiang",
-   "prov_name": "黑龙江",
-   "title": "关于黑龙江移动系统升级优化的公告（2026-11）",
-   "date": "2026-11-05",
-   "summary": "尊敬的客户： 您好！为了向您提供更为优质的服务，我公司将于2026年11月6日0:00至6:00、2026年11月7日0:00至6:00、2026年11月25日",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56139.html",
    "status": "on"
   },
   {
@@ -1823,10 +1823,10 @@
   {
    "section": "heilongjiang",
    "name": "黑龙江",
-   "count": 106,
-   "active": 106,
+   "count": 109,
+   "active": 109,
    "removed": 0,
-   "updated": "2026-11-20 10:37"
+   "updated": "2026-11-20 15:09"
   },
   {
    "section": "shanghai",
