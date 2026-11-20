@@ -30,7 +30,7 @@
 /* ===== 老入口自升级（2026-10-19）=====
    旧 HTML 被 CDN 缓存时，靠它自己跳到最新版：
    请求 version.json 带时间戳（CDN 必回源），版本号不同则 replace 到带时间戳的新 URL。 */
-var BUILD_VER = "20261120a";
+var BUILD_VER = "20261120c";
 (function(){
   function base(){
     var m = location.pathname.match(/^(.*)\/[^\/]*$/);
@@ -1140,6 +1140,83 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
   .card,.view.on{animation:none!important}
 }
 
+/* ---------- 自定义：四家运营商自选省份变更监控 ---------- */
+.cu-lines{display:flex;flex-direction:column;gap:9px}
+.cu-line{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.cu-opn{font-size:11.5px;font-weight:800;color:var(--tx2);padding:4px 9px;border-radius:8px;
+  background:var(--glass2);border:1px solid var(--bd);flex:0 0 auto}
+.cu-tag{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:10px;
+  font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;color:var(--tx);
+  background:var(--glass2);border:1px solid var(--bd2);
+  transition:transform .16s,background .16s,border-color .16s,box-shadow .16s}
+.cu-tag:hover{transform:translateY(-2px);border-color:var(--ac);box-shadow:var(--sh)}
+.cu-tag .d{width:7px;height:7px;border-radius:50%;flex:none;
+  background:linear-gradient(135deg,var(--ica,#6366f1),var(--icb,#8b8cf7))}
+.cu-tag em{font-style:normal;font-size:10.5px;font-weight:800;color:var(--tx3)}
+.cu-ops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-bottom:12px}
+.cu-op{cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 6px;
+  border-radius:12px;border:1px solid var(--bd2);background:var(--glass2);color:var(--tx2);
+  font-size:12.5px;font-weight:700;font-family:inherit;
+  transition:transform .16s,background .16s,color .16s,border-color .16s}
+.cu-op:hover:not(:disabled){transform:translateY(-2px);border-color:var(--ac);color:var(--tx)}
+.cu-op.on{color:#fff;border-color:transparent;
+  background:linear-gradient(135deg,var(--ica),var(--icb));box-shadow:0 6px 16px rgba(0,0,0,.24)}
+.cu-op:disabled{opacity:.45;cursor:not-allowed}
+.cu-op .n{font-size:10.5px;font-weight:800;opacity:.82}
+.cu-pvs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.cu-pv{cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:11px;
+  border:1px solid var(--bd2);background:var(--glass2);color:var(--tx);font-size:12.5px;
+  font-weight:700;font-family:inherit;transition:transform .16s,background .16s,border-color .16s}
+.cu-pv:hover{transform:translateY(-2px);border-color:var(--ac)}
+.cu-pv .d{width:7px;height:7px;border-radius:50%;flex:none;
+  background:linear-gradient(135deg,var(--ica,#6366f1),var(--icb,#8b8cf7))}
+.cu-pv em{font-style:normal;font-size:10.5px;font-weight:800;color:var(--tx3)}
+.cu-pv.on{color:#fff;border-color:transparent;
+  background:linear-gradient(135deg,var(--ica,#6366f1),var(--icb,#8b8cf7))}
+.cu-pv.on .d{background:rgba(255,255,255,.9)}
+.cu-pv.on em{color:rgba(255,255,255,.88)}
+.cu-empty{padding:24px 12px;text-align:center;color:var(--tx3);font-size:12.5px;line-height:1.85}
+.cu-all{display:flex;flex-direction:column;gap:7px}
+.cu-row{display:grid;grid-template-columns:auto auto 1fr auto;gap:6px 9px;align-items:center;
+  padding:10px 12px;border-radius:12px;border:1px solid var(--bd);background:var(--glass2);
+  color:var(--tx);font-family:inherit;text-align:left;cursor:pointer;
+  transition:transform .18s,border-color .18s,box-shadow .18s}
+.cu-row:hover{transform:translateY(-2px);border-color:var(--ac);box-shadow:var(--sh)}
+.cu-rb{font-size:11px;font-weight:800;color:#fff;padding:3px 8px;border-radius:7px;white-space:nowrap;
+  background:linear-gradient(135deg,var(--ica,#6366f1),var(--icb,#8b8cf7))}
+.cu-rp{font-size:12.5px;font-weight:800;white-space:nowrap}
+.cu-rt{font-size:11px;color:var(--tx3);font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.cu-rs{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:5px}
+.cu-rn{grid-column:1 / -1;font-size:11.5px;color:var(--tx2);line-height:1.55;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cu-chip{display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:6px 11px;border-radius:11px;
+  font-size:12.5px;line-height:1.45;text-align:left;font-family:inherit;font-weight:600;cursor:pointer;
+  background:var(--glass2);border:1px solid var(--bd2);color:var(--tx);
+  transition:transform .2s,background .2s,border-color .2s,color .2s}
+.cu-chip:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.24)}
+.cu-chip .cic{font-size:11.5px;flex:0 0 auto}
+.cu-chip .cn{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cu-chip .cd{font-size:10.5px;flex:0 0 auto;font-weight:800}
+.cu-chip.c-add{border-color:rgba(52,211,153,.45);background:rgba(52,211,153,.13);color:#7ff0c4}
+.cu-chip.c-del{border-color:rgba(251,113,133,.42);background:rgba(251,113,133,.12);color:#ff97a8}
+.cu-chip.c-mod{border-color:rgba(251,191,36,.45);background:rgba(251,191,36,.13);color:#ffd166}
+.cu-chip.c-rst{border-color:rgba(148,163,184,.45);background:rgba(148,163,184,.14);color:#cbd5e1}
+[data-theme="light"] .cu-chip.c-add{color:#047857;border-color:rgba(5,150,105,.4);background:rgba(5,150,105,.1)}
+[data-theme="light"] .cu-chip.c-del{color:#be123c;border-color:rgba(225,29,72,.35);background:rgba(225,29,72,.09)}
+[data-theme="light"] .cu-chip.c-mod{color:#92400e;border-color:rgba(180,83,9,.38);background:rgba(180,83,9,.1)}
+[data-theme="light"] .cu-chip.c-rst{color:#475569;border-color:rgba(71,85,105,.4);background:rgba(71,85,105,.1)}
+.cu-chip.x{display:none}
+.cu-more{margin-top:6px;font-size:11.5px;color:var(--ac2t);background:none;border:0;
+  cursor:pointer;font-family:inherit;font-weight:600;padding:4px 2px}
+.cu-more:hover{text-decoration:underline}
+#cuMask .modal{max-height:72vh;width:min(560px,100%)}
+#cuMask .mb{max-height:min(46vh,380px);overscroll-behavior:contain}
+#cuMask .optlist{flex:none}
+.cu-mtabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:0 0 10px}
+.cu-mbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:0 0 10px}
+.cu-mbar .search{flex:1 1 160px;min-width:120px}
+.cu-mcnt{font-size:11.5px;color:var(--tx3);font-weight:700;margin-right:auto;font-variant-numeric:tabular-nums}
+
 /* ================= flex gap 兜底（旧内核不支持 gap） ================= */
 @media(min-width:761px){.nav-in > * + *{margin-left:12px}}
 .brand > * + *{margin-left:11px}
@@ -1204,6 +1281,7 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
     <button class="tab" data-v="quanguo">全国资费</button>
     <button class="tab" data-v="prov">省份资费</button>
     <button class="tab" data-v="history">变化历史</button>
+    <button class="tab" data-v="custom">自定义</button>
     <button class="tab" data-v="announce"><span id="anTabTxt">移动公告</span><span class="an-dot" id="anDot"></span></button>
     <button class="tab" data-v="about">关于</button>
   </nav>
@@ -1286,6 +1364,30 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
           <span class="ps" id="hHint"></span>
         </div>
         <div class="tl" id="tlBox"></div>
+      </div>
+    </section>
+
+    <section class="view" id="v-custom">
+      <div class="panel glass">
+        <div class="ph">
+          <h2 class="pt">我的订阅</h2>
+          <button class="pick" id="cuPick" data-cu-pick="1"><span class="pk-t">选择运营商省份</span><span class="pk-s"></span><i class="pk-a">▾</i></button>
+          <button class="tgl" id="cuClear" data-cu-clear="1" style="display:none">清空</button>
+          <span class="ps" id="cuHint"></span>
+        </div>
+        <div class="cu-lines" id="cuSel"></div>
+      </div>
+
+      <div class="panel glass">
+        <div class="ph"><h2 class="pt">全部订阅动态</h2><span class="ps" id="cuAllHint"></span></div>
+        <div class="cu-all" id="cuAll"></div>
+      </div>
+
+      <div class="panel glass" id="cuTlPanel">
+        <div class="ph"><h2 class="pt">省份变化历史</h2><span class="ps" id="cuHistHint"></span></div>
+        <div class="cu-ops" id="cuOps"></div>
+        <div class="cu-pvs" id="cuProvs"></div>
+        <div class="tl" id="cuTl"></div>
       </div>
     </section>
 
@@ -1441,6 +1543,27 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
     <div class="pk-quick" id="pkQuick" style="display:none"></div>
     <div class="pk-search" id="pkSearchWrap"><div class="search"><span class="si">⌕</span><input type="search" id="pkSearch" placeholder="搜索…"></div></div>
     <div class="mb"><div class="optlist" id="pkBody"></div></div>
+  </div>
+</div>
+
+<!-- 自定义订阅选择弹窗 -->
+<div class="mask" id="cuMask">
+  <div class="modal">
+    <div class="mh"><h3>选择运营商与省份</h3><button class="mx" id="cuX">×</button></div>
+    <div class="mb">
+      <div class="cu-mtabs" id="cuMTabs"></div>
+      <div class="cu-mbar">
+        <div class="search"><span class="si">⌕</span><input type="search" id="cuMSearch" placeholder="搜索省份…"></div>
+        <button class="tgl" id="cuMAll" type="button">全选</button>
+        <button class="tgl" id="cuMNone" type="button">清空</button>
+      </div>
+      <div class="optlist pkgrid" id="cuMBody"></div>
+    </div>
+    <div class="mf">
+      <span class="cu-mcnt" id="cuMCnt"></span>
+      <button class="btn" id="cuMCancel">取消</button>
+      <button class="btn pri" id="cuMSave">保存</button>
+    </div>
   </div>
 </div>
 
@@ -2094,6 +2217,7 @@ function secHtml(hi, ci, type, arr, diffs){
 var HIST_OPEN = {}, HIST_POPEN = {}, HIST_INIT = false, HIST_ALL = false, HIST_SHOW = 15;
 var HIST_LOADED = false;
 var HIST_LOADING = false;   // 防止空闲预载与「打开历史页」同时触发重复下载
+var HIST_P = null;          // 「自定义」也要用这份历史，统一挂同一个 Promise
 function updNavChg(){
   var nx = document.getElementById("navChg");
   if(!nx){ return; }
@@ -2106,18 +2230,22 @@ function updNavChg(){
   nx.textContent = t ? (t + " 条") : "\u2014";
 }
 function loadHistory(){
-  if(HIST_LOADED || HIST_LOADING){ return; }
+  if(HIST_P){ return HIST_P; }
+  if(HIST_LOADED){ return Promise.resolve(D.history); }
   HIST_LOADING = true;
-  __j(DATA_BASE + "history.json").then(function(hist){
+  HIST_P = __j(DATA_BASE + "history.json").then(function(hist){
     D.history = __normHist(hist || []);
     HIST_LOADED = true; HIST_INIT = false;
     updNavChg();
     renderHistory();
+    return D.history;
   }).catch(function(){
     HIST_LOADED = true;
     var b = document.getElementById("tlBox");
     if(b){ b.innerHTML = '<div class="ti-none">变更记录加载失败</div>'; }
-  }).then(function(){ HIST_LOADING = false; });
+    return D.history;
+  }).then(function(h){ HIST_LOADING = false; return h; });
+  return HIST_P;
 }
 function histBars(cs){
   var a = 0, r = 0, m = 0, s = 0;
@@ -2385,6 +2513,7 @@ function setView(v){
     if(!HIST_LOADED){ loadHistory(); }   // 首次打开才拉 history.json
     else { renderHistory(); }
   }
+  if(v === "custom"){ cuRender(); cuEnsure(); }
   if(v === "announce"){ renderAnnounce(); }
   window.scrollTo({ top:0, behavior:"smooth" });
 }
@@ -3596,6 +3725,652 @@ function applyOp(key){
   toast(o.ready ? ("已切换到" + o.name) : (o.name + "：界面已就绪，暂无抓取数据"));
 }
 
+/* ══════════ 自定义：四家运营商自选省份变更监控 ══════════
+   只在移动主站（根目录 index.html）出现：省份来源覆盖移动主站与
+   联通 / 电信 / 广电三个子站，并直接读各站的 data/history.json。
+   选中的运营商 + 省份与当前查看位置全部存在浏览器本地，不上传。 */
+var CU_KEY = "tariffCustomSel.v1";
+var CU_CHIP_LIMIT = 8;
+var CU_OPS = [
+  { key:"mobile",  short:"移动", name:"中国移动", ca:"#0085d0", cb:"#4cc9f0", base:"./data/" },
+  { key:"unicom",  short:"联通", name:"中国联通", ca:"#e2231a", cb:"#ff7a45", base:"./unicom/data/" },
+  { key:"telecom", short:"电信", name:"中国电信", ca:"#0057b8", cb:"#00a0e9", base:"./telecom/data/" },
+  { key:"gb",      short:"广电", name:"中国广电", ca:"#c8102e", cb:"#ff4d6d", base:"./gb/data/" }
+];
+var CU_MAP = {};
+CU_OPS.forEach(function(o){ CU_MAP[o.key] = o; });
+var CU = {
+  sel:{ mobile:[], unicom:[], telecom:[], gb:[] },
+  last:{},
+  meta:{}, metaP:{},
+  hist:{}, histP:{}, stat:{},
+  det:{}, detP:{},
+  op:"mobile", prov:"",
+  draft:null, draftOp:"mobile", draftKw:"",
+  open:{}, allShow:12, histShow:12
+};
+function cuLoad(){
+  var raw = null;
+  try{ raw = JSON.parse(localStorage.getItem(CU_KEY) || "null"); }catch(e){ raw = null; }
+  if(raw && raw.sel){
+    CU_OPS.forEach(function(o){
+      var v = raw.sel[o.key];
+      if(Object.prototype.toString.call(v) === "[object Array]"){
+        CU.sel[o.key] = v.filter(function(x){ return typeof x === "string" && x; });
+      }
+    });
+    if(raw.last && typeof raw.last === "object"){
+      CU_OPS.forEach(function(o){
+        if(typeof raw.last[o.key] === "string"){ CU.last[o.key] = raw.last[o.key]; }
+      });
+    }
+    if(raw.op && CU_MAP[raw.op]){ CU.op = raw.op; }
+    if(typeof raw.prov === "string"){ CU.prov = raw.prov; }
+  }
+  if(!CU.sel[CU.op] || !CU.sel[CU.op].length){
+    var first = cuSelectedOps()[0];
+    CU.op = first ? first.key : "mobile";
+    CU.prov = first ? CU.sel[first.key][0] : "";
+  }
+}
+function cuSave(){
+  try{
+    localStorage.setItem(CU_KEY, JSON.stringify({ v:1, sel:CU.sel, last:CU.last, op:CU.op, prov:CU.prov }));
+  }catch(e){}
+}
+function cuSelectedOps(){
+  return CU_OPS.filter(function(o){ return (CU.sel[o.key] || []).length > 0; });
+}
+function cuSelCount(){
+  var n = 0;
+  CU_OPS.forEach(function(o){ n += (CU.sel[o.key] || []).length; });
+  return n;
+}
+function cuProvName(op, sec){
+  var m = CU.meta[op];
+  if(m && m.map[sec]){ return m.map[sec]; }
+  return NAME_MAP[sec] || sec;
+}
+function cuMeta(op, cb){
+  if(CU.meta[op]){ if(cb){ cb(CU.meta[op]); } return Promise.resolve(CU.meta[op]); }
+  if(!CU.metaP[op]){
+    CU.metaP[op] = __j(CU_MAP[op].base + "latest.json").then(function(j){
+      var secs = (j && j.sections) || [], list = [], map = {};
+      secs.forEach(function(s){
+        if(!s || !s.section || s.section === "quanguo"){ return; }
+        var nm = s.name || NAME_MAP[s.section] || s.section;
+        list.push({ section:s.section, name:nm, total:s.total || 0 });
+        map[s.section] = nm;
+      });
+      CU.meta[op] = { list:list, map:map, updated:(j && j.updated) || "" };
+      return CU.meta[op];
+    }).catch(function(){
+      CU.meta[op] = { list:[], map:{}, updated:"" };
+      return CU.meta[op];
+    });
+  }
+  if(cb){ CU.metaP[op].then(function(m){ cb(m); }); }
+  return CU.metaP[op];
+}
+function cuNormHist(raw, mapProv){
+  var out = [];
+  (raw || []).forEach(function(h){
+    if(!h || !h.ts){ return; }
+    if(Array.isArray(h.changes)){        // 已归一化（移动主站 D.history）
+      out.push({ ts:h.ts, changes:h.changes });
+      return;
+    }
+    var changes = [];
+    Object.keys(h).forEach(function(k){
+      if(k === "ts"){ return; }
+      var v = h[k];
+      if(!v || typeof v !== "object" || Array.isArray(v)){ return; }
+      var c = { prov:k, name:(mapProv[k] || NAME_MAP[k] || k),
+        added:0, removed:0, modified:0, restored:0,
+        added_names:[], removed_names:[], modified_names:[], restored_names:[] };
+      Object.keys(v).forEach(function(kk){ c[kk] = v[kk]; });
+      changes.push(c);
+    });
+    out.push({ ts:h.ts, changes:changes });
+  });
+  out.sort(function(a, b){
+    var x = String(a.ts || ""), y = String(b.ts || "");
+    return x < y ? 1 : (x > y ? -1 : 0);
+  });
+  return out;
+}
+function cuHist(op, cb){
+  if(CU.hist[op]){ if(cb){ cb(CU.hist[op]); } return Promise.resolve(CU.hist[op]); }
+  if(!CU.histP[op]){
+    /* 移动历史主站本来就会拉，复用 loadHistory 的同一份，不再重复下载 2.7MB */
+    var p = (op === "mobile") ? loadHistory() : __j(CU_MAP[op].base + "history.json");
+    CU.histP[op] = Promise.resolve(p).then(function(raw){
+      var mp = (CU.meta[op] && CU.meta[op].map) || NAME_MAP;
+      var arr = cuNormHist(raw || [], mp), st = {};
+      arr.forEach(function(r){
+        (r.changes || []).forEach(function(c){
+          if(histN(c)){ st[c.prov] = (st[c.prov] || 0) + 1; }
+        });
+      });
+      CU.stat[op] = st;
+      CU.hist[op] = arr;
+      return arr;
+    }).catch(function(){
+      CU.hist[op] = [];
+      CU.stat[op] = {};
+      return CU.hist[op];
+    });
+  }
+  if(cb){ CU.histP[op].then(function(h){ cb(h); }); }
+  return CU.histP[op];
+}
+function cuDetBlock(op, ts, prov, cb){
+  if(op !== "mobile"){ cb(null); return; }
+  if(CU.det[ts]){ cb(CU.det[ts][prov] || null); return; }
+  if(!CU.detP[ts]){
+    var u = CU_MAP[op].base + "hist/" + String(ts || "").replace(/[^0-9A-Za-z]/g, "-") + ".json";
+    CU.detP[ts] = __j(u).then(function(d){
+      CU.det[ts] = d || {};
+      return CU.det[ts];
+    }).catch(function(){
+      CU.det[ts] = {};
+      return CU.det[ts];
+    });
+  }
+  CU.detP[ts].then(function(d){ cb((d || {})[prov] || null); });
+}
+function cuProvStat(op, sec){
+  var st = CU.stat[op];
+  return st ? { n:(st[sec] || 0) } : null;
+}
+function cuFind(op, ts, prov){
+  var arr = CU.hist[op] || [];
+  for(var i = 0; i < arr.length; i++){
+    if(String(arr[i].ts) !== String(ts)){ continue; }
+    var cs = arr[i].changes || [];
+    for(var j = 0; j < cs.length; j++){
+      if(cs[j].prov === prov){ return { h:arr[i], c:cs[j] }; }
+    }
+  }
+  return null;
+}
+
+/* ---------- 自定义视图渲染 ---------- */
+function cuRender(){
+  var selBox = document.getElementById("cuSel");
+  if(!selBox){ return; }
+  var nProv = cuSelCount(), nOps = cuSelectedOps().length;
+  var pick = document.getElementById("cuPick");
+  if(pick){
+    var pt = pick.querySelector(".pk-t"), pss = pick.querySelector(".pk-s");
+    if(pt){ pt.textContent = "选择运营商省份"; }
+    if(pss){ pss.textContent = nProv ? (nOps + " 家 · " + nProv + " 省") : ""; }
+  }
+  var hint = document.getElementById("cuHint");
+  if(hint){ hint.textContent = nProv ? "选中即存本机，下次打开自动加载" : ""; }
+  var clearBtn = document.getElementById("cuClear");
+  if(clearBtn){ clearBtn.style.display = nProv ? "" : "none"; }
+
+  var lines = "";
+  CU_OPS.forEach(function(o){
+    var arr = CU.sel[o.key] || [];
+    if(!arr.length){ return; }
+    var tags = arr.map(function(sec){
+      var m = provMeta(cuProvName(o.key, sec));
+      var st = cuProvStat(o.key, sec);
+      return '<button class="cu-tag" data-cu-jump="' + o.key + "|" + esc(sec) + '"' +
+        ' style="--ica:' + m.ca + ';--icb:' + m.cb + '">' +
+        '<span class="d"></span>' + esc(cuProvName(o.key, sec)) +
+        (st ? '<em>' + st.n + '</em>' : '') + "</button>";
+    }).join("");
+    lines += '<div class="cu-line"><span class="cu-opn">' + esc(o.short) + '</span>' + tags + "</div>";
+  });
+  selBox.innerHTML = lines || '<div class="cu-empty">还没有订阅任何省份<br>点上方「选择运营商省份」开始，选择结果会长期保存在本机浏览器</div>';
+
+  var opsBox = document.getElementById("cuOps");
+  if(opsBox){
+    opsBox.innerHTML = CU_OPS.map(function(o){
+      var n = (CU.sel[o.key] || []).length;
+      return '<button class="cu-op' + (o.key === CU.op ? " on" : "") + '" data-cu-op="' + o.key + '"' +
+        ' style="--ica:' + o.ca + ';--icb:' + o.cb + '"' + (n ? "" : " disabled") + '>' +
+        '<span>' + esc(o.short) + '</span><em class="n">' + n + '</em></button>';
+    }).join("");
+  }
+  var pvBox = document.getElementById("cuProvs");
+  if(pvBox){
+    var arr2 = CU.sel[CU.op] || [];
+    pvBox.innerHTML = arr2.map(function(sec){
+      var m = provMeta(cuProvName(CU.op, sec));
+      var st = cuProvStat(CU.op, sec);
+      return '<button class="cu-pv' + (sec === CU.prov ? " on" : "") + '" data-cu-prov="' + esc(sec) + '"' +
+        ' style="--ica:' + m.ca + ';--icb:' + m.cb + '">' +
+        '<span class="d"></span>' + esc(cuProvName(CU.op, sec)) +
+        '<em>' + (st ? st.n : "—") + '</em></button>';
+    }).join("");
+  }
+  cuRenderAll();
+  cuRenderTl();
+}
+function cuPills(c){
+  var o = "";
+  if(c.added){ o += '<span class="pill p-add">上架 ' + c.added + '</span>'; }
+  if(c.modified){ o += '<span class="pill p-mod">修改 ' + c.modified + '</span>'; }
+  if(c.removed){ o += '<span class="pill p-del">下架 ' + c.removed + '</span>'; }
+  if(c.restored){ o += '<span class="pill p-rst">补录 ' + c.restored + '</span>'; }
+  return o || '<span class="pill p-rst">无变化</span>';
+}
+function cuAllNames(c){
+  return (c.modified_names || []).concat(c.added_names || [], c.removed_names || [], c.restored_names || []);
+}
+function cuRenderAll(){
+  var box = document.getElementById("cuAll");
+  if(!box){ return; }
+  if(!cuSelCount()){
+    box.innerHTML = '<div class="cu-empty">订阅后这里按时间汇总四家运营商的变更历史</div>';
+    var h0 = document.getElementById("cuAllHint"); if(h0){ h0.textContent = ""; }
+    return;
+  }
+  var items = [], missing = 0;
+  cuSelectedOps().forEach(function(o){
+    var h = CU.hist[o.key];
+    if(!h){ missing++; cuHist(o.key, function(){ cuRenderAll(); }); return; }
+    h.forEach(function(r){
+      (CU.sel[o.key] || []).forEach(function(sec){
+        var c = null;
+        (r.changes || []).forEach(function(x){ if(x.prov === sec && histN(x)){ c = x; } });
+        if(c){ items.push({ op:o, r:r, c:c }); }
+      });
+    });
+  });
+  items.sort(function(a, b){
+    var x = String(a.r.ts || ""), y = String(b.r.ts || "");
+    return x < y ? 1 : (x > y ? -1 : 0);
+  });
+  var hint = document.getElementById("cuAllHint");
+  if(hint){
+    hint.textContent = items.length
+      ? ("共 " + items.length + " 条" + (missing ? " · 其余运营商加载中" : ""))
+      : (missing ? "正在加载各运营商变更记录…" : "所选省份暂无变更记录");
+  }
+  if(!items.length){
+    box.innerHTML = missing ? '<div class="cu-empty">正在加载各运营商变更记录…</div>' : '<div class="cu-empty">所选省份暂无变更记录</div>';
+    return;
+  }
+  var show = items.slice(0, CU.allShow);
+  var html = show.map(function(x){
+    var c = x.c, names = cuAllNames(c), n = names.length;
+    return '<button class="cu-row" data-cu-jump="' + x.op.key + "|" + esc(c.prov) + '">' +
+      '<span class="cu-rb" style="--ica:' + x.op.ca + ';--icb:' + x.op.cb + '">' + esc(x.op.short) + '</span>' +
+      '<span class="cu-rp">' + esc(c.name) + '</span>' +
+      '<span class="cu-rt">' + esc(bjTime(x.r.ts)) + '</span>' +
+      '<span class="cu-rs">' + cuPills(c) + '</span>' +
+      '<span class="cu-rn">' + esc(names.slice(0, 3).join(" / ")) + (n > 3 ? " 等 " + n + " 项" : "") + '</span>' +
+      "</button>";
+  }).join("");
+  if(items.length > show.length){
+    html += '<button class="ti-more" id="cuAllMore">加载更早 ' + (items.length - show.length) + " 条</button>";
+  }
+  box.innerHTML = html;
+}
+function cuRenderTl(){
+  var box = document.getElementById("cuTl"), hint = document.getElementById("cuHistHint");
+  if(!box){ return; }
+  if(!cuSelCount()){
+    box.innerHTML = '<div class="ti-none">还没有订阅省份，选择后这里显示该省全部变更记录</div>';
+    if(hint){ hint.textContent = ""; }
+    return;
+  }
+  var op = CU.op, prov = CU.prov;
+  if(!prov){
+    box.innerHTML = '<div class="ti-none">选择上方省份查看该省变化历史</div>';
+    if(hint){ hint.textContent = ""; }
+    return;
+  }
+  var h = CU.hist[op];
+  if(!h){
+    box.innerHTML = '<div class="ti-none">正在加载' + esc(CU_MAP[op].name) + '变更记录…</div>';
+    if(hint){ hint.textContent = ""; }
+    cuHist(op, function(){ cuRenderTl(); });
+    return;
+  }
+  var recs = [];
+  h.forEach(function(r){
+    var c = null;
+    (r.changes || []).forEach(function(x){ if(x.prov === prov && histN(x)){ c = x; } });
+    if(c){ recs.push({ r:r, c:c }); }
+  });
+  if(hint){ hint.textContent = recs.length ? (CU_MAP[op].name + " · " + cuProvName(op, prov) + " · 共 " + recs.length + " 次变更") : (CU_MAP[op].name + " · " + cuProvName(op, prov)); }
+  if(!recs.length){
+    box.innerHTML = '<div class="ti-none">该省暂无变更记录</div>';
+    return;
+  }
+  var show = recs.slice(0, CU.histShow);
+  var html = show.map(function(x, i){ return cuRecHtml(op, x.r, x.c, i === 0); }).join("");
+  if(recs.length > show.length){
+    html += '<button class="ti-more" id="cuMore">加载更早 ' + (recs.length - show.length) + " 条</button>";
+  }
+  box.innerHTML = html;
+}
+function cuRecHtml(op, r, c, first){
+  var key = op + "|" + r.ts;
+  if(first && CU.open[key] === undefined){ CU.open[key] = true; }
+  var open = !!CU.open[key];
+  return '<div class="ti' + (open ? " open" : "") + '">' +
+    '<div class="ti-hd" data-cu-tog="rec" data-ts="' + esc(r.ts) + '">' +
+      '<span class="ti-ar"></span><span class="ti-ti">资费变更</span>' +
+      '<span class="ti-ts">' + esc(bjTime(r.ts)) + '</span>' +
+      (first ? '<span class="ti-new">最新</span>' : "") +
+      '<span class="ti-sum">' + cuPills(c) + '</span></div>' +
+    '<div class="ti-bd"' + (open ? ">" + cuBodyHtml(op, r, c) : ' style="display:none">') + "</div></div>";
+}
+function cuBodyHtml(op, r, c){
+  var body = cuSecHtml(op, r, c, "mod") + cuSecHtml(op, r, c, "add") +
+             cuSecHtml(op, r, c, "del") + cuSecHtml(op, r, c, "rst");
+  return body || '<div style="font-size:11.5px;color:var(--tx3)">本次无明细业务</div>';
+}
+function cuSecHtml(op, r, c, type){
+  var arr = type === "add" ? (c.added_names || [])
+          : (type === "del" ? (c.removed_names || [])
+          : (type === "rst" ? (c.restored_names || []) : (c.modified_names || [])));
+  if(!arr.length){ return ""; }
+  var cls = type === "add" ? "c-add" : (type === "del" ? "c-del" : (type === "rst" ? "c-rst" : "c-mod"));
+  var ic = type === "add" ? "＋" : (type === "del" ? "－" : (type === "rst" ? "↺" : "✎"));
+  var diffs = c.modified_details || {};
+  var chips = arr.map(function(n, bi){
+    var nd = (type === "mod" && diffs[n]) ? diffs[n].length : 0;
+    return '<button class="cu-chip ' + cls + (bi >= CU_CHIP_LIMIT ? " x" : "") + '" data-cu-chip="1"' +
+      ' data-op="' + esc(op) + '" data-ts="' + esc(r.ts) + '" data-prov="' + esc(c.prov) + '"' +
+      ' data-t="' + type + '" data-bi="' + bi + '">' +
+      '<span class="cic">' + ic + '</span><span class="cn">' + esc(n) + '</span>' +
+      '<span class="cd">' + (nd ? nd + "项" : "") + '</span></button>';
+  }).join("");
+  var more = arr.length > CU_CHIP_LIMIT
+    ? '<button class="cu-more" data-cu-morechip="1">展开全部 ' + arr.length + " 个</button>" : "";
+  return '<div class="ti-sec"><div class="chips">' + chips + "</div>" + more + "</div>";
+}
+function cuMoreChip(btn){
+  var sec = btn.parentNode;
+  if(!sec){ return; }
+  var cs = sec.querySelectorAll(".cu-chip");
+  for(var i = 0; i < cs.length; i++){ cs[i].classList.remove("x"); }
+  btn.style.display = "none";
+}
+function cuToggleRec(ts){
+  var hds = document.querySelectorAll("#cuTl [data-cu-tog]");
+  var hit = false;
+  for(var i = 0; i < hds.length; i++){
+    if(hds[i].getAttribute("data-ts") === ts){ hit = true; break; }
+  }
+  if(!hit){ return; }
+  var key = CU.op + "|" + ts;
+  CU.open[key] = !CU.open[key];
+  cuRenderTl();
+}
+function cuOpenChip(op, ts, prov, type, bi){
+  var f = cuFind(op, ts, prov);
+  if(!f){ return; }
+  var h = f.h, c = f.c;
+  var arr = type === "add" ? (c.added_names || [])
+          : (type === "del" ? (c.removed_names || [])
+          : (type === "rst" ? (c.restored_names || []) : (c.modified_names || [])));
+  var name = arr[bi];
+  if(!name){ return; }
+  var paint = function(){
+    curHist = { name:name, type:type, prov:(c.name || ""), ts:h.ts || "" };
+    document.getElementById("hmTitle").textContent = name;
+    var tc = HIST_TMAP[type] || ["变更", "p-mod"];
+    document.getElementById("hmHead").innerHTML =
+      '<span class="pill ' + tc[1] + '">' + tc[0] + '</span>' +
+      '<span class="dfmeta">' + esc(CU_MAP[op].name) + " · " + esc(c.name || "") + " · " + esc(bjTime(h.ts)) + '</span>';
+    var curW = document.getElementById("hmCurWrap");
+    if(curW){ curW.style.display = "none"; }
+    var note = HIST_NOTE[type] || "";
+    var box = document.getElementById("hmDiff");
+    if(type === "mod"){
+      var rows = (c.modified_details || {})[name] || [];
+      var bf = (c.modified_before || {})[name] || null;
+      var af = (c.modified_after || {})[name] || null;
+      box.innerHTML = '<div class="dfnote">' + esc(note) + '</div>' + histDiffRows(rows, bf, af);
+    }else{
+      var det = type === "add" ? (c.added_details || {})
+              : (type === "rst" ? (c.restored_details || {}) : (c.removed_details || {}));
+      var snap = det[name] || null;
+      box.innerHTML = '<div class="dfnote">' + esc(note) + '</div>' +
+        (snap && Object.keys(snap).length ? histSnapRows(snap) : histEmptyBox("本轮未留存该业务的字段快照"));
+    }
+    document.getElementById("hmMask").classList.add("on");
+  };
+  /* 移动的详情在 hist/<ts>.json 分片里，首次点开才拉；其余三家详情内联在 history.json */
+  var hasDet = c.modified_details || c.added_details || c.removed_details || c.modified_before;
+  if(op === "mobile" && !hasDet){
+    document.getElementById("hmTitle").textContent = "加载详情…";
+    document.getElementById("hmDiff").innerHTML = histEmptyBox("正在加载该轮变更详情…");
+    document.getElementById("hmMask").classList.add("on");
+    cuDetBlock(op, h.ts, c.prov, function(blk){
+      if(blk){ Object.keys(blk).forEach(function(k){ c[k] = blk[k]; }); }
+      paint();
+    });
+    return;
+  }
+  paint();
+}
+function cuSetOp(key){
+  if(!CU_MAP[key] || !(CU.sel[key] || []).length){ return; }
+  CU.op = key;
+  CU.prov = (CU.last[key] && CU.sel[key].indexOf(CU.last[key]) >= 0) ? CU.last[key] : CU.sel[key][0];
+  CU.histShow = 12;
+  cuSave();
+  cuRender();
+  cuEnsure();
+}
+function cuSetProv(sec){
+  if(!sec || (CU.sel[CU.op] || []).indexOf(sec) < 0){ return; }
+  CU.prov = sec;
+  CU.last[CU.op] = sec;
+  CU.histShow = 12;
+  cuSave();
+  cuRender();
+}
+function cuJump(op, sec){
+  if(!op || !CU_MAP[op]){ return; }
+  if((CU.sel[op] || []).indexOf(sec) < 0){ return; }
+  CU.op = op;
+  CU.prov = sec;
+  CU.last[op] = sec;
+  CU.histShow = 12;
+  cuSave();
+  cuRender();
+  cuEnsure();
+  var panel = document.getElementById("cuTlPanel");
+  if(panel){
+    var top = panel.getBoundingClientRect().top + (window.scrollY || 0) - 86;
+    window.scrollTo({ top:top, behavior:"smooth" });
+  }
+}
+function cuClear(){
+  CU_OPS.forEach(function(o){ CU.sel[o.key] = []; });
+  CU.last = {};
+  CU.op = "mobile";
+  CU.prov = "";
+  CU.allShow = 12;
+  cuSave();
+  cuRender();
+  toast("已清空自定义订阅");
+}
+function cuEnsure(){
+  if(!cuSelCount()){ return; }
+  cuSelectedOps().forEach(function(o){
+    cuMeta(o.key, function(){
+      if(state.view === "custom"){ cuRenderTl(); }
+    });
+    cuHist(o.key, function(){
+      if(state.view === "custom"){ cuRender(); }
+    });
+  });
+}
+function cuPreload(){
+  var ops = cuSelectedOps(), i = 0;
+  (function next(){
+    if(i >= ops.length){ return; }
+    var op = ops[i++];
+    cuMeta(op.key);
+    cuHist(op.key, function(){ next(); });
+  })();
+}
+
+/* ---------- 自定义：订阅选择弹窗 ---------- */
+function cuOpenSel(){
+  CU.draft = {};
+  CU_OPS.forEach(function(o){ CU.draft[o.key] = (CU.sel[o.key] || []).slice(); });
+  CU.draftOp = CU.op || "mobile";
+  CU.draftKw = "";
+  var si = document.getElementById("cuMSearch");
+  if(si){ si.value = ""; }
+  document.getElementById("cuMask").classList.add("on");
+  cuSelRender();
+}
+function cuCloseSel(){
+  document.getElementById("cuMask").classList.remove("on");
+  CU.draft = null;
+}
+function cuSelRender(){
+  var tabs = document.getElementById("cuMTabs"), body = document.getElementById("cuMBody");
+  if(!tabs || !body || !CU.draft){ return; }
+  tabs.innerHTML = CU_OPS.map(function(o){
+    var n = (CU.draft[o.key] || []).length;
+    return '<button class="cu-op' + (o.key === CU.draftOp ? " on" : "") + '" data-cu-dop="' + o.key + '"' +
+      ' style="--ica:' + o.ca + ';--icb:' + o.cb + '">' +
+      '<span>' + esc(o.short) + '</span><em class="n">' + n + '</em></button>';
+  }).join("");
+  var meta = CU.meta[CU.draftOp];
+  if(!meta || !meta.list.length){
+    body.innerHTML = '<div class="opt-empty">正在读取省份列表…</div>';
+    cuMeta(CU.draftOp, function(){ if(CU.draft){ cuSelRender(); } });
+    cuSelCountPaint();
+    return;
+  }
+  var kw = String(CU.draftKw || "").trim().toLowerCase();
+  var list = meta.list.filter(function(p){
+    if(!kw){ return true; }
+    return String(p.name || "").toLowerCase().indexOf(kw) >= 0 ||
+      String(p.section || "").toLowerCase().indexOf(kw) >= 0;
+  });
+  if(!list.length){
+    body.innerHTML = '<div class="opt-empty">没有匹配的省份</div>';
+    cuSelCountPaint();
+    return;
+  }
+  var on = {};
+  (CU.draft[CU.draftOp] || []).forEach(function(x){ on[x] = 1; });
+  body.innerHTML = list.map(function(p, i){
+    var m = provMeta(p.name);
+    return '<button class="pv' + (on[p.section] ? " on" : "") + '" data-cu-pv="' + esc(p.section) + '"' +
+      ' style="--ica:' + m.ca + ';--icb:' + m.cb + ';animation-delay:' + Math.min(i * 8, 160) + 'ms">' +
+      '<span class="pv-ck">✓</span><span class="pv-nm">' + esc(p.name) + '</span>' +
+      '<span class="pv-sub"><span class="pv-dot"></span><span class="pv-ct">' +
+      (p.total ? fmt(p.total) : "—") + '</span></span></button>';
+  }).join("");
+  cuSelCountPaint();
+}
+function cuSelCountPaint(){
+  var el = document.getElementById("cuMCnt");
+  if(!el || !CU.draft){ return; }
+  var n = 0;
+  CU_OPS.forEach(function(o){ n += (CU.draft[o.key] || []).length; });
+  el.textContent = n ? ("已选 " + n + " 个省份") : "未选择省份";
+}
+function cuToggleProv(sec){
+  if(!CU.draft || !sec){ return; }
+  var arr = CU.draft[CU.draftOp] || (CU.draft[CU.draftOp] = []);
+  var i = arr.indexOf(sec);
+  if(i >= 0){ arr.splice(i, 1); }else{ arr.push(sec); }
+  cuSelRender();
+}
+function cuDraftAll(){
+  var meta = CU.meta[CU.draftOp];
+  if(!CU.draft || !meta || !meta.list.length){ return; }
+  var arr = CU.draft[CU.draftOp] || (CU.draft[CU.draftOp] = []);
+  meta.list.forEach(function(p){
+    if(arr.indexOf(p.section) < 0){ arr.push(p.section); }
+  });
+  cuSelRender();
+}
+function cuDraftNone(){
+  if(!CU.draft){ return; }
+  CU.draft[CU.draftOp] = [];
+  cuSelRender();
+}
+function cuSelSave(){
+  if(!CU.draft){ return; }
+  CU_OPS.forEach(function(o){ CU.sel[o.key] = (CU.draft[o.key] || []).slice(); });
+  var selOps = cuSelectedOps();
+  if(!selOps.length){
+    CU.op = "mobile";
+    CU.prov = "";
+  }else{
+    if(!(CU.sel[CU.op] || []).length){ CU.op = selOps[0].key; }
+    if(!CU.prov || CU.sel[CU.op].indexOf(CU.prov) < 0){ CU.prov = CU.sel[CU.op][0]; }
+  }
+  CU.allShow = 12;
+  CU.histShow = 12;
+  cuSave();
+  cuCloseSel();
+  cuRender();
+  cuEnsure();
+  toast(selOps.length ? ("已保存订阅：" + selOps.length + " 家运营商 · " + cuSelCount() + " 个省份") : "已清空自定义订阅");
+}
+function cuInit(){
+  cuLoad();
+  if(state.view === "custom"){ cuRender(); cuEnsure(); }
+  __idle(cuPreload, 6000);
+}
+
+document.addEventListener("click", function(e){
+  var t = e.target;
+  if(!t || !t.closest){ return; }
+  var x;
+  if(t.id === "cuX" || t.id === "cuMCancel" || t.id === "cuMask"){ cuCloseSel(); return; }
+  if((x = t.closest("[data-cu-pick]"))){ cuOpenSel(); return; }
+  if((x = t.closest("[data-cu-clear]"))){ cuClear(); return; }
+  if((x = t.closest("[data-cu-dop]"))){
+    CU.draftOp = x.getAttribute("data-cu-dop");
+    CU.draftKw = "";
+    var si = document.getElementById("cuMSearch");
+    if(si){ si.value = ""; }
+    cuSelRender();
+    return;
+  }
+  if((x = t.closest("[data-cu-pv]"))){ cuToggleProv(x.getAttribute("data-cu-pv")); return; }
+  if(t.id === "cuMAll"){ cuDraftAll(); return; }
+  if(t.id === "cuMNone"){ cuDraftNone(); return; }
+  if(t.id === "cuMSave"){ cuSelSave(); return; }
+  if((x = t.closest("[data-cu-op]"))){ cuSetOp(x.getAttribute("data-cu-op")); return; }
+  if((x = t.closest("[data-cu-prov]"))){ cuSetProv(x.getAttribute("data-cu-prov")); return; }
+  if((x = t.closest("[data-cu-jump]"))){
+    var v = String(x.getAttribute("data-cu-jump")).split("|");
+    cuJump(v[0], v[1]);
+    return;
+  }
+  if((x = t.closest("[data-cu-tog]"))){ cuToggleRec(x.getAttribute("data-ts")); return; }
+  if((x = t.closest("[data-cu-chip]"))){
+    cuOpenChip(x.getAttribute("data-op"), x.getAttribute("data-ts"), x.getAttribute("data-prov"),
+      x.getAttribute("data-t"), parseInt(x.getAttribute("data-bi"), 10));
+    return;
+  }
+  if((x = t.closest("[data-cu-morechip]"))){ cuMoreChip(x); return; }
+  if(t.id === "cuMore"){ CU.histShow += 20; cuRenderTl(); return; }
+  if(t.id === "cuAllMore"){ CU.allShow += 20; cuRenderAll(); return; }
+});
+document.addEventListener("input", function(e){
+  var t = e.target;
+  if(t && t.id === "cuMSearch"){ CU.draftKw = t.value; cuSelRender(); }
+});
+document.addEventListener("keydown", function(e){
+  if(e.key !== "Escape" || !CU.draft){ return; }
+  var m = document.getElementById("cuMask");
+  if(m && m.classList.contains("on")){ cuCloseSel(); }
+});
+
 /* ---------- 事件 ---------- */
 /* 手机端禁用点击涟漪：每次点击都 getBoundingClientRect() 强制同步布局 + 建 DOM + 播动画，
    是"点击后要等一两秒才有反应"的直接原因 */
@@ -4225,6 +5000,7 @@ function boot(){
   renderList("p");
   renderHistory();
   renderAnnounce();
+  cuInit();
   setTimeout(function(){
     var on = document.querySelector(".tab.on");
     if(on){ moveInd(on, false); }
