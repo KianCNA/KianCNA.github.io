@@ -30,7 +30,7 @@
 /* ===== 老入口自升级（2026-10-19）=====
    旧 HTML 被 CDN 缓存时，靠它自己跳到最新版：
    请求 version.json 带时间戳（CDN 必回源），版本号不同则 replace 到带时间戳的新 URL。 */
-var BUILD_VER = "20261108a";
+var BUILD_VER = "20261120a";
 (function(){
   function base(){
     var m = location.pathname.match(/^(.*)\/[^\/]*$/);
@@ -1139,8 +1139,8 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
   <main>
     <section class="view on" id="v-overview">
       <div class="stats">
-        <div class="stat"><div class="stat-ic">🌐</div><div class="stat-n" data-num="1558">0</div><div class="stat-l">全网通用资费</div></div>
-        <div class="stat"><div class="stat-ic">🗺️</div><div class="stat-n" data-num="42818">0</div><div class="stat-l">31 省资费合计（去重）</div></div>
+        <div class="stat"><div class="stat-ic">🌐</div><div class="stat-n" id="stQuanguo" data-num="0">0</div><div class="stat-l">全网通用资费</div></div>
+        <div class="stat"><div class="stat-ic">🗺️</div><div class="stat-n" id="stProvSum" data-num="0">0</div><div class="stat-l">31 省资费合计（去重）</div></div>
         <div class="stat a"><div class="stat-ic">👤</div><div class="stat-n" id="stPersonal">0</div><div class="stat-l" id="stPersonalL">本省个人资费</div></div>
         <div class="stat b"><div class="stat-ic">🏢</div><div class="stat-n" id="stGq">0</div><div class="stat-l" id="stGqL">本省政企资费</div></div>
       </div>
@@ -1339,6 +1339,16 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
 var D = { updated:"", stats:{}, sections:[], prov_stats:{}, hunan_dist:{}, quanguo_dist:{},
             items:[], qitems:null, history:[] };
 var DATA_BASE = "./data/";
+function bjTime(s){
+  // 数据文件里的时间戳是 UTC，展示层统一转北京时间；解析不了就原样返回
+  var m = /^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2})(:\d{2})?/.exec(String(s || ""));
+  if(!m) return s;
+  var t = Date.parse(m[1] + "T" + m[2] + (m[3] || ":00") + "Z");
+  if(isNaN(t)) return s;
+  var d = new Date(t + 8 * 3600 * 1000), p = function(n){ return (n < 10 ? "0" : "") + n; };
+  return d.getUTCFullYear() + "-" + p(d.getUTCMonth() + 1) + "-" + p(d.getUTCDate()) + " " +
+         p(d.getUTCHours()) + ":" + p(d.getUTCMinutes()) + ":" + p(d.getUTCSeconds());
+}
 var CK_WF = "unicom-fetch.yml";
 var REAL_OK = false;
 function __j(u){
@@ -2022,7 +2032,7 @@ function recHtml(o, first){
   return '<div class="ti' + (op ? " open" : "") + '" data-hi="' + hi + '">' +
     '<div class="ti-hd" data-tog="rec" data-hi="' + hi + '">' +
       '<span class="ti-ar"></span><span class="ti-ti">资费变更</span>' +
-      '<span class="ti-ts">' + esc(h.ts) + "</span>" +
+      '<span class="ti-ts">' + esc(bjTime(h.ts)) + "</span>" +
       (first ? '<span class="ti-new">最新</span>' : "") +
       '<span class="ti-sum">' + (cs.length ? histBars(cs) : '<span class="pill p-rst">无变化</span>') + "</span></div>" +
     '<div class="ti-bd"' + bd + "</div></div>";
@@ -2512,7 +2522,7 @@ function openHistDetail(hi, ci, type, bi){
   var tc = HIST_TMAP[type] || ["变更", "p-mod"];
   document.getElementById("hmHead").innerHTML =
     '<span class="pill ' + tc[1] + '">' + tc[0] + '</span>' +
-    '<span class="dfmeta">' + esc(c.name || "") + " · " + esc(h.ts || "") + "</span>";
+    '<span class="dfmeta">' + esc(c.name || "") + " · " + esc(bjTime(h.ts) || "") + "</span>";
 
   /* ② 取数据 */
   var rows = (type === "mod") ? ((c.modified_details || {})[name] || []) : [];
@@ -3449,7 +3459,7 @@ document.getElementById("tabs").addEventListener("scroll", function(){ updateEdg
 /* ---------- 启动 ---------- */
 function boot(){
   D.items.forEach(function(x,n){ x.__i = n; });
-  document.getElementById("updTxt").textContent = "更新于 " + (D.updated || "—");
+  document.getElementById("updTxt").textContent = "更新于 " + (bjTime(D.updated) || "—");
   updNavChg();
   (function(){
     var nc = document.getElementById("navCnt");
@@ -3460,6 +3470,9 @@ function boot(){
     nc.textContent = fmt(t);
   })();
   var nums = document.querySelectorAll("[data-num]");
+  var nq = document.getElementById("stQuanguo"), np = document.getElementById("stProvSum");
+  if(nq && D.stats){ nq.setAttribute("data-num", D.stats.quanguo_total || 0); }
+  if(np && D.stats){ np.setAttribute("data-num", D.stats.prov_total || 0); }
   for(var i=0;i<nums.length;i++){ countUp(nums[i], parseInt(nums[i].getAttribute("data-num"), 10)); }
   setPickText(document.getElementById("ovProv"), NAME_MAP[state.prov], fmt((PROV_MAP[state.prov] || {}).total || 0));
   setPickText(document.getElementById("pvProv"), NAME_MAP[state.prov], fmt((PROV_MAP[state.prov] || {}).total || 0));
@@ -3510,7 +3523,7 @@ if(document.readyState === "loading"){
       var old = "";
       try { old = localStorage.getItem(KEY) || ""; } catch(e){}
       if(old && old !== cur){
-        showTip("已有新数据（" + cur + "），点此立即刷新");
+        showTip("已有新数据（" + bjTime(cur) + "），点此立即刷新");
         var t = document.getElementById("newTip");
         if(t) t.onclick = hardReload;
       }

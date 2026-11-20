@@ -35,7 +35,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TH_TELECOM: "14400"
           TH_GB: "14400"
-          TH_UNICOM: "36000"
+          TH_UNICOM: "21600"
         run: |
           set -e
           DEADLINE=$(( $(date -u +%s) + 320 * 60 ))
