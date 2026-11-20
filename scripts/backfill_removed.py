@@ -13,8 +13,8 @@
 """
 import json, os, sys, urllib.request, urllib.error
 
-OWNER = "WoShiYiGeManHuaJia"
-REPO = "hunan-tariff-site"
+OWNER = "rdtscx"
+REPO = "tariff"
 BRANCH = "main"
 TOKEN = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN") or ""
 HDR = {"Authorization": "Bearer " + TOKEN, "User-Agent": "backfill",

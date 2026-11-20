@@ -89,7 +89,8 @@ fork 本项目后，填入**你自己的**凭据，资费变化就能推送到**
 ## UI 保护约定
 
 自动化任务只允许提交**数据产物**（`data/`、`pipelines/mobile/snapshots/`、`tariff-fetch-source.zip`），
-界面文件（`index.html`、`nav.html`、`push-center.html`、`style.css`、`app.js`、`version.json` 等）
+界面文件（`index.html`、`nav.html`、`push-center.html`、`manifest.json`、`version.json`、
+`unicom/`、`telecom/`、`gb/` 等）
 只由人工改动：
 
 - 各工作流的提交步骤一律使用带路径限定的 `git add`，不用 `git add -A`；

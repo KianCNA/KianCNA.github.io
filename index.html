@@ -30,7 +30,7 @@
 /* ===== 老入口自升级（2026-10-19）=====
    旧 HTML 被 CDN 缓存时，靠它自己跳到最新版：
    请求 version.json 带时间戳（CDN 必回源），版本号不同则 replace 到带时间戳的新 URL。 */
-var BUILD_VER = "20261116a";
+var BUILD_VER = "20261120a";
 (function(){
   function base(){
     var m = location.pathname.match(/^(.*)\/[^\/]*$/);
@@ -1404,7 +1404,6 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
           <li>配置<b>只存在你本机浏览器</b>，与「推送中心」共用同一份，不上传任何服务器</li>
           <li>钉钉 / 飞书 可由本页直连发送并测试；企业微信与邮箱需导出给脚本执行</li>
           <li><b>要让选择影响每天 8 点 / 20 点的定时推送</b>：把它填进<a href="https://github.com/rdtscx/tariff/settings/variables/actions" target="_blank" rel="noopener">仓库 Variables ↗</a>（PUSH_OPS / PUSH_PROVS）。不填则定时推送维持原样，只存在本机</li>
-          <li>想让别人自己搭一套（互不影响）：<a href="https://github.com/rdtscx/tariff/tree/main/visitor" target="_blank" rel="noopener">自助部署说明 ↗</a></li>
           <li>想立即抓取最新数据：<a id="psGh" href="#" target="_blank" rel="noopener">打开 Actions 页 ↗</a></li>
         </ul>
       </div>
