@@ -195,26 +195,33 @@ def _qid(code, name, used):
     return stem
 
 
-def _write_quanguo_index(data_dir, quanguo_json, items):
+def _write_quanguo_index(data_dir, quanguo_json, items, extra_items=None):
     """全国资费拆成轻量索引 + 每条业务一个详情分片。
 
-    全国板块近三千条、整份 4MB，移动端要下完整份才能渲染列表。
-    改为：data/qindex.json 只带列表与筛选要用的短字段（名称/方案编号/归属/
-    类型/价格/上线日期/分片文件名），data/qd/<方案编号>.json 才是完整字段，
-    用户点开某条时才拉取。
+    列表 = 全网板块全部业务 + 各省政企资费。全网接口的政企只有个位数，政企业务
+    实际上都在省板块里，而用户要求「全国资费」能查到全部政企，所以在索引层合并。
+    索引只带列表与筛选要用的短字段（名称/方案编号/归属/类型/价格/上线日期/
+    分片文件名），data/qd/<方案编号>.json 才是完整字段，点开某条时才拉取。
     """
     if not items:
         print("  [qindex] 本轮无全国数据，跳过索引生成")
         return
-    qd_dir = os.path.join(data_dir, "qd")
-    os.makedirs(qd_dir, exist_ok=True)
-    used, keep, rows = set(), set(), []
-    for it in items:
+    merged, seen = [], set()
+    for it in list(items) + list(extra_items or []):
         name = (it.get("name") or "").strip()
         if not name:
             continue
         fields = clean_fields(it.get("fields") or {})
         code = str(fields.get("方案编号") or "").strip()
+        key = code or ("%s|%s" % (name, fields.get("适用地区") or ""))
+        if key in seen:
+            continue
+        seen.add(key)
+        merged.append((name, code, fields))
+    qd_dir = os.path.join(data_dir, "qd")
+    os.makedirs(qd_dir, exist_ok=True)
+    used, keep, rows = set(), set(), []
+    for name, code, fields in merged:
         stem = _qid(code, name, used)
         fn = stem + ".json"
         keep.add(fn)
@@ -723,8 +730,19 @@ def main():
         json.dump(latest, f, ensure_ascii=False, indent=2)
 
     # 2.5) 全国资费轻量索引 + 逐条详情分片（列表只下索引，点开某条才拉详情）
+    #      全国板块里的政企只有个位数，政企业务实际分布在各省板块：
+    #      这里把各省政企并进全国索引，用户才能在「全国资费」查到全部政企。
     if "quanguo" in st:
-        _write_quanguo_index(DATA, st["quanguo"][0], st["quanguo"][1])
+        gq_extra = []
+        for sec in sections:
+            if sec == "quanguo":
+                continue
+            for it in st[sec][1]:
+                if ((it.get("fields") or {}).get("归属") or "") == "政企资费":
+                    gq_extra.append(it)
+        _write_quanguo_index(DATA, st["quanguo"][0], st["quanguo"][1], gq_extra)
+        if gq_extra:
+            print("  全国索引已并入各省政企 %d 条" % len(gq_extra))
 
     # 3) 变化历史：逐板块对比上次快照副本（_prev/），rec 含全部板块变更 + 字段级修改明细
     history = load(os.path.join(PREV, "history.json")) or []
