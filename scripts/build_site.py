@@ -166,6 +166,78 @@ def _write_history_split(data_dir, history):
     return sz
 
 
+def _q_price(fields):
+    m = re.search(r"(\d+(?:\.\d+)?)\s*元", str(fields.get("资费标准") or ""))
+    return float(m.group(1)) if m else None
+
+
+def _q_date(fields):
+    s = str(fields.get("上线日期") or "")
+    m = re.search(r"(\d{4})[年\-/](\d{1,2})[月\-/](\d{1,2})", s)
+    if m:
+        return "%s-%02d-%02d" % (m.group(1), int(m.group(2)), int(m.group(3)))
+    return s[:10]
+
+
+def _qid(code, name, used):
+    """详情分片文件名：优先用方案编号，非法字符、重号时追加序号。"""
+    base = re.sub(r"[^0-9A-Za-z_-]+", "-", str(code or "").strip()).strip("-")
+    if not base:
+        base = re.sub(r"[^0-9A-Za-z_-]+", "-", name).strip("-")[:24] or "item"
+    stem, n = base, 2
+    while stem in used:
+        stem = "%s~%d" % (base, n)
+        n += 1
+    used.add(stem)
+    return stem
+
+
+def _write_quanguo_index(data_dir, quanguo_json, items):
+    """全国资费拆成轻量索引 + 每条业务一个详情分片。
+
+    全国板块近三千条、整份 4MB，移动端要下完整份才能渲染列表。
+    改为：data/qindex.json 只带列表与筛选要用的短字段（名称/方案编号/归属/
+    类型/价格/上线日期/分片文件名），data/qd/<方案编号>.json 才是完整字段，
+    用户点开某条时才拉取。
+    """
+    if not items:
+        print("  [qindex] 本轮无全国数据，跳过索引生成")
+        return
+    qd_dir = os.path.join(data_dir, "qd")
+    os.makedirs(qd_dir, exist_ok=True)
+    used, keep, rows = set(), set(), []
+    for it in items:
+        name = (it.get("name") or "").strip()
+        if not name:
+            continue
+        fields = clean_fields(it.get("fields") or {})
+        code = str(fields.get("方案编号") or "").strip()
+        stem = _qid(code, name, used)
+        fn = stem + ".json"
+        keep.add(fn)
+        p = os.path.join(qd_dir, fn)
+        with open(p + ".tmp", "w", encoding="utf-8") as f:
+            json.dump({"name": name, "fields": fields}, f, ensure_ascii=False,
+                      separators=(",", ":"))
+        os.replace(p + ".tmp", p)
+        rows.append([name, code, fields.get("归属") or "", fields.get("资费类型") or "",
+                     _q_price(fields), _q_date(fields), stem])
+    idx = {"u": (quanguo_json or {}).get("timestamp") or "", "n": len(rows), "items": rows}
+    tmp = os.path.join(data_dir, "qindex.json.tmp")
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(idx, f, ensure_ascii=False, separators=(",", ":"))
+    os.replace(tmp, os.path.join(data_dir, "qindex.json"))
+    # 清理已下架/改号留下旧分片，避免仓库无限膨胀（与 hist 分片同一策略）
+    for fn in os.listdir(qd_dir):
+        if fn.endswith(".json") and fn not in keep:
+            try:
+                os.remove(os.path.join(qd_dir, fn))
+            except OSError:
+                pass
+    print("  qindex %d 条 / %.0f KB，详情分片 %d 个" % (
+        len(rows), os.path.getsize(os.path.join(data_dir, "qindex.json")) / 1024.0, len(keep)))
+
+
 def name_of(item):
     return (item.get("name") or "").strip()
 
@@ -646,6 +718,10 @@ def main():
     }
     with open(os.path.join(DATA, "latest.json"), "w", encoding="utf-8") as f:
         json.dump(latest, f, ensure_ascii=False, indent=2)
+
+    # 2.5) 全国资费轻量索引 + 逐条详情分片（列表只下索引，点开某条才拉详情）
+    if "quanguo" in st:
+        _write_quanguo_index(DATA, st["quanguo"][0], st["quanguo"][1])
 
     # 3) 变化历史：逐板块对比上次快照副本（_prev/），rec 含全部板块变更 + 字段级修改明细
     history = load(os.path.join(PREV, "history.json")) or []
