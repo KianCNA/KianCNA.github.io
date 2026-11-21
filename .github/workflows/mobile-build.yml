@@ -330,10 +330,25 @@ jobs:
             n=$(printf '%s' "$j" | jq '[.workflow_runs[] | select(.status == "in_progress" or .status == "queued" or .status == "waiting")] | length') || n=0
             echo "$n"
           }
+          # 数据够旧才派发：子站单轮 8~75 分钟，若刚更新过又派一轮纯属重复抓取，
+          # 还会把下一轮挤到并发组里互踩。阈值 100 分钟 ≈ 主站 2 小时的节拍留余量。
+          data_age() {
+            local dir=$1 u ts
+            u=$(api "https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/main/${dir}/data/latest.json" \
+                | jq -r '.updated // empty' 2>/dev/null) || u=""
+            [ -n "$u" ] || { echo 999999; return 0; }
+            ts=$(date -u -d "$u" +%s 2>/dev/null) || { echo 999999; return 0; }
+            echo $(( $(date -u +%s) - ts ))
+          }
           for wf in unicom-build telecom-build gb-build; do
             n=$(active "$wf")
             if [ "$n" != "0" ]; then
               echo "[$wf] 已有 $n 个运行在进行/排队，跳过"
+              continue
+            fi
+            age=$(data_age "${wf%-build}")
+            if [ "$age" -lt 6000 ]; then
+              echo "[$wf] 数据距今 $((age/60)) 分钟，仍然新鲜，本轮跳过"
               continue
             fi
             ok=0

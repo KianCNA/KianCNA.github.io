@@ -16,9 +16,9 @@ name: Ops Heartbeat
 # 「有运行在跑」而不敢触发，等于空转。
 
 on:
-  workflow_run:
-    workflows: ["Telecom Fetch & Build", "GB Fetch & Build", "Unicom Fetch & Build"]
-    types: [completed]
+  # 不再用 workflow_run 触发：三家子站每跑完一轮就重启一次心跳，循环刚进入
+  # 等待就被 cancel-in-progress 杀掉，日志里全是 cancelled（一晚上几十次），
+  # 心跳实际上从没跑满过一轮。改由本工作流自续期 + build-watchdog 保活。
   workflow_dispatch:
 
 permissions:

@@ -77,6 +77,22 @@ jobs:
             -f ref=main
           echo "已触发"
 
+      - name: 运维心跳保活
+        # ops-heartbeat 改为只靠自续期，链路一旦断掉就没人叫醒它。看门狗每 15
+        # 分钟检查一次，没有任何在跑/排队的心跳就补发一个。
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          ACTIVE=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/ops-heartbeat.yml/runs?per_page=5" \
+            | jq '[.workflow_runs[] | select(.status == "in_progress" or .status == "queued" or .status == "waiting")] | length')
+          if [ "$ACTIVE" = "0" ]; then
+            echo "运维心跳不在运行，补发一个"
+            gh api -X POST "repos/${GITHUB_REPOSITORY}/actions/workflows/ops-heartbeat.yml/dispatches" -f ref=main || echo "::warning::补发失败"
+          else
+            echo "运维心跳在运行（$ACTIVE）"
+          fi
+
       - name: 三家运营商数据过期时补触发
         # 与移动同理：三家已跟随主站节拍（mobile-build 每轮派发），
         # 这里只在主站派发链断掉时兜底：数据超 3 小时未更新且无运行在跑就补一次。
@@ -105,7 +121,7 @@ jobs:
             gh api -X POST "repos/${GITHUB_REPOSITORY}/actions/workflows/${wf}.yml/dispatches" \
               -f ref=main || echo "[${dir}] 触发失败"
           }
-          check telecom-build telecom 10800
-          check gb-build gb 10800
-          check unicom-build unicom 10800
+          check telecom-build telecom 7800
+          check gb-build gb 7800
+          check unicom-build unicom 7800
           echo "三家检查完成"
