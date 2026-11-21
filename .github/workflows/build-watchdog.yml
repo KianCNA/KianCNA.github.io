@@ -27,7 +27,11 @@ jobs:
           set -e
           CUTOFF=$(date -u -d '2 hours ago' +%s)
           echo "截止时间: $(date -u -d @$CUTOFF +%FT%TZ) 之前启动的运行将被取消"
-          for wf in mobile-build.yml dingtalk-summary.yml; do
+          # 三家子站单轮正常 30~80 分钟（联通约 75 分钟），超过 2 小时必然是
+          # 平台侧僵尸（job timeout 已被 GitHub 忽略）。僵尸会永久占住各站的
+          # 并发组：subsites 派发看到 in_progress 就跳过、ops-heartbeat 也判定
+          # 「有运行在跑」不敢补发 —— 表现就是某个资产长时间不更新。
+          for wf in mobile-build.yml dingtalk-summary.yml unicom-build.yml telecom-build.yml gb-build.yml; do
             gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/${wf}/runs?per_page=20" \
               | jq -r --argjson cutoff "$CUTOFF" \
               '.workflow_runs[]

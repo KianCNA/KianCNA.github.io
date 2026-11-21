@@ -44,7 +44,15 @@ jobs:
       - run: pip install pycryptodome
 
       - name: 抓取移动资费快照（31省+全网）
+        # 单步硬超时：抓取从 ~25 分钟涨到 ~50 分钟（新增 3 个分类组合后），
+        # 再叠加源站限流重试可能拖到整轮 110 分钟上限，导致本轮被下一轮取消、
+        # 什么都没提交。这里给抓取单独设 70 分钟闸门，超时直接失败重来。
+        timeout-minutes: 70
         env:
+          # 分类并发度 3→5：10 个分类组合从 4 批降到 2 批，批量间降温等待也减半，
+          # 单轮抓取时间回落 10~15 分钟；每个分类用独立 UA 池，并发不互相挤占。
+          FETCH_WORKERS: "5"
+          SECTION_INTERVAL: "1.0"
           DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
           DINGTALK_SECRET: ${{ secrets.DINGTALK_SECRET }}
           # 抓取管线不再自己推送：它与 Tariff Notify 汇总基于同一份 history，

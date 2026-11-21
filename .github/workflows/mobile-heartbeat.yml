@@ -57,11 +57,35 @@ jobs:
           # 循环中途任何一次 gh api 失败都会被 set -e 直接终止脚本，而续期在脚本
           # 末尾，于是心跳链彻底断掉（2026-11-06 实测断链，靠 schedule 与看门狗
           # 才补上，空窗 4 小时）。这里统一走重试封装，并用 EXIT trap 兜底续期。
-          gh_api() {
-            local out i
+          # 统一走 curl：runner 上 gh CLI 曾整体失败（错误被吞掉，心跳永远判定
+          # 「有运行在跑」而空转，数据被卡住数小时）。curl 失败可见、可重试。
+          api() {
+            local url="$1" i out
             for i in 1 2 3; do
-              if out=$(gh api "$@" 2>/dev/null); then printf '%s' "$out"; return 0; fi
-              echo "[warn] gh api 失败（$i/3），10s 后重试" >&2
+              if out=$(curl -fsSL --max-time 30 \
+                -H "Authorization: Bearer ${GH_TOKEN}" \
+                -H "Accept: application/vnd.github+json" \
+                -H "User-Agent: mobile-heartbeat" "$url" 2>/tmp/api_err); then
+                printf '%s' "$out"; return 0
+              fi
+              echo "[warn] API 失败（$i/3）：$(head -c 120 /tmp/api_err)" >&2
+              sleep 10
+            done
+            return 1
+          }
+
+          api_post() {
+            local url="$1" i
+            for i in 1 2 3; do
+              if curl -fsS --max-time 30 -X POST \
+                -H "Authorization: Bearer ${GH_TOKEN}" \
+                -H "Accept: application/vnd.github+json" \
+                -H "User-Agent: mobile-heartbeat" \
+                -H "Content-Type: application/json" \
+                -d '{"ref":"main"}' "$url" >/dev/null 2>/tmp/api_err; then
+                return 0
+              fi
+              echo "[warn] 派发失败（$i/3）：$(head -c 120 /tmp/api_err)" >&2
               sleep 10
             done
             return 1
@@ -71,9 +95,7 @@ jobs:
           renew() {
             [ "$RENEWED" = "1" ] && return 0
             RENEWED=1
-            if gh_api -X POST \
-                "repos/${GITHUB_REPOSITORY}/actions/workflows/mobile-heartbeat.yml/dispatches" \
-                -f ref=main >/dev/null; then
+            if api_post "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/mobile-heartbeat.yml/dispatches"; then
               echo "已续期新心跳 $(date -u +%FT%TZ)"
             else
               echo "::warning::心跳续期失败，等待 build-watchdog 兜底"
@@ -83,10 +105,21 @@ jobs:
 
           count_active() {
             local j
-            j=$(gh_api "repos/${GITHUB_REPOSITORY}/actions/workflows/mobile-build.yml/runs?per_page=5" || true)
+            j=$(api "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/mobile-build.yml/runs?per_page=5" || true)
             # 取不到运行列表时按「有运行」处理，宁可本轮不触发，下轮再试
             [ -n "$j" ] || { echo 1; return 0; }
             printf '%s' "$j" | jq '[.workflow_runs[] | select(.status == "in_progress" or .status == "queued" or .status == "waiting")] | length'
+          }
+
+          # 距下一个「偶数 UTC 整点」（mobile-build 的 cron 点）还有多少分钟。
+          # 抓取已从 ~25 分钟涨到 ~50 分钟，心跳若在整点前 30 分钟内再派发一
+          # 轮，会和准点定时轮撞在同一个并发组里，被 cancel-in-progress 直接
+          # 掐死（2026-11-21 15:41 那轮跑了 18 分钟被 16:00 整点轮取消，白跑）。
+          minutes_to_cron() {
+            local now next
+            now=$(date -u +%s)
+            next=$(( ( now / 7200 + 1 ) * 7200 ))
+            echo $(( (next - now) / 60 ))
           }
 
           data_age() {
@@ -112,8 +145,15 @@ jobs:
 
             ATTEMPTED=1
             ACTIVE=$(count_active)
+            M2C=$(minutes_to_cron)
+            if [ "$ACTIVE" = "0" ] && [ "$M2C" -le 30 ]; then
+              # 让位于即将到来的整点定时轮，避免两轮互踩被取消
+              echo "距整点定时轮只剩 ${M2C} 分钟，本轮不派发，交给 schedule"
+              sleep 600
+              continue
+            fi
             if [ "$ACTIVE" = "0" ]; then
-              if gh_api -X POST "repos/${GITHUB_REPOSITORY}/actions/workflows/mobile-build.yml/dispatches" -f ref=main >/dev/null; then
+              if api_post "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/mobile-build.yml/dispatches"; then
                 echo "已触发下一轮抓取 $(date -u +%FT%TZ)"
               else
                 echo "::warning::触发抓取失败，等下一轮循环或兜底任务补上"
