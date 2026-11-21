@@ -30,7 +30,7 @@
 /* ===== 老入口自升级（2026-10-19）=====
    旧 HTML 被 CDN 缓存时，靠它自己跳到最新版：
    请求 version.json 带时间戳（CDN 必回源），版本号不同则 replace 到带时间戳的新 URL。 */
-var BUILD_VER = "20261121b";
+var BUILD_VER = "20261121c";
 (function(){
   function base(){
     var m = location.pathname.match(/^(.*)\/[^\/]*$/);
@@ -1318,8 +1318,8 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
   <main>
     <section class="view on" id="v-overview">
       <div class="stats">
-        <div class="stat"><div class="stat-ic">🌐</div><div class="stat-n" data-num="1558">0</div><div class="stat-l">全网通用资费</div></div>
-        <div class="stat"><div class="stat-ic">🗺️</div><div class="stat-n" data-num="42818">0</div><div class="stat-l">31 省资费合计（去重）</div></div>
+        <div class="stat"><div class="stat-ic">🌐</div><div class="stat-n" id="stQuanguo">0</div><div class="stat-l">全网通用资费</div></div>
+        <div class="stat"><div class="stat-ic">🗺️</div><div class="stat-n" id="stProvSum">0</div><div class="stat-l">31 省资费合计（去重）</div></div>
         <div class="stat a"><div class="stat-ic">👤</div><div class="stat-n" id="stPersonal">0</div><div class="stat-l" id="stPersonalL">本省个人资费</div></div>
         <div class="stat b"><div class="stat-ic">🏢</div><div class="stat-n" id="stGq">0</div><div class="stat-l" id="stGqL">本省政企资费</div></div>
       </div>
@@ -5122,6 +5122,8 @@ function boot(){
   })();
   var nums = document.querySelectorAll("[data-num]");
   for(var i=0;i<nums.length;i++){ countUp(nums[i], parseInt(nums[i].getAttribute("data-num"), 10)); }
+  setNum(document.getElementById("stQuanguo"), D.stats.quanguo_total || (D.qitems ? D.qitems.length : 0));
+  setNum(document.getElementById("stProvSum"), D.stats.prov_total || 0);
   setPickText(document.getElementById("ovProv"), NAME_MAP[state.prov], fmt((PROV_MAP[state.prov] || {}).total || 0));
   setPickText(document.getElementById("pvProv"), NAME_MAP[state.prov], fmt((PROV_MAP[state.prov] || {}).total || 0));
   renderOpGrid();
