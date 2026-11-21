@@ -30,7 +30,7 @@
 /* ===== 老入口自升级（2026-10-19）=====
    旧 HTML 被 CDN 缓存时，靠它自己跳到最新版：
    请求 version.json 带时间戳（CDN 必回源），版本号不同则 replace 到带时间戳的新 URL。 */
-var BUILD_VER = "20261121a";
+var BUILD_VER = "20261121b";
 (function(){
   function base(){
     var m = location.pathname.match(/^(.*)\/[^\/]*$/);
@@ -279,6 +279,13 @@ body{
   transform:translateX(-130%);transition:transform .8s cubic-bezier(.4,0,.2,1)}
 .card:hover{transform:translateY(-5px);box-shadow:var(--sh2);border-color:var(--bd2);z-index:3}
 .card:hover::after{transform:translateX(130%)}
+.list.qrows{grid-template-columns:1fr;gap:8px}
+.qrow{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;cursor:pointer;
+  background:var(--glass);border:1px solid var(--bd);transition:border-color .2s,transform .2s}
+.qrow:hover{border-color:var(--bd2);transform:translateY(-1px)}
+.qrow .qn{flex:1;min-width:0;font-size:13.5px;font-weight:600;line-height:1.45;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.qrow .qc{flex:none;font-family:var(--mono);font-size:11.5px;color:var(--tx3);letter-spacing:.2px}
 .ct{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px}
 .cn{font-size:14px;font-weight:700;line-height:1.4;letter-spacing:-.2px;flex:1;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -523,7 +530,7 @@ body{
 .ab li{margin-bottom:7px}
 
 /* ---------- 弹窗（统一玻璃风） ---------- */
-.mask{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;
+.mask{position:fixed;top:0;right:0;bottom:0;left:0;z-index:90;display:none;align-items:center;justify-content:center;
   padding:18px;background:rgba(2,6,14,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .mask.on{display:flex;animation:fin .28s ease}
 /* 检测弹窗 */
@@ -1340,7 +1347,7 @@ button:focus:not(:focus-visible),a:focus:not(:focus-visible){outline:none}
 
     <section class="view" id="v-quanguo">
       <div class="tool glass" data-scope="q">
-        <div class="search"><span class="si">⌕</span><input type="search" data-f="search" placeholder="搜索名称 / 资费标准 / 说明关键词…"></div>
+        <div class="search"><span class="si">⌕</span><input type="search" data-f="search" placeholder="搜索名称 / 方案编号…"></div>
         <button class="pick" data-pick="own" data-scope="q"><span class="pk-t">全部归属</span><i class="pk-a">▾</i></button>
         <button class="pick" data-pick="type" data-scope="q"><span class="pk-t">全部类型</span><i class="pk-a">▾</i></button>
         <div class="seg" data-f="sort">
@@ -1660,6 +1667,20 @@ function __idle(fn, timeout){
 function __loadSec(sec){
   return __j(DATA_BASE + sec + ".json").then(function(j){ return (j && j.items) ? j.items : []; });
 }
+/* 全国资费：列表只需要名称/方案编号/归属/类型/价格/日期，完整字段拆在
+   data/qd/<方案编号>.json，点开某条时才拉取。索引约 300KB，整份快照 4MB。 */
+function __loadQIndex(){
+  return __j(DATA_BASE + "qindex.json").then(function(j){
+    var rows = (j && j.items) || [], out = [];
+    for(var i = 0; i < rows.length; i++){
+      var r = rows[i];
+      out.push({ name:r[0], __f:r[6], __p:(typeof r[4] === "number") ? r[4] : null, __d:r[5] || "",
+        fields:{ "方案编号":r[1] || "", "归属":r[2] || "", "资费类型":r[3] || "" } });
+    }
+    D.quanguo_updated = (j && j.u) || "";
+    return out;
+  });
+}
 function __tag(arr){
   if(!arr){ return; }
   for(var i=0;i<arr.length;i++){ arr[i].__i = i; }
@@ -1830,7 +1851,7 @@ function __bootReal(){
     rebuildProv();
     state.prov = def;
     // 全国资费单独一份
-    var qp = __loadSec("quanguo").then(function(qi){ D.qitems = qi || []; __tag(D.qitems); })
+    var qp = __loadQIndex().then(function(qi){ D.qitems = qi || []; __tag(D.qitems); })
               .catch(function(){ D.qitems = null; });
     var pp = __loadSec(def).then(function(pi){ D.items = pi || []; __tag(D.items); });
     return Promise.all([qp, pp]);
@@ -1850,6 +1871,7 @@ function __bootReal(){
     for(var k2 in D.quanguo_dist){ if(D.quanguo_dist.hasOwnProperty(k2)){ emptyD = false; break; } }
     if(emptyD && D.qitems){ D.quanguo_dist = __distOf(D.qitems); }
     REAL_OK = true;
+    state.q.__sig = null; state.p.__sig = null;
     window.__bootedAt = Date.now();   // 供「新数据提示」复用首屏已拉到的 latest.json
     /* 单处渲染异常不应阻断后续流程，尤其是历史记录的异步加载 */
     try { boot(); } catch(e) { if(window.console){ console.error(e); } }
@@ -1902,7 +1924,13 @@ function plain(s){
   return s.replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
 }
 function f(it,k){ var o = it.fields || {}; return o[k] || ""; }
-function priceOf(it){ var m = String(f(it,"资费标准")).match(/(\d+(?:\.\d+)?)\s*元/); return m ? parseFloat(m[1]) : null; }
+function priceOf(it){
+  if(!it){ return null; }
+  if(it.__p !== undefined){ return it.__p; }
+  var m = String(f(it,"资费标准")).match(/(\d+(?:\.\d+)?)\s*元/);
+  it.__p = m ? parseFloat(m[1]) : null;
+  return it.__p;
+}
 function priceMain(it){
   var s = String(f(it,"资费标准")), p = priceOf(it);
   if(p === null){ return { v: s || "—", u:"" }; }
@@ -1910,11 +1938,14 @@ function priceMain(it){
   return { v:String(p), u:(m && m[1]) ? ("元" + m[1]) : "元" };
 }
 function dateKey(it){
+  if(!it){ return ""; }
+  if(it.__d !== undefined){ return it.__d; }
   var s = String(f(it,"上线日期")), m = s.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
-  if(m){ return m[1] + "-" + ("0"+m[2]).slice(-2) + "-" + ("0"+m[3]).slice(-2); }
+  if(m){ it.__d = m[1] + "-" + ("0"+m[2]).slice(-2) + "-" + ("0"+m[3]).slice(-2); return it.__d; }
   m = s.match(/(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
-  if(m){ return m[1] + "-" + ("0"+m[2]).slice(-2) + "-" + ("0"+m[3]).slice(-2); }
-  return s.slice(0,10);
+  if(m){ it.__d = m[1] + "-" + ("0"+m[2]).slice(-2) + "-" + ("0"+m[3]).slice(-2); return it.__d; }
+  it.__d = s.slice(0,10);
+  return it.__d;
 }
 function typeBadge(t){
   if(t === "套餐"){ return "b1t"; }
@@ -2013,43 +2044,59 @@ function emptyBox(txt){
 /* ---------- 列表 ---------- */
 var TYPE_ORDER = { "套餐": 0, "加装包": 1, "营销活动": 2, "流量包": 3 };
 
+/* 搜索用的归一化文本：名称/编号/标准/归属/类型预先拼好并缓存，
+   避免每次输入都对全表逐字段扫描；省份板块快速命中失败时再退到全字段。 */
+function __hay(it){
+  if(it.__h !== undefined){ return it.__h; }
+  var o = it.fields || {};
+  it.__h = ((it.name || "") + " " + (o["方案编号"] || "") + " " + (o["资费标准"] || "") + " " +
+            (o["归属"] || "") + " " + (o["资费类型"] || "")).toLowerCase();
+  return it.__h;
+}
+function __hayDeep(it){
+  if(it.__hd !== undefined){ return it.__hd; }
+  var o = it.fields || {}, s = __hay(it);
+  for(var k in o){ if(Object.prototype.hasOwnProperty.call(o,k)){ s += " " + o[k]; } }
+  it.__hd = s.toLowerCase();
+  return it.__hd;
+}
 function filtered(scope){
-  var s = state[scope], arr = ((scope === "q" && D.qitems) ? D.qitems : D.items).slice();
+  var s = state[scope];
+  // 翻页/重复渲染不重做筛选与排序：结果按筛选签名缓存
+  var sig = s.search + "\u0001" + s.own + "\u0001" + s.type + "\u0001" + s.sort + "\u0001" + s.dir;
+  if(s.__sig === sig && s.__out){ return s.__out; }
+  var src = (scope === "q") ? (D.qitems || []) : (D.items || []);
   var kw = s.search.trim().toLowerCase();
-  if(kw){
-    arr = arr.filter(function(it){
-      var hit = String(it.name || "").toLowerCase().indexOf(kw) >= 0;
-      if(!hit){
-        var o = it.fields || {};
-        for(var k in o){
-          if(Object.prototype.hasOwnProperty.call(o,k) && String(o[k]).toLowerCase().indexOf(kw) >= 0){ hit = true; break; }
-        }
-      }
-      return hit;
-    });
-  }
   var own = (s.own === "全部归属") ? "" : s.own;
   var typ = (s.type === "全部类型") ? "" : s.type;
-  if(own){ arr = arr.filter(function(it){ return f(it,"归属") === own; }); }
-  if(typ){ arr = arr.filter(function(it){ return f(it,"资费类型") === typ; }); }
-  var dir = s.dir === "asc" ? 1 : -1;
-  arr.sort(function(a,b){
+  var out = [];
+  for(var i = 0; i < src.length; i++){
+    var it = src[i];
+    if(own && f(it,"归属") !== own){ continue; }
+    if(typ && f(it,"资费类型") !== typ){ continue; }
+    if(kw && __hay(it).indexOf(kw) < 0 && (scope === "q" || __hayDeep(it).indexOf(kw) < 0)){ continue; }
+    out.push(it);
+  }
+  var dir = s.dir === "asc" ? 1 : -1, mode = s.sort;
+  out.sort(function(a,b){
     var r = 0;
-    if(s.sort === "price"){
+    if(mode === "price"){
       var pa = priceOf(a), pb = priceOf(b);
       if(pa === null && pb === null){ r = 0; }
       else if(pa === null){ r = 1; }
       else if(pb === null){ r = -1; }
       else { r = pa - pb; }
-    } else if(s.sort === "zero"){
+    } else if(mode === "zero"){
       r = (priceOf(a) === 0 ? 0 : 1) - (priceOf(b) === 0 ? 0 : 1);
       if(r === 0){ r = dateKey(b) > dateKey(a) ? -1 : 1; }
     } else {
-      r = dateKey(b) > dateKey(a) ? -1 : (dateKey(b) < dateKey(a) ? 1 : 0);
+      var da = dateKey(a), db = dateKey(b);
+      r = da < db ? -1 : (da > db ? 1 : 0);
     }
     return r * dir;
   });
-  return arr;
+  s.__sig = sig; s.__out = out;
+  return out;
 }
 function dirLabel(sort, dir){
   if(sort === "time"){ return dir === "desc" ? "最新在前 ↓" : "最早在前 ↑"; }
@@ -2102,6 +2149,12 @@ function cardHTML(it, i){
     '<div class="cf"><span class="bo">' + esc(f(it,"归属") || "—") + "</span>" +
     '<span class="cfd">' + (d ? "上线 " + esc(d) : "") + "</span></div></article>";
 }
+function qRowHTML(it, i){
+  var gi = (typeof it.__i === "number") ? it.__i : i;
+  return '<article class="qrow" data-idx="' + gi + '">' +
+    '<span class="qn">' + esc(it.name) + '</span>' +
+    '<span class="qc">' + esc(f(it,"方案编号") || "—") + '</span></article>';
+}
 function skeleton(n){
   var one = '<div class="sk"><div class="skl" style="width:70%"></div><div class="skl" style="width:45%;height:22px"></div><div class="skl" style="width:85%"></div><div class="skl" style="width:55%"></div></div>';
   return new Array(n + 1).join(one);
@@ -2145,28 +2198,33 @@ function renderList(scope){
     pager.innerHTML = ""; hint.textContent = "";
     return;
   }
-  var arr = filtered(scope), per = 12;
+  if(scope === "q" && !D.qitems){
+    box.innerHTML = '<div class="empty">全国资费索引加载失败，刷新页面重试</div>';
+    pager.innerHTML = ""; hint.textContent = "";
+    return;
+  }
+  var arr = filtered(scope), per = (scope === "q") ? 30 : 12;
   var pages = Math.max(1, Math.ceil(arr.length / per));
   if(s.page > pages){ s.page = pages; }
   var slice = arr.slice((s.page-1)*per, s.page*per);
+    box.classList.toggle("qrows", scope === "q");
     (function(){
     if(!slice.length){
       box.innerHTML = '<div class="empty"><span class="ei">🔍</span>没有匹配的资费，换个关键词试试' +
         '<div style="margin-top:12px"><button class="btn" data-f="clearf" data-scope="' + scope + '">清除全部筛选</button></div></div>';
     } else {
-      box.innerHTML = slice.map(function(it,i){ return cardHTML(it,i); }).join("");
+      box.innerHTML = slice.map(function(it,i){ return scope === "q" ? qRowHTML(it,i) : cardHTML(it,i); }).join("");
     }
-    hint.textContent = "共 " + fmt(arr.length) + " 条 · 第 " + s.page + "/" + pages + " 页 · 左右滑动翻页";
-    if(pager.__pages !== pages || !pager.querySelector("[data-pg]")){
-      var btns = [];
-      for(var k = 1; k <= pages; k++){
-        btns.push('<button class="pg' + (k === s.page ? " on" : "") + '" data-pg="' + k + '">' + k + "</button>");
-      }
-      pager.innerHTML = btns.join("");
-      pager.__pages = pages;
-    } else {
-      var __po = pager.querySelector(".pg.on"); if(__po){ __po.classList.remove("on"); }
-      var __pc = pager.querySelector('[data-pg="'+s.page+'"]'); if(__pc){ __pc.classList.add("on"); }
+    hint.textContent = "共 " + fmt(arr.length) + " 条 · 第 " + s.page + "/" + pages + " 页" +
+      (scope === "q" ? " · 点开某条查看详情" : "") + " · 左右滑动翻页";
+    /* 页码只渲染当前窗（240 页时逐个建按钮会把工具栏卡死） */
+    var psig = pages + "|" + s.page;
+    if(pager.__sig !== psig){
+      pager.innerHTML = pgSeq(s.page, pages, 7).map(function(k){
+        return k === 0 ? '<span class="pg dots">…</span>'
+             : '<button class="pg' + (k === s.page ? " on" : "") + '" data-pg="' + k + '">' + k + "</button>";
+      }).join("");
+      pager.__sig = psig;
     }
     pager.style.justifyContent = "flex-start";
     var wrap = pager.closest ? pager.closest(".pagerwrap") : null;
@@ -2602,14 +2660,27 @@ function copyText(text, okMsg){
 
 /* ---------- 详情弹窗 ---------- */
 var curDetail = null;
+var QD_CACHE = {};   // data/qd/<编号>.json 已拉取的详情，同一会话内复用
 function openDetail(idx, scope){
-  var arr = ((scope === "q" && D.qitems) ? D.qitems : D.items);
+  var arr = (scope === "q") ? (D.qitems || []) : (D.items || []);
   var it = arr[idx];
   if(!it){ return; }
   curDetail = it;
   document.getElementById("mTitle").textContent = it.name || "资费详情";
-  document.getElementById("mBody").innerHTML = dvHtml(it);
+  var body = document.getElementById("mBody");
   document.getElementById("mask").classList.add("on");
+  if(scope !== "q"){ body.innerHTML = dvHtml(it); return; }
+  /* 全国列表只有名称与方案编号，完整字段按需从仓库拉取 */
+  var hit = QD_CACHE[it.__f];
+  if(hit){ body.innerHTML = dvHtml(hit); return; }
+  body.innerHTML = '<div class="dv-none">正在加载详情…</div>';
+  __j(DATA_BASE + "qd/" + encodeURIComponent(it.__f) + ".json").then(function(d){
+    if(!d || !d.fields){ throw new Error("详情格式异常"); }
+    QD_CACHE[it.__f] = d;
+    if(curDetail === it){ body.innerHTML = dvHtml(d); }
+  }).catch(function(){
+    if(curDetail === it){ body.innerHTML = '<div class="dv-none">详情加载失败，请稍后重试</div>'; }
+  });
 }
 var DV_L = ["国内通话","国内通用流量","定向流量","宽带","移动高清","权益"];
 var DV_R = ["适用范围","适用地区","上线日期","下线日期","有效期限","在网要求","销售渠道","退订方式","违约责任","超出资费说明","其他服务内容","其他说明"];
@@ -4885,7 +4956,7 @@ document.addEventListener("click", function(e){
         __loadSec(v).then(function(it){
           D.items = __normItems(it);
           __tag(D.items);
-          state.p.search = ""; state.p.own = ""; state.p.type = ""; state.p.page = 1;
+          state.p.search = ""; state.p.own = ""; state.p.type = ""; state.p.page = 1; state.p.__sig = null;
           var _ps = document.getElementById("pSearch"); if(_ps){ _ps.value = ""; }
           var _po = document.querySelector('.pick[data-scope="p"][data-pick="own"]'); if(_po){ setPickText(_po, "全部归属", ""); }
           var _pt = document.querySelector('.pick[data-scope="p"][data-pick="type"]'); if(_pt){ setPickText(_pt, "全部类型", ""); }
@@ -4921,7 +4992,7 @@ document.addEventListener("click", function(e){
         opts = ["全部归属","个人资费","政企资费"];
       }else{
         // 类型从当前数据里动态取（套餐/加装包/营销活动/流量包…），避免新增类型时选项缺失
-        var src = (sc === "q" && D.qitems) ? D.qitems : D.items;
+        var src = (sc === "q") ? (D.qitems || []) : D.items;
         var seenType = {};
         (src || []).forEach(function(it){
           var t = f(it,"资费类型");
@@ -4944,7 +5015,7 @@ document.addEventListener("click", function(e){
   var tab = el.closest ? el.closest(".tab") : null;
   if(tab){ setView(tab.getAttribute("data-v")); return; }
   /* 卡片 */
-  var card = el.closest ? el.closest(".card") : null;
+  var card = el.closest ? (el.closest(".card") || el.closest(".qrow")) : null;
   if(card){
     var _lst = card.closest ? card.closest("[data-scope]") : null;
     var _sc = _lst ? (_lst.getAttribute("data-scope") || "p") : "p";
