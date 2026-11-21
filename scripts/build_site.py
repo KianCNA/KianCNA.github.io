@@ -13,6 +13,7 @@
 """
 import collections
 import datetime
+import hashlib
 import json
 import os
 import shutil
@@ -183,7 +184,9 @@ def _qid(code, name, used):
     """详情分片文件名：优先用方案编号，非法字符、重号时追加序号。"""
     base = re.sub(r"[^0-9A-Za-z_-]+", "-", str(code or "").strip()).strip("-")
     if not base:
-        base = re.sub(r"[^0-9A-Za-z_-]+", "-", name).strip("-")[:24] or "item"
+        # 无编号时用名称哈希：名称可能全是中文，直接做文件名会变成空串，
+        # 按顺序编号又会让改名/排序变化引起大量分片改名为新文件
+        base = hashlib.md5(name.encode("utf-8")).hexdigest()[:12]
     stem, n = base, 2
     while stem in used:
         stem = "%s~%d" % (base, n)
