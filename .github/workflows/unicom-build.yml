@@ -55,8 +55,21 @@ jobs:
           python3 -u unicom_pipeline.py --prev-dir ../unicom/data --out-dir ../unicom/data 2>&1 | tail -150
           python3 -c "import json;d=json.load(open('../unicom/data/latest.json',encoding='utf-8'));print('[联通] updated =',d.get('updated'),'| 板块 =',len(d.get('sections',[])))"
 
+      - name: 体量闸门（防池残缺导致数据缩水）
+        run: |
+          set -e
+          OLDQ=$(git show HEAD:unicom/data/latest.json 2>/dev/null | python3 -c "import json,sys;print(json.load(sys.stdin).get('quanguo_total',0))" || echo 0)
+          NEWQ=$(python3 -c "import json;print(json.load(open('unicom/data/latest.json',encoding='utf-8')).get('quanguo_total',0))")
+          echo "上轮全网 $OLDQ 条 → 本轮 $NEWQ 条"
+          if [ "$OLDQ" -gt 0 ] && [ "$NEWQ" -lt $(( OLDQ * 6 / 10 )) ]; then
+            echo "::error::本轮全网条数较上轮缩水超过 40%，疑似累积池残缺，放弃提交并保留线上数据"
+            exit 1
+          fi
+
       - name: 保存联通累积池
-        if: always()
+        # 只在本轮成功时保存：此前是 always()，被取消的轮次也会把「抓到一半」的
+        # 池写进缓存，下一轮 restore 到残缺池 → 误判首次基线，线上 3851 条被砍到 613 条。
+        if: success()
         continue-on-error: true
         run: |
           if [ -f unicom/data/_pool.json ]; then
@@ -64,7 +77,7 @@ jobs:
             echo "池已压缩 $(du -h unicom/_pool.json.gz | cut -f1)"
           fi
       - name: 写入缓存
-        if: always()
+        if: success()
         continue-on-error: true
         uses: actions/cache/save@v4
         with:
