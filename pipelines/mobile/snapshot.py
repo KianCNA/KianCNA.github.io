@@ -16,7 +16,7 @@ _SEEN_PATH = os.path.join(SNAPSHOT_DIR, "_seen.json")
 
 # 归属/资费类型 → 抓取分类（与 fetcher.TYPE_COMBOS 的 (type1,type2) 对应）
 _OWN_TO_T1 = {"个人资费": "1", "政企资费": "2"}
-_TYPE_TO_T2 = {"套餐": "1", "加装包": "2", "营销活动": "3", "流量包": "4"}
+_TYPE_TO_T2 = {"套餐": "1", "加装包": "2", "营销活动": "3", "流量包": "4", "其他业务": "5"}
 _DATE_RE = re.compile(r"(\d{4})\D{0,3}(\d{1,2})\D{0,3}(\d{1,2})")
 
 
