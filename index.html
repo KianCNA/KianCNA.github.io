@@ -30,7 +30,7 @@
 /* ===== 老入口自升级（2026-10-19）=====
    旧 HTML 被 CDN 缓存时，靠它自己跳到最新版：
    请求 version.json 带时间戳（CDN 必回源），版本号不同则 replace 到带时间戳的新 URL。 */
-var BUILD_VER = "20261120d";
+var BUILD_VER = "20261121a";
 (function(){
   function base(){
     var m = location.pathname.match(/^(.*)\/[^\/]*$/);
@@ -3901,6 +3901,11 @@ function cuProvStat(op, sec){
   var st = CU.stat[op];
   return st ? { n:(st[sec] || 0) } : null;
 }
+/* 移动主站 history.json 的 ts 是构建时的北京时间（scripts/build_site.py 按 +8 生成），
+   与「变化历史」一致地原样展示；联通 / 电信 / 广电的 ts 是 runner 的 UTC，需要 +8。 */
+function cuTs(op, ts){
+  return op === "mobile" ? String(ts || "") : bjTime(ts);
+}
 function cuFind(op, ts, prov){
   var arr = CU.hist[op] || [];
   for(var i = 0; i < arr.length; i++){
@@ -4001,7 +4006,7 @@ function cuRenderAll(){
     });
   });
   items.sort(function(a, b){
-    var x = String(a.r.ts || ""), y = String(b.r.ts || "");
+    var x = cuTs(a.op.key, a.r.ts), y = cuTs(b.op.key, b.r.ts);
     return x < y ? 1 : (x > y ? -1 : 0);
   });
   var hint = document.getElementById("cuAllHint");
@@ -4021,7 +4026,7 @@ function cuRenderAll(){
       ' data-cu-ts="' + esc(x.r.ts) + '">' +
       '<span class="cu-rb" style="--ica:' + x.op.ca + ';--icb:' + x.op.cb + '">' + esc(x.op.short) + '</span>' +
       '<span class="cu-rp">' + esc(c.name) + '</span>' +
-      '<span class="cu-rt">' + esc(bjTime(x.r.ts)) + '</span>' +
+      '<span class="cu-rt">' + esc(cuTs(x.op.key, x.r.ts)) + '</span>' +
       '<span class="cu-rs">' + cuPills(c) + '</span>' +
       '<span class="cu-rn">' + esc(names.slice(0, 3).join(" / ")) + (n > 3 ? " 等 " + n + " 项" : "") + '</span>' +
       "</button>";
@@ -4078,7 +4083,7 @@ function cuRecHtml(op, r, c, first){
   return '<div class="ti' + (open ? " open" : "") + hl + '">' +
     '<div class="ti-hd" data-cu-tog="rec" data-ts="' + esc(r.ts) + '">' +
       '<span class="ti-ar"></span><span class="ti-ti">资费变更</span>' +
-      '<span class="ti-ts">' + esc(bjTime(r.ts)) + '</span>' +
+      '<span class="ti-ts">' + esc(cuTs(op, r.ts)) + '</span>' +
       (first ? '<span class="ti-new">最新</span>' : "") +
       '<span class="ti-sum">' + cuPills(c) + '</span></div>' +
     '<div class="ti-bd"' + (open ? ">" + cuBodyHtml(op, r, c) : ' style="display:none">') + "</div></div>";
@@ -4141,7 +4146,7 @@ function cuOpenChip(op, ts, prov, type, bi){
     var tc = HIST_TMAP[type] || ["变更", "p-mod"];
     document.getElementById("hmHead").innerHTML =
       '<span class="pill ' + tc[1] + '">' + tc[0] + '</span>' +
-      '<span class="dfmeta">' + esc(CU_MAP[op].name) + " · " + esc(c.name || "") + " · " + esc(bjTime(h.ts)) + '</span>';
+      '<span class="dfmeta">' + esc(CU_MAP[op].name) + " · " + esc(c.name || "") + " · " + esc(cuTs(op, h.ts)) + '</span>';
     var curW = document.getElementById("hmCurWrap");
     if(curW){ curW.style.display = "none"; }
     var note = HIST_NOTE[type] || "";
