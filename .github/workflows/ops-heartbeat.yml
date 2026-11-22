@@ -31,7 +31,8 @@ concurrency:
 jobs:
   heartbeat:
     runs-on: ubuntu-latest
-    timeout-minutes: 350
+    # 同 mobile-heartbeat：长驻 job 卡死会永久占用 runner 与并发组，缩到 120 分钟
+    timeout-minutes: 120
     steps:
       - name: 循环驱动三家抓取
         env:
@@ -41,7 +42,7 @@ jobs:
           TH_UNICOM: "10800"
         run: |
           set -e
-          DEADLINE=$(( $(date -u +%s) + 320 * 60 ))
+          DEADLINE=$(( $(date -u +%s) + 100 * 60 ))
           MIN_GAP=900
           LAST_DISPATCH=0
 

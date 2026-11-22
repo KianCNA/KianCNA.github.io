@@ -39,17 +39,20 @@ jobs:
     runs-on: ubuntu-latest
     # GitHub 托管 runner 单 job 上限 6 小时；DEADLINE 留足余量保证
     # 运行总是自己收尾并完成续期，而不是被 timeout 强杀后断链
-    timeout-minutes: 350
+    # 350 分钟的长驻 job 会长期占住 runner 名额，一旦平台侧卡死就变成无法清理的
+    # 僵尸（实测跑了 8+ 小时仍在 in_progress，同组后续运行全部 pending）。
+    # 缩短到 120 分钟，靠退出时自续期保持循环。
+    timeout-minutes: 120
     steps:
       - name: 循环驱动抓取
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
-          DEADLINE=$(( $(date -u +%s) + 320 * 60 ))
+          DEADLINE=$(( $(date -u +%s) + 100 * 60 ))
           # 下一轮抓取在「线上数据已有 95 分钟」时启动，构建约 25 分钟，
           # 线上数据因此保持约 2 小时一更；取不到时间戳时按已过期处理。
-          INTERVAL=5700
+          INTERVAL=6600
           # 触发过一轮后至少隔 20 分钟再试，避免构建连续失败时原地热循环
           MIN_GAP=1200
           ATTEMPTED=0

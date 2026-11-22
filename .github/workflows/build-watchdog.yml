@@ -31,7 +31,7 @@ jobs:
           # 平台侧僵尸（job timeout 已被 GitHub 忽略）。僵尸会永久占住各站的
           # 并发组：subsites 派发看到 in_progress 就跳过、ops-heartbeat 也判定
           # 「有运行在跑」不敢补发 —— 表现就是某个资产长时间不更新。
-          for wf in mobile-build.yml dingtalk-summary.yml unicom-build.yml telecom-build.yml gb-build.yml; do
+          for wf in mobile-build.yml dingtalk-summary.yml unicom-build.yml telecom-build.yml gb-build.yml mobile-heartbeat.yml ops-heartbeat.yml; do
             gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/${wf}/runs?per_page=20" \
               | jq -r --argjson cutoff "$CUTOFF" \
               '.workflow_runs[]
