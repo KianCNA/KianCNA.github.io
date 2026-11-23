@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-23 11:46",
+ "updated": "2026-11-23 12:43",
  "count": 176,
  "items": [
   {
@@ -10,6 +10,16 @@
    "date": "2026-11-26",
    "summary": "尊敬的用户，您好！因业务发展调整，2026年12月31日24时起福建省内中国移动CMCC、CMCC-WEB、CMCC-FJ、CMCC-EDU网络将停止服务，已订",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/fj/index_591_591_detail_56216.html",
+   "status": "on"
+  },
+  {
+   "id": "56248",
+   "prov": "neimenggu",
+   "prov_name": "内蒙古",
+   "title": "中国移动通辽分公司2026年自控厅店引入合作伙伴项目（第四期）谈判结果公示",
+   "date": "2026-11-23",
+   "summary": "11月2日通辽分公司启动3 处自控房产合作伙伴引入项目。本项目谈判工作由科区分公司组织开展，谈判时间为 2026 年 11月12日。现将本项目中各房屋的中选候选",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/nm/index_471_471_detail_56248.html",
    "status": "on"
   },
   {
@@ -610,16 +620,6 @@
    "date": "2026-11-04",
    "summary": "阿拉善分公司部分自营厅引商入柜及自有产权房屋招商于2026年11月6日8：30点至2026年11月9日8：30开始报名，于2026年11月13日上午10：30进",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/nm/index_471_471_detail_56130.html",
-   "status": "on"
-  },
-  {
-   "id": "56129",
-   "prov": "neimenggu",
-   "prov_name": "内蒙古",
-   "title": "中国移动通信集团内蒙古有限公司赤峰分公司27处自有营业用房引入合作商项目招商公告",
-   "date": "2026-11-04",
-   "summary": "本项目由中国移动通信集团内蒙古有限公司赤峰分公司组织实施。现进行公开竞争性谈判，由符合资格要求的生产商或供应商均可前来谈判。 一、引入说明 中国移动通信集团内蒙",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/nm/index_471_471_detail_56129.html",
    "status": "on"
   },
   {
@@ -1799,10 +1799,10 @@
   {
    "section": "neimenggu",
    "name": "内蒙古",
-   "count": 78,
-   "active": 78,
+   "count": 79,
+   "active": 79,
    "removed": 0,
-   "updated": "2026-11-20 10:37"
+   "updated": "2026-11-23 12:43"
   },
   {
    "section": "liaoning",
