@@ -1,7 +1,23 @@
 {
- "updated": "2026-11-20 15:09",
- "count": 109,
+ "updated": "2026-11-23 16:19",
+ "count": 110,
  "items": [
+  {
+   "id": "56251",
+   "title": "关于对移动高清4款资费停止服务的公告",
+   "date": "2026-11-23",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56251.html",
+   "status": "on",
+   "first_seen": "2026-11-23 16:19",
+   "summary": "尊敬的客户： 您好！ 由于公司内业务调整，移动高清4款资费产品将于2026年11月30日24:00正式下线，下线后将停止相关服务。业务下线后，不再收取任何功能费用，并自动为您解除业务订购关系，无需您额外操作。如有疑问您可拨打客服热线1008",
+   "content": "<p style=\"text-align:left\">尊敬的客户：</p>\n<p style=\"text-align:left\">&nbsp; &nbsp; &nbsp; &nbsp;您好！</p>\n<p style=\"text-align:left\">&nbsp; &nbsp; &nbsp; &nbsp;由于公司内业务调整，移动高清4款资费产品将于2026年11月30日24:00正式下线，下线后将停止相关服务。业务下线后，不再收取任何功能费用，并自动为您解除业务订购关系，无需您额外操作。如有疑问您可拨打客服热线10086咨询处理。</p>\n<p style=\"text-align:left\">&nbsp; &nbsp; &nbsp; &nbsp;给您带来不便敬请谅解，感谢您对中国移动的理解和支持，特此公告！</p>\n<p style=\"text-align:left\"><br>\n</p>\n<p style=\"text-align:left\">&nbsp; &nbsp; &nbsp; &nbsp;附件：<a href=\"https://www.10086.cn/uploadBaseDir/content/xlsx/20261123/20261123153832353lg2.xlsx\" target=\"_blank\" download=\"待停止服务资费产品清单（公告）.xlsx\">待停止服务资费产品清单（公告）.xlsx</a></p>\n<p style=\"text-align:justify\">&nbsp;</p>\n<p style=\"text-align:right\">中国移动通信集团黑龙江有限公司</p>\n<p style=\"text-align:right\">2026年11月23日</p>\n<br>",
+   "attachments": [
+    {
+     "name": "待停止服务资费产品清单（公告）.xlsx",
+     "url": "https://www.10086.cn/uploadBaseDir/content/xlsx/20261123/20261123153832353lg2.xlsx"
+    }
+   ]
+  },
   {
    "id": "56236",
    "title": "关于黑龙江移动系统升级优化的公告（2026-11）",
@@ -965,6 +981,6 @@
  ],
  "section": "heilongjiang",
  "name": "黑龙江",
- "active": 109,
+ "active": 110,
  "removed": 0
 }

@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-23 15:19",
+ "updated": "2026-11-23 16:19",
  "count": 176,
  "items": [
   {
@@ -10,6 +10,46 @@
    "date": "2026-11-26",
    "summary": "尊敬的用户，您好！因业务发展调整，2026年12月31日24时起福建省内中国移动CMCC、CMCC-WEB、CMCC-FJ、CMCC-EDU网络将停止服务，已订",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/fj/index_591_591_detail_56216.html",
+   "status": "on"
+  },
+  {
+   "id": "56253",
+   "prov": "shandong",
+   "prov_name": "山东",
+   "title": "关于山东移动11月26日晚系统维护公告",
+   "date": "2026-11-23",
+   "summary": "尊敬的移动用户： 您好！ 为提升系统性能给客户提供更好的服务，2026年11月26日晚23:00点至次日7:00点我公司将进行系统紧急维护升级，升级期间会停止营",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sd/index_531_531_detail_56253.html",
+   "status": "on"
+  },
+  {
+   "id": "56252",
+   "prov": "anhui",
+   "prov_name": "安徽",
+   "title": "关于算力豆产品向MobileAI产品迁移的公告",
+   "date": "2026-11-23",
+   "summary": "尊敬的客户: 您好!为了给您提供更优质的Token服务，中国移动计划于2026年11月25日起有序关停算力豆产品，并于2026年12月1日完成迁移至全新的Mob",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/ah/index_551_551_detail_56252.html",
+   "status": "on"
+  },
+  {
+   "id": "56251",
+   "prov": "heilongjiang",
+   "prov_name": "黑龙江",
+   "title": "关于对移动高清4款资费停止服务的公告",
+   "date": "2026-11-23",
+   "summary": "尊敬的客户： 您好！ 由于公司内业务调整，移动高清4款资费产品将于2026年11月30日24:00正式下线，下线后将停止相关服务。业务下线后，不再收取任何功能费",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56251.html",
+   "status": "on"
+  },
+  {
+   "id": "56250",
+   "prov": "neimenggu",
+   "prov_name": "内蒙古",
+   "title": "中国移动包头分公司2026年部分自有房屋引商招募公告",
+   "date": "2026-11-23",
+   "summary": "本项目由中国移动通信集团内蒙古有限公司包头分公司组织实施。包头分公司现启动昆区等5处自有房屋引商项目招募工作，自治区范围内符合资格要求的意向合作商均可报名参与竞",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/nm/index_471_471_detail_56250.html",
    "status": "on"
   },
   {
@@ -403,16 +443,6 @@
    "status": "on"
   },
   {
-   "id": "56199",
-   "prov": "heilongjiang",
-   "prov_name": "黑龙江",
-   "title": "关于对佳缘咪咕中级会员等45款资费停止服务的公告",
-   "date": "2026-11-17",
-   "summary": "尊敬的客户： 您好！ 由于公司内业务调整，佳缘咪咕中级会员等45款资费产品将逐步进行下线。佳缘咪咕中级会员等45款资费产品将于2026年11月30日24:00正",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/hl/index_451_451_detail_56199.html",
-   "status": "on"
-  },
-  {
    "id": "56192",
    "prov": "tianjin",
    "prov_name": "天津",
@@ -613,16 +643,6 @@
    "status": "on"
   },
   {
-   "id": "56130",
-   "prov": "neimenggu",
-   "prov_name": "内蒙古",
-   "title": "阿拉善分公司关于2026年度自营厅引商入柜及自有产权房屋招商",
-   "date": "2026-11-04",
-   "summary": "阿拉善分公司部分自营厅引商入柜及自有产权房屋招商于2026年11月6日8：30点至2026年11月9日8：30开始报名，于2026年11月13日上午10：30进",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/nm/index_471_471_detail_56130.html",
-   "status": "on"
-  },
-  {
    "id": "56127",
    "prov": "guizhou",
    "prov_name": "贵州",
@@ -743,16 +763,6 @@
    "status": "on"
   },
   {
-   "id": "56099",
-   "prov": "anhui",
-   "prov_name": "安徽",
-   "title": "关于腾讯视频权益原子及关联产品调整的公告",
-   "date": "2026-10-30",
-   "summary": "尊敬的用户： 您好！因权益合作方单方面调整供货策略，2026年12月1日起，我公司将对产品内可领权益池中的腾讯视频会员月卡、腾讯视频VIP会员-周卡、腾讯视频超",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/ah/index_551_551_detail_56099.html",
-   "status": "on"
-  },
-  {
    "id": "56068",
    "prov": "fujian",
    "prov_name": "福建",
@@ -870,16 +880,6 @@
    "date": "2026-10-20",
    "summary": "尊敬的客户: 因权益方单方面调整供货策略，2026年12月1日起，以下权益将无法领取：腾讯视频VIP月卡、腾讯视频VIP周卡、腾讯视频超级影视会员月卡、腾讯体育",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/zj/index_571_571_detail_56022.html",
-   "status": "on"
-  },
-  {
-   "id": "56013",
-   "prov": "shandong",
-   "prov_name": "山东",
-   "title": "关于山东移动10月22日晚系统维护公告",
-   "date": "2026-10-19",
-   "summary": "尊敬的移动用户： 您好！ 为提升系统性能给客户提供更好的服务，2026年10月22日晚23:00点至23日早上7:00点我公司将进行系统紧急维护升级，升级期间会",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sd/index_531_531_detail_56013.html",
    "status": "on"
   },
   {
@@ -1799,10 +1799,10 @@
   {
    "section": "neimenggu",
    "name": "内蒙古",
-   "count": 79,
-   "active": 79,
+   "count": 80,
+   "active": 80,
    "removed": 0,
-   "updated": "2026-11-23 12:43"
+   "updated": "2026-11-23 16:19"
   },
   {
    "section": "liaoning",
@@ -1823,10 +1823,10 @@
   {
    "section": "heilongjiang",
    "name": "黑龙江",
-   "count": 109,
-   "active": 109,
+   "count": 110,
+   "active": 110,
    "removed": 0,
-   "updated": "2026-11-20 15:09"
+   "updated": "2026-11-23 16:19"
   },
   {
    "section": "shanghai",
@@ -1855,10 +1855,10 @@
   {
    "section": "anhui",
    "name": "安徽",
-   "count": 391,
-   "active": 391,
+   "count": 392,
+   "active": 392,
    "removed": 0,
-   "updated": "2026-11-20 11:33"
+   "updated": "2026-11-23 16:19"
   },
   {
    "section": "fujian",
@@ -1879,10 +1879,10 @@
   {
    "section": "shandong",
    "name": "山东",
-   "count": 25,
-   "active": 25,
+   "count": 26,
+   "active": 26,
    "removed": 0,
-   "updated": "2026-11-20 17:14"
+   "updated": "2026-11-23 16:19"
   },
   {
    "section": "henan",

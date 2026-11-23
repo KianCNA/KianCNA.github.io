@@ -1,7 +1,18 @@
 {
- "updated": "2026-11-20 11:33",
- "count": 391,
+ "updated": "2026-11-23 16:19",
+ "count": 392,
  "items": [
+  {
+   "id": "56252",
+   "title": "关于算力豆产品向MobileAI产品迁移的公告",
+   "date": "2026-11-23",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/ah/index_551_551_detail_56252.html",
+   "status": "on",
+   "first_seen": "2026-11-23 16:19",
+   "summary": "尊敬的客户: 您好!为了给您提供更优质的Token服务，中国移动计划于2026年11月25日起有序关停算力豆产品，并于2026年12月1日完成迁移至全新的MobileAI产品，迁移前后用户权益保持一致。如您未主动办理，公告发布之后将有序对存",
+   "content": "<p>尊敬的客户:<br>\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您好!为了给您提供更优质的Token服务，中国移动计划于2026年11月25日起有序关停算力豆产品，并于2026年12月1日完成迁移至全新的MobileAI产品，迁移前后用户权益保持一致。如您未主动办理，公告发布之后将有序对存量算力豆订单进行退订(退订当月月底失效，不再产生后续费用)，并通过电话或短信方式征得您同意后，为您订购同等权益的MobileAI产品，迁移过程不影响您的正常使用；如您确认不再订购或未回复通知，将不会为您办理MobileAI产品的订购业务。如您选择主动办理，办理方式如下:<br>\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;自助办理：登录中国移动APP，退订“算力豆产品”，并在“移动Token专区”新订购同等权益的MobileAI产品；<br>\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人工办理：就近前往营业厅或致电10086办理退订算力豆业务，并新订购MobileAI产品；<br>\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本公告适用于标准算力豆订单，详情请登录中国移动APP或致电10086咨询，感谢您的支持！<br>\n</p>\n<p><br>\n<br>\n</p>\n<div style=\"text-align:right\">中国移动通信集团安徽有限公司</div><div style=\"text-align:right\">2026年11月23日</div><br>\n<p><br>\n</p>\n<p><br>\n</p>",
+   "attachments": []
+  },
   {
    "id": "56228",
    "title": "关于合肥移动VIP售后服务厅信息更新的公示",
@@ -3197,6 +3208,6 @@
  ],
  "section": "anhui",
  "name": "安徽",
- "active": 391,
+ "active": 392,
  "removed": 0
 }
