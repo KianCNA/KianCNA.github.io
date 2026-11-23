@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-23 07:54",
+ "updated": "2026-11-23 10:26",
  "count": 176,
  "items": [
   {
@@ -10,6 +10,16 @@
    "date": "2026-11-26",
    "summary": "尊敬的用户，您好！因业务发展调整，2026年12月31日24时起福建省内中国移动CMCC、CMCC-WEB、CMCC-FJ、CMCC-EDU网络将停止服务，已订",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/fj/index_591_591_detail_56216.html",
+   "status": "on"
+  },
+  {
+   "id": "56244",
+   "prov": "hebei",
+   "prov_name": "河北",
+   "title": "中国移动河北公司衡水分公司市区北沼委托加盟店公开招募经营人公告",
+   "date": "2026-11-23",
+   "summary": "中国移动通信集团河北有限公司衡水分公司拟对市区北沼委托加盟店进行公开招募经营人，欢迎供应商报名参加。现就该项目的有关事项公告如下： 一、采购说明 1、采购范围：",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/he/index_311_311_detail_56244.html",
    "status": "on"
   },
   {
@@ -1133,16 +1143,6 @@
    "status": "on"
   },
   {
-   "id": "54853",
-   "prov": "hebei",
-   "prov_name": "河北",
-   "title": "关于优化升级“国际/中国港澳台漫游功能”开通规则的公告",
-   "date": "2026-04-17",
-   "summary": "尊敬的客户，您好： 为提供更优质的国际/中国港澳台漫游体验，我公司将进行基础功能升级，于2026年4月20日0点起，为您免费开通国际/中国港澳台漫游功能，以保障",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/he/index_311_311_detail_54853.html",
-   "status": "on"
-  },
-  {
    "id": "54850",
    "prov": "jilin",
    "prov_name": "吉林",
@@ -1783,10 +1783,10 @@
   {
    "section": "hebei",
    "name": "河北",
-   "count": 32,
-   "active": 32,
+   "count": 33,
+   "active": 33,
    "removed": 0,
-   "updated": "2026-10-27 22:09"
+   "updated": "2026-11-23 10:26"
   },
   {
    "section": "shanxi",
