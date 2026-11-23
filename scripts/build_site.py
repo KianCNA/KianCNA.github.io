@@ -539,6 +539,34 @@ def clean_shell_modified_records(history):
     return cleaned
 
 
+def clean_all_zero_records(history):
+    """剔除整条记录均无真实变化的全零记录。
+
+    空壳 modified 归零后，若某条历史记录所有板块的
+    added/removed/modified/restored 全为 0，说明该轮没有任何真实
+    资费变化（仅是采集流程跑了一轮但数据未变），整条记录无任何信息量。
+    保留它只会让前端「变化历史」多出一条「资费变更·无变化」的噪声条目。
+
+    recovered 记录的明细在分片里而非摘要中，摘要字段可能全零但实际
+    有变化，故不参与清理。
+    """
+    cleaned = []
+    for rec0 in history:
+        if not isinstance(rec0, dict) or rec0.get("recovered"):
+            cleaned.append(rec0)
+            continue
+        has_change = False
+        for sec, d in rec0.items():
+            if sec == "ts" or not isinstance(d, dict) or d.get("note") == "baseline":
+                continue
+            if any(d.get(k) for k in ("added", "removed", "modified", "restored")):
+                has_change = True
+                break
+        if has_change:
+            cleaned.append(rec0)
+    return cleaned
+
+
 def same_change(a, b):
     """判断两条历史记录的业务变更是否等效（忽略 ts 与字段级明细），用于防止重复记录。"""
     if not isinstance(a, dict) or not isinstance(b, dict):
@@ -759,6 +787,11 @@ def main():
     history = clean_shell_modified_records(history)
     if len(history) != _pre_shell:
         print(f"[清理] 剔除 {_pre_shell - len(history)} 条空壳 modified 误报记录")
+    # 空壳 modified 归零后，整条记录若所有板块均无变化（全零），无任何信息量，剔除之
+    _pre_zero = len(history)
+    history = clean_all_zero_records(history)
+    if len(history) != _pre_zero:
+        print(f"[清理] 剔除 {_pre_zero - len(history)} 条全零无变化历史记录")
     rec = {"ts": now}
     has_change = False
     diff_details = {}   # sec -> {name: [{field,from,to}, ...]} 供回填旧记录
