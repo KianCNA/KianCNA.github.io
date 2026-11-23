@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-23 10:26",
+ "updated": "2026-11-23 11:46",
  "count": 176,
  "items": [
   {
@@ -10,6 +10,26 @@
    "date": "2026-11-26",
    "summary": "尊敬的用户，您好！因业务发展调整，2026年12月31日24时起福建省内中国移动CMCC、CMCC-WEB、CMCC-FJ、CMCC-EDU网络将停止服务，已订",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/fj/index_591_591_detail_56216.html",
+   "status": "on"
+  },
+  {
+   "id": "56247",
+   "prov": "henan",
+   "prov_name": "河南",
+   "title": "关于河南移动新一代数智云原生研发（计费帐务大版本及全栈国产化）项目割接上线的公告",
+   "date": "2026-11-23",
+   "summary": "尊敬的客户： 为给您提供更优质的服务，中国移动通信集团河南有限公司将于 2026 年 11 月 24 日 22:00 至 2026 年 11 月 25 日 07",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/ha/index_371_371_detail_56247.html",
+   "status": "on"
+  },
+  {
+   "id": "56246",
+   "prov": "shanxi",
+   "prov_name": "山西",
+   "title": "大同分公司2026年第四批委托加盟店合作伙伴引入结果公示",
+   "date": "2026-11-23",
+   "summary": "中国移动通信集团山西有限公司【大同】分公司（以下简称：【大同】移动）第四批委托加盟店合作伙伴引入项目，已按照相关规定完成评审工作，现将结果公示如下： 大同分公司",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sx/index_351_351_detail_56246.html",
    "status": "on"
   },
   {
@@ -803,16 +823,6 @@
    "status": "on"
   },
   {
-   "id": "56052",
-   "prov": "shanxi",
-   "prov_name": "山西",
-   "title": "中国移动通信集团山西有限公司吕梁分公司2026年第6批自控厅委托加盟合作伙伴评估引入公告",
-   "date": "2026-10-23",
-   "summary": "本项目为中国移动通信集团山西有限公司【吕梁】分公司（以下简称：【吕梁】移动）集中评估引入，评估引入主体为中国移动通信集团山西有限公司【吕梁】分公司。该项目具备引",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sx/index_351_351_detail_56052.html",
-   "status": "on"
-  },
-  {
    "id": "53548",
    "prov": "fujian",
    "prov_name": "福建",
@@ -1210,16 +1220,6 @@
    "date": "2026-03-03",
    "summary": "尊敬的客户： 为更好地保护您的个人信息安全，根据国家相关法律法规的要求，我公司已设立个人信息保护负责人，负责监督和管理本公司个人信息保护相关工作。如您对本公司个",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/ha/index_371_371_detail_54577.html",
-   "status": "on"
-  },
-  {
-   "id": "54571",
-   "prov": "henan",
-   "prov_name": "河南",
-   "title": "关于部分资费套内流量扩容的公告",
-   "date": "2026-03-01",
-   "summary": "尊敬的客户： 您好！为回馈广大客户，河南移动现对部分老版资费套餐进行流量扩容，2026年3月1日开始生效。具体优化资费列表详见附件。。 套餐扩容明细表列表.xl",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/ha/index_371_371_detail_54571.html",
    "status": "on"
   },
   {
@@ -1791,10 +1791,10 @@
   {
    "section": "shanxi",
    "name": "山西",
-   "count": 43,
-   "active": 43,
+   "count": 44,
+   "active": 44,
    "removed": 0,
-   "updated": "2026-11-10 18:03"
+   "updated": "2026-11-23 11:46"
   },
   {
    "section": "neimenggu",
@@ -1887,10 +1887,10 @@
   {
    "section": "henan",
    "name": "河南",
-   "count": 66,
-   "active": 66,
+   "count": 67,
+   "active": 67,
    "removed": 0,
-   "updated": "2026-11-20 10:37"
+   "updated": "2026-11-23 11:46"
   },
   {
    "section": "hubei",
