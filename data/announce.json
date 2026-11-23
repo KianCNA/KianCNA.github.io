@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-23 22:53",
+ "updated": "2026-11-24 00:44",
  "count": 176,
  "items": [
   {
@@ -10,6 +10,16 @@
    "date": "2026-11-26",
    "summary": "尊敬的用户，您好！因业务发展调整，2026年12月31日24时起福建省内中国移动CMCC、CMCC-WEB、CMCC-FJ、CMCC-EDU网络将停止服务，已订",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/fj/index_591_591_detail_56216.html",
+   "status": "on"
+  },
+  {
+   "id": "56257",
+   "prov": "shanghai",
+   "prov_name": "上海",
+   "title": "特服号码割接公告",
+   "date": "2026-11-24",
+   "summary": "尊敬的客户： 2026年11月27日00:00至06:00，上海移动为进一步提升语音网络能力与服务质量，将对网间紧急特服（119、120）话务路由进行优化。期间",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sh/index_210_210_detail_56257.html",
    "status": "on"
   },
   {
@@ -850,16 +860,6 @@
    "date": "2026-10-22",
    "summary": "尊敬的中国移动湖北公司客户： 我们依据《个人信息保护法》《未成年人保护法》《儿童个人信息网络保护规定》《未成年人网络保护条例》等法律法规，特向您清晰、透明地说明",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/hb/index_270_270_detail_56048.html",
-   "status": "on"
-  },
-  {
-   "id": "56045",
-   "prov": "shanghai",
-   "prov_name": "上海",
-   "title": "关于2026年度中国移动通信集团上海有限公司松江区公司公开寻源租赁营业厅用房公示（下半年）",
-   "date": "2026-10-22",
-   "summary": "中国移动通信集团上海有限公司松江区公司以公开方式寻源租赁营业厅用房的需求。现结合2026年7月-12月份松江区公司营业厅租约到期情况、房东情况及拟新建营业厅区域",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sh/index_210_210_detail_56045.html",
    "status": "on"
   },
   {
@@ -1831,10 +1831,10 @@
   {
    "section": "shanghai",
    "name": "上海",
-   "count": 197,
-   "active": 197,
+   "count": 198,
+   "active": 198,
    "removed": 0,
-   "updated": "2026-11-21 00:34"
+   "updated": "2026-11-24 00:44"
   },
   {
    "section": "jiangsu",

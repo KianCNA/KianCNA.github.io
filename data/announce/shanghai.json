@@ -1,7 +1,18 @@
 {
- "updated": "2026-11-21 00:34",
- "count": 197,
+ "updated": "2026-11-24 00:44",
+ "count": 198,
  "items": [
+  {
+   "id": "56257",
+   "title": "特服号码割接公告",
+   "date": "2026-11-24",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sh/index_210_210_detail_56257.html",
+   "status": "on",
+   "first_seen": "2026-11-24 00:44",
+   "summary": "尊敬的客户： 2026年11月27日00:00至06:00，上海移动为进一步提升语音网络能力与服务质量，将对网间紧急特服（119、120）话务路由进行优化。期间部分网间通话可能短暂受影响，敬请谅解。详询10086。 特此通知。 中国移动通信",
+   "content": "<p>尊敬的客户：</p>\n<p>      <a date=\"1795741200000\"Microsoft YaHei\"; font-size: medium; white-space: normal; color: inherit; border-bottom: 1px dashed rgb(153, 153, 153); cursor: pointer;\">2026年11月27日</a>00:00至06:00，上海移动为进一步提升语音网络能力与服务质量，将对网间紧急特服（119、120）话务路由进行优化。期间部分网间通话可能短暂受影响，敬请谅解。详询10086。</p>\n<p>      特此通知。</p>\n<p><br>\n</p>\n<p><br>\n</p>\n<p><br>\n</p>\n<p style=\"text-align:right\">中国移动通信集团上海有限公司</p>\n<p style=\"text-align:right\"><a date=\"1750208400000\" style=\"color:inherit\"> </a><a date=\"1774227600000\" style=\"color:inherit\">2026年11月24日</a></p>",
+   "attachments": []
+  },
   {
    "id": "56243",
    "title": "业务系统升级公告",
@@ -1638,6 +1649,6 @@
  ],
  "section": "shanghai",
  "name": "上海",
- "active": 197,
+ "active": 198,
  "removed": 0
 }
