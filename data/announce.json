@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-23 16:19",
+ "updated": "2026-11-23 17:35",
  "count": 176,
  "items": [
   {
@@ -100,6 +100,16 @@
    "date": "2026-11-21",
    "summary": "尊敬的客户： 您好，为进一步提升客户服务质量，我公司计划于2026年11月21日23:00至11月22日7:00对业务系统进行升级，届时我公司所有服务渠道将暂停",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/sh/index_210_210_detail_56243.html",
+   "status": "on"
+  },
+  {
+   "id": "56254",
+   "prov": "beijing",
+   "prov_name": "北京",
+   "title": "关于 CRM 系统 BOSS 系统升级的公告",
+   "date": "2026-11-20",
+   "summary": "尊敬的客户： 您好！ 为了给您提供更加优质便捷的服务，中国移动通信集团北京有限公司定于 2026年 11 月 24 日 23 时至 11 月 25 日 7 时进",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/bj/index_100_100_detail_56254.html",
    "status": "on"
   },
   {
@@ -790,16 +800,6 @@
    "date": "2026-10-29",
    "summary": "中国移动通信集团山西有限公司【吕梁】分公司（以下简称：【吕梁】移动）2026年第5批自控厅委托加盟合作伙伴评估引入项目（项目编号：LL202605）已按照相关规",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/sx/index_351_351_detail_56069.html",
-   "status": "on"
-  },
-  {
-   "id": "56067",
-   "prov": "beijing",
-   "prov_name": "北京",
-   "title": "关于 49 元“动感地带校园专属套餐”流量扩容的通知",
-   "date": "2026-10-28",
-   "summary": "尊敬的客户： 您好！ 为回馈广大客户，带来更好的业务体验，现对 49 元“动感地带校园专属套餐”中的国内通用流量进行免费升级扩容，扩容前套内流量资源：20GB ",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/bj/index_100_100_detail_56067.html",
    "status": "on"
   },
   {
@@ -1767,10 +1767,10 @@
   {
    "section": "beijing",
    "name": "北京",
-   "count": 1145,
-   "active": 1145,
+   "count": 1146,
+   "active": 1146,
    "removed": 0,
-   "updated": "2026-11-20 11:33"
+   "updated": "2026-11-23 17:35"
   },
   {
    "section": "tianjin",
