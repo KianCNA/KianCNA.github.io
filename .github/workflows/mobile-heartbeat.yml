@@ -50,18 +50,18 @@ jobs:
         run: |
           set -e
           DEADLINE=$(( $(date -u +%s) + 100 * 60 ))
-          # 下一轮抓取在「线上数据已有 95 分钟」时启动，构建约 25 分钟，
-          # 线上数据因此保持约 2 小时一更；取不到时间戳时按已过期处理。
-          INTERVAL=6600
-          # 触发过一轮后至少隔 20 分钟再试，避免构建连续失败时原地热循环
-          MIN_GAP=1200
+          API_BASE="${API_BASE:-https://socialist-cow-d3glswv91d832ff2d-1252525450.ap-shanghai.app.tcloudbase.com/api}"
+          # 节奏（2026-11-26 调整）：
+          #   全量轮抓完 → 间隔 30 分钟 → 再抓
+          #   优先轮（只抓订阅省份）抓完 → 间隔 15 分钟 → 再抓
+          # 两类轮共用 mobile-build 的同一并发组，因此在本心跳里串行排队、不并发。
+          GAP_FULL=1800
+          GAP_PRIO=900
+          # 派发过一轮后至少隔 10 分钟再试：既防构建连续失败时原地热循环，
+          # 也防派发后 GitHub 尚未把运行登记为 queued 时重复派发。
+          MIN_GAP=600
           ATTEMPTED=0
 
-          # 循环中途任何一次 gh api 失败都会被 set -e 直接终止脚本，而续期在脚本
-          # 末尾，于是心跳链彻底断掉（2026-11-06 实测断链，靠 schedule 与看门狗
-          # 才补上，空窗 4 小时）。这里统一走重试封装，并用 EXIT trap 兜底续期。
-          # 统一走 curl：runner 上 gh CLI 曾整体失败（错误被吞掉，心跳永远判定
-          # 「有运行在跑」而空转，数据被卡住数小时）。curl 失败可见、可重试。
           api() {
             local url="$1" i out
             for i in 1 2 3; do
@@ -128,10 +128,11 @@ jobs:
           # 抓取已从 ~25 分钟涨到 ~50 分钟，心跳若在整点前 30 分钟内再派发一
           # 轮，会和准点定时轮撞在同一个并发组里，被 cancel-in-progress 直接
           # 掐死（2026-11-21 15:41 那轮跑了 18 分钟被 16:00 整点轮取消，白跑）。
+          # 距下一个「6 小时兜底整点」还有多少分钟（mobile-build 的 cron 为 0 */6）
           minutes_to_cron() {
             local now next
             now=$(date -u +%s)
-            next=$(( ( now / 7200 + 1 ) * 7200 ))
+            next=$(( ( now / 21600 + 1 ) * 21600 ))
             echo $(( (next - now) / 60 ))
           }
 
@@ -144,35 +145,111 @@ jobs:
             echo $(( $(date -u +%s) - UPDATED_TS ))
           }
 
+          # 后端调度状态：last_full / last_priority 的完成时刻，决定下一轮该抓什么
+          sched_json() {
+            curl -fsSL --max-time 20 "${API_BASE}/internal/sched" 2>/dev/null || true
+          }
+
+          age_of() {
+            local json="$1" key="$2" at ts
+            at=$(printf '%s' "$json" | jq -r --arg k "$key" '.state[$k].at // empty' 2>/dev/null) || at=""
+            [ -n "$at" ] || { echo 999999; return; }
+            ts=$(date -u -d "$at" +%s 2>/dev/null) || { echo 999999; return; }
+            echo $(( $(date -u +%s) - ts ))
+          }
+
+          # 把所有账号订阅里的省份聚合成 focus 抓取目标（后端只返回去重省份，不含身份信息）
+          priority_provs() {
+            curl -fsSL --max-time 20 "${API_BASE}/internal/priority-targets" 2>/dev/null \
+              | jq -r '.focus_provs // empty' 2>/dev/null || echo ""
+          }
+
+          dispatch_build() {
+            # 参数：1=mode  2=focus_provs  3=round_tag
+            local mode="$1" provs="$2" tag="$3" i body
+            body=$(jq -nc --arg m "$mode" --arg p "$provs" --arg t "$tag" \
+              '{ref:"main", inputs:{mode:$m, focus_provs:$p, round_tag:$t}}')
+            for i in 1 2 3; do
+              if curl -fsS --max-time 30 -X POST \
+                -H "Authorization: Bearer ${GH_TOKEN}" \
+                -H "Accept: application/vnd.github+json" \
+                -H "User-Agent: mobile-heartbeat" \
+                -H "Content-Type: application/json" \
+                -d "$body" \
+                "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/mobile-build.yml/dispatches" \
+                >/dev/null 2>/tmp/api_err; then
+                return 0
+              fi
+              echo "[warn] 派发失败（$i/3）：$(head -c 120 /tmp/api_err)" >&2
+              sleep 10
+            done
+            return 1
+          }
+
           while :; do
             LEFT=$(( DEADLINE - $(date -u +%s) ))
             if [ "$LEFT" -le 0 ]; then break; fi
-            AGE=$(data_age)
-            SLEEP=$(( INTERVAL - AGE ))
-            if [ "$ATTEMPTED" = "1" ] && [ "$SLEEP" -lt "$MIN_GAP" ]; then SLEEP=$MIN_GAP; fi
-            if [ "$SLEEP" -lt 0 ]; then SLEEP=0; fi
-            if [ "$SLEEP" -gt "$LEFT" ]; then SLEEP=$LEFT; fi
-            echo "=== 线上数据距今 $(( AGE / 60 )) 分钟，睡眠 $(( SLEEP / 60 )) 分钟至 $(date -u -d "+$SLEEP seconds" +%FT%TZ) ==="
-            sleep "$SLEEP"
+
+            S=$(sched_json)
+            if [ -n "$S" ] && printf '%s' "$S" | jq -e '.ok == true' >/dev/null 2>&1; then
+              AF=$(age_of "$S" last_full)
+              AP=$(age_of "$S" last_priority)
+              SRC="后端状态"
+            else
+              # 后端不可用：退回按 latest.json 陈旧度只跑全量，优先轮跳过，避免整站停更
+              AF=$(data_age)
+              AP=999999
+              SRC="兜底判断"
+            fi
+
+            if [ "$AF" -ge "$GAP_FULL" ]; then
+              KIND="full"; WAIT=0
+            elif [ "$AP" -ge "$GAP_PRIO" ]; then
+              KIND="priority"; WAIT=0
+            else
+              WF=$(( GAP_FULL - AF )); WP=$(( GAP_PRIO - AP ))
+              if [ "$WF" -le "$WP" ]; then KIND="full"; WAIT=$WF; else KIND="priority"; WAIT=$WP; fi
+            fi
+            if [ "$ATTEMPTED" = "1" ] && [ "$WAIT" -lt "$MIN_GAP" ]; then WAIT=$MIN_GAP; fi
+            if [ "$WAIT" -lt 0 ]; then WAIT=0; fi
+            if [ "$WAIT" -gt "$LEFT" ]; then WAIT=$LEFT; fi
+
+            echo "=== [$SRC] 距全量 ${AF}s / 距优先 ${AP}s → 下一轮 $KIND，睡眠 $((WAIT/60)) 分钟至 $(date -u -d "+${WAIT} seconds" +%FT%TZ) ==="
+            sleep "$WAIT"
             if [ "$(date -u +%s)" -ge "$DEADLINE" ]; then break; fi
 
             ATTEMPTED=1
             ACTIVE=$(count_active)
             M2C=$(minutes_to_cron)
-            if [ "$ACTIVE" = "0" ] && [ "$M2C" -le 30 ]; then
-              # 让位于即将到来的整点定时轮，避免两轮互踩被取消
-              echo "距整点定时轮只剩 ${M2C} 分钟，本轮不派发，交给 schedule"
+            if [ "$ACTIVE" = "0" ] && [ "$M2C" -le 40 ]; then
+              # 让位于即将到来的 6 小时兜底轮：那一轮会 cancel-in-progress 掐掉正在跑的本轮
+              echo "距兜底轮只剩 ${M2C} 分钟，本轮不派发，交给 schedule"
               sleep 600
               continue
             fi
-            if [ "$ACTIVE" = "0" ]; then
-              if api_post "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/mobile-build.yml/dispatches"; then
-                echo "已触发下一轮抓取 $(date -u +%FT%TZ)"
-              else
-                echo "::warning::触发抓取失败，等下一轮循环或兜底任务补上"
-              fi
+            if [ "$ACTIVE" != "0" ]; then
+              echo "已有 $ACTIVE 个抓取运行在进行/排队，等待其结束"
             else
-              echo "已有 $ACTIVE 个抓取运行在进行/排队，直接等待其结束"
+              if [ "$KIND" = "priority" ]; then
+                PROVS=$(priority_provs)
+                if [ -z "$PROVS" ]; then
+                  echo "没有订阅省份，本轮降级为全量"
+                  KIND="full"
+                fi
+              fi
+              if [ "$KIND" = "priority" ]; then
+                if dispatch_build "focus" "$PROVS" "priority"; then
+                  echo "已派发优先轮（$PROVS）$(date -u +%FT%TZ)"
+                else
+                  echo "::warning::优先轮派发失败，等下一轮循环或兜底任务补上"
+                fi
+              else
+                if dispatch_build "full" "" ""; then
+                  echo "已派发全量轮 $(date -u +%FT%TZ)"
+                else
+                  echo "::warning::全量轮派发失败，等下一轮循环或兜底任务补上"
+                fi
+              fi
             fi
 
             while [ "$(date -u +%s)" -lt "$DEADLINE" ]; do
