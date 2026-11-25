@@ -99,7 +99,7 @@
         <thead><tr>
           <th>开始时间</th><th>模式</th><th>触发</th><th>状态</th>
           <th style="text-align:right">耗时</th><th style="text-align:right">板块</th>
-          <th style="text-align:right">条目</th><th style="text-align:right">速度</th><th>备注</th>
+          <th style="text-align:right">套餐总量</th><th style="text-align:right">板块/分</th><th>备注</th>
         </tr></thead>
         <tbody id="rows"><tr><td colspan="9" class="empty">加载中…</td></tr></tbody>
       </table>
@@ -211,8 +211,8 @@
       ['失败', (s.fails || 0), '轮'],
       ['成功率', s.runs ? (100 - rate).toFixed(1) : '—', '%'],
       ['平均耗时', s.avg_sec == null ? '—' : dur(s.avg_sec), ''],
-      ['累计条目', (s.items || 0), '条'],
-      ['平均速度', s.avg_per_min || '—', '条/分']
+      ['套餐总量', (s.items || 0), '条'],
+      ['平均速度', s.avg_per_min || '—', '板块/分']
     ];
     $('sum').innerHTML = cells.map(function (c) {
       return '<div class="kv"><div class="k">' + c[0] + '</div><div class="v">' + c[1] +

@@ -346,6 +346,15 @@ jobs:
           TAG="${{ github.event.inputs.round_tag }}"
           if [ -n "$TAG" ]; then MODE="$TAG"; fi
           if [ -z "$MODE" ] || [ "$MODE" = "default" ]; then MODE="full"; fi
+          # 板块数按「实际抓取范围」计：focus 只抓 全网 + 指定省份，不能用 latest.json 的 32 板块
+          if [ "$MODE" = "focus" ] || [ "$MODE" = "priority" ]; then
+            FOCUS="${{ github.event.inputs.focus_provs }}"
+            if [ -z "$FOCUS" ]; then FOCUS="${{ vars.FOCUS_PROVS }}"; fi
+            if [ -n "$FOCUS" ]; then
+              N=$(printf '%s' "$FOCUS" | tr ',' ' ' | wc -w | tr -d ' ')
+              SECS=$(( N + 1 ))
+            fi
+          fi
           echo "结束 mode=$MODE status=$ST 耗时 ${DUR}s 板块 $SECS 条目 $TOTAL"
           curl -fsS --max-time 25 -X POST "$API_BASE/internal/crawl/report"             -H 'Content-Type: application/json'             -d "{\"round_key\":\"${GITHUB_RUN_ID}\",\"mode\":\"$MODE\",\"status\":\"$ST\",\"finished_at\":\"$(date -u +%FT%TZ)\",\"duration_sec\":$DUR,\"sections_total\":$SECS,\"sections_done\":$SECS,\"items_total\":$TOTAL,\"note\":\"耗时 ${DUR}s / $SECS 板块\"}"             || echo "::warning::结束上报失败"
 
