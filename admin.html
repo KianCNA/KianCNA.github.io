@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>账号管理 · 资费监控</title>
+<script src="tc-app.js"></script>
+<style>
+  :root{--bg:#f4f7fc;--card:#fff;--bd:#e3e8f1;--tx:#16202e;--tx2:#6b7686;--ac:#3f6fd8;--ac2:#2f5cc0;
+        --bad:#c5221f;--ok:#0f7a46;--warn:#b06f00;--sh:0 10px 34px rgba(20,40,80,.09)}
+  @media (prefers-color-scheme:dark){:root{--bg:#0d1520;--card:#151f2b;--bd:#26313f;--tx:#e8eefb;--tx2:#93a2b8;
+        --ac:#5b8af0;--ac2:#4a79df;--bad:#ff8a95;--ok:#5ee9a4;--warn:#e0a63a;--sh:0 14px 44px rgba(0,0,0,.45)}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;padding:22px 16px 96px}
+  .head{max-width:960px;margin:0 auto 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .head h1{margin:0;font-size:19px}
+  .head .sub{font-size:12.5px;color:var(--tx2);margin-top:4px}
+  .btn{height:38px;padding:0 16px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);
+       font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit}
+  .btn:hover{border-color:var(--ac)}
+  .btn.pri{background:var(--ac);border-color:var(--ac);color:#fff}
+  .btn.pri:hover{background:var(--ac2)}
+  .btn.danger{color:var(--bad);border-color:var(--bd)}
+  .btn.danger:hover{border-color:var(--bad)}
+  .btn:disabled{opacity:.55;cursor:not-allowed}
+  .card{max-width:960px;margin:0 auto;background:var(--card);border:1px solid var(--bd);border-radius:16px;box-shadow:var(--sh);overflow:hidden}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--bd);white-space:nowrap}
+  th{font-size:12px;color:var(--tx2);font-weight:600;background:rgba(127,150,190,.07)}
+  tr:last-child td{border-bottom:none}
+  td.ops{display:flex;gap:8px;flex-wrap:wrap}
+  .mini{height:30px;padding:0 11px;font-size:12.5px;border-radius:8px;border:1px solid var(--bd);background:transparent;color:var(--tx);cursor:pointer;font-family:inherit}
+  .mini:hover{border-color:var(--ac);color:var(--ac)}
+  .mini.d:hover{border-color:var(--bad);color:var(--bad)}
+  .tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:700}
+  .tag.admin{background:rgba(63,111,216,.13);color:var(--ac)}
+  .tag.user{background:rgba(127,150,190,.16);color:var(--tx2)}
+  .tag.on{background:rgba(15,122,70,.13);color:var(--ok)}
+  .tag.off{background:rgba(197,34,31,.12);color:var(--bad)}
+  .empty{padding:34px;text-align:center;color:var(--tx2);font-size:13.5px}
+  .mask{position:fixed;inset:0;background:rgba(10,18,30,.5);display:none;align-items:center;justify-content:center;padding:20px;z-index:9998}
+  .mask.show{display:flex}
+  .dlg{background:var(--card);border:1px solid var(--bd);border-radius:16px;width:100%;max-width:420px;padding:22px;box-shadow:0 24px 66px rgba(0,0,0,.35)}
+  .dlg h3{margin:0 0 16px;font-size:16px}
+  .fld{margin-bottom:14px}
+  .fld label{display:block;font-size:12.5px;font-weight:600;color:var(--tx2);margin-bottom:6px}
+  .inp{width:100%;height:40px;border:1px solid var(--bd);border-radius:10px;background:transparent;color:var(--tx);
+       font-size:14px;padding:0 12px;outline:none;font-family:inherit}
+  .inp:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(63,111,216,.15)}
+  .row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2);cursor:pointer;margin-bottom:14px}
+  .dlg .acts{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}
+  .hint{font-size:12px;color:var(--tx2);line-height:1.6}
+  .pwdbox{margin-top:6px;padding:11px 13px;border-radius:10px;background:rgba(63,111,216,.09);
+          font-family:ui-monospace,Consolas,monospace;font-size:15px;font-weight:700;color:var(--ac);word-break:break-all}
+  .toast{position:fixed;left:50%;top:20px;transform:translateX(-50%);background:#16202e;color:#fff;padding:10px 18px;
+         border-radius:10px;font-size:13px;z-index:99999;opacity:0;transition:opacity .2s;pointer-events:none}
+  .toast.show{opacity:.96}
+</style>
+</head>
+<body>
+<div class="head">
+  <div>
+    <h1>账号管理</h1>
+    <div class="sub">仅管理员可见 · 账号不开放注册，只能在这里创建</div>
+  </div>
+  <div style="display:flex;gap:9px">
+    <button class="btn" onclick="location.href='index.html'">返回首页</button>
+    <button class="btn pri" id="addBtn">＋ 新建账号</button>
+  </div>
+</div>
+
+<div class="card">
+  <table>
+    <thead><tr><th>账号</th><th>名称</th><th>角色</th><th>状态</th><th>最近登录</th><th>操作</th></tr></thead>
+    <tbody id="tb"><tr><td colspan="6" class="empty">加载中…</td></tr></tbody>
+  </table>
+</div>
+
+<div class="mask" id="mask">
+  <div class="dlg" id="dlg"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  if (!TC.guard()) return;
+  var me = TC.getUser() || {};
+  if (me.role !== 'admin') { location.replace('index.html'); return; }
+  TC.mountBar();
+
+  var $ = function(id){ return document.getElementById(id); };
+  var tb = $('tb'), mask = $('mask'), dlg = $('dlg');
+
+  function toast(t){ var el = $('toast'); el.textContent = t; el.classList.add('show'); setTimeout(function(){ el.classList.remove('show'); }, 2000); }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+  function fmt(t){ return t ? String(t).replace('T',' ').slice(0,16) : '—'; }
+
+  var users = [];
+
+  async function load(){
+    try {
+      var r = await TC.req('/users');
+      users = r.users || [];
+      render();
+    } catch (e) {
+      tb.innerHTML = '<tr><td colspan="6" class="empty">' + esc(e.message) + '</td></tr>';
+    }
+  }
+
+  function render(){
+    if (!users.length) { tb.innerHTML = '<tr><td colspan="6" class="empty">暂无账号</td></tr>'; return; }
+    tb.innerHTML = users.map(function(u){
+      var self = String(u.id) === String(me.id);
+      return '<tr data-id="' + u.id + '">' +
+        '<td><b>' + esc(u.username) + '</b>' + (self ? ' <span class="tag user">我</span>' : '') + '</td>' +
+        '<td>' + esc(u.display_name || '—') + '</td>' +
+        '<td><span class="tag ' + (u.role === 'admin' ? 'admin' : 'user') + '">' + (u.role === 'admin' ? '管理员' : '普通') + '</span></td>' +
+        '<td><span class="tag ' + (u.enabled ? 'on' : 'off') + '">' + (u.enabled ? '启用' : '禁用') + '</span></td>' +
+        '<td>' + fmt(u.last_login_at) + '</td>' +
+        '<td class="ops">' +
+          '<button class="mini" data-act="edit">编辑</button>' +
+          '<button class="mini" data-act="pwd">改密码</button>' +
+          '<button class="mini" data-act="boot">强制下线</button>' +
+          (self ? '' : '<button class="mini d" data-act="del">删除</button>') +
+        '</td></tr>';
+    }).join('');
+  }
+
+  tb.addEventListener('click', async function(ev){
+    var b = ev.target.closest('button[data-act]');
+    if (!b) return;
+    var tr = b.closest('tr');
+    var id = tr.getAttribute('data-id');
+    var u = users.filter(function(x){ return String(x.id) === String(id); })[0];
+    if (!u) return;
+    var act = b.getAttribute('data-act');
+
+    if (act === 'edit') return openEdit(u);
+    if (act === 'pwd') return openPwd(u);
+    if (act === 'boot') {
+      if (!confirm('让「' + u.username + '」在所有设备上退出登录？')) return;
+      try { await TC.req('/users/' + id, { method:'PATCH', body:{ force_logout:true } }); toast('已强制下线'); }
+      catch (e) { alert(e.message); }
+      return;
+    }
+    if (act === 'del') {
+      if (!confirm('删除账号「' + u.username + '」？其推送配置会一并删除，且不可恢复。')) return;
+      try { await TC.req('/users/' + id, { method:'DELETE' }); toast('已删除'); load(); }
+      catch (e) { alert(e.message); }
+    }
+  });
+
+  function close(){ mask.classList.remove('show'); dlg.innerHTML = ''; }
+  mask.addEventListener('click', function(ev){ if (ev.target === mask) close(); });
+
+  function openAdd(){
+    dlg.innerHTML =
+      '<h3>新建账号</h3>' +
+      '<div class="fld"><label>账号</label><input class="inp" id="nU" placeholder="2-32 位字母数字 _ . -" autocomplete="off"></div>' +
+      '<div class="fld"><label>显示名称</label><input class="inp" id="nN" placeholder="可不填" autocomplete="off"></div>' +
+      '<div class="fld"><label>初始密码</label><input class="inp" id="nP" placeholder="留空自动生成 12 位随机密码" autocomplete="off"></div>' +
+      '<label class="row"><input type="checkbox" id="nA"> 设为管理员（拥有账号管理权限）</label>' +
+      '<div class="acts"><button class="btn" id="c">取消</button><button class="btn pri" id="s">创建</button></div>';
+    mask.classList.add('show');
+    $('c').onclick = close;
+    $('s').onclick = async function(){
+      var username = $('nU').value.trim();
+      if (!username) return alert('请填写账号');
+      var body = { username: username, display_name: $('nN').value.trim(), role: $('nA').checked ? 'admin' : 'user' };
+      var pw = $('nP').value.trim();
+      if (pw) body.password = pw;
+      this.disabled = true;
+      try {
+        var r = await TC.req('/users', { method:'POST', body: body });
+        dlg.innerHTML =
+          '<h3>账号已创建</h3>' +
+          '<div class="hint">请把下面的初始密码发给对方，登录后可在页面里自行修改。</div>' +
+          '<div class="pwdbox">' + esc(r.password) + '</div>' +
+          '<div class="acts"><button class="btn pri" id="ok">知道了</button></div>';
+        $('ok').onclick = function(){ close(); load(); };
+      } catch (e) {
+        alert(e.message); this.disabled = false;
+      }
+    };
+  }
+
+  function openEdit(u){
+    dlg.innerHTML =
+      '<h3>编辑「' + esc(u.username) + '」</h3>' +
+      '<div class="fld"><label>显示名称</label><input class="inp" id="eN" value="' + esc(u.display_name || '') + '"></div>' +
+      '<div class="fld"><label>角色</label><select class="inp" id="eR"><option value="user">普通账号</option><option value="admin">管理员</option></select></div>' +
+      '<label class="row"><input type="checkbox" id="eE"> 启用该账号</label>' +
+      '<div class="acts"><button class="btn" id="c">取消</button><button class="btn pri" id="s">保存</button></div>';
+    mask.classList.add('show');
+    $('eR').value = u.role;
+    $('eE').checked = !!u.enabled;
+    $('c').onclick = close;
+    $('s').onclick = async function(){
+      this.disabled = true;
+      try {
+        await TC.req('/users/' + u.id, { method:'PATCH', body:{
+          display_name: $('eN').value.trim(), role: $('eR').value, enabled: $('eE').checked
+        }});
+        close(); toast('已保存'); load();
+      } catch (e) { alert(e.message); this.disabled = false; }
+    };
+  }
+
+  function openPwd(u){
+    dlg.innerHTML =
+      '<h3>重置「' + esc(u.username) + '」的密码</h3>' +
+      '<div class="fld"><label>新密码</label><input class="inp" id="pP" placeholder="留空自动生成随机密码" autocomplete="off"></div>' +
+      '<div class="hint">重置后该账号的所有设备都会被强制退出登录。</div>' +
+      '<div class="acts"><button class="btn" id="c">取消</button><button class="btn pri" id="s">确认重置</button></div>';
+    mask.classList.add('show');
+    $('c').onclick = close;
+    $('s').onclick = async function(){
+      var pw = $('pP').value.trim();
+      if (!pw) pw = Math.random().toString(36).slice(2, 8) + Math.random().toString(36).slice(2, 8);
+      this.disabled = true;
+      try {
+        await TC.req('/users/' + u.id, { method:'PATCH', body:{ password: pw } });
+        dlg.innerHTML =
+          '<h3>密码已重置</h3>' +
+          '<div class="pwdbox">' + esc(pw) + '</div>' +
+          '<div class="acts"><button class="btn pri" id="ok">知道了</button></div>';
+        $('ok').onclick = function(){ close(); load(); };
+      } catch (e) { alert(e.message); this.disabled = false; }
+    };
+  }
+
+  $('addBtn').addEventListener('click', openAdd);
+  load();
+})();
+</script>
+</body>
+</html>

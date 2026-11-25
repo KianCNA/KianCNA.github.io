@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>登录 · 资费监控</title>
+<script src="tc-app.js"></script>
+<style>
+  :root{
+    --bg1:#eef3fc; --bg2:#f7f9fd; --card:#ffffff; --bd:#e3e8f1;
+    --tx:#16202e; --tx2:#6b7686; --ac:#3f6fd8; --ac2:#2f5cc0;
+    --bad:#c5221f; --ok:#0f7a46; --sh:0 18px 50px rgba(20,40,80,.12);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg1:#0c131c; --bg2:#131c27; --card:#151f2b; --bd:#26313f;
+      --tx:#e8eefb; --tx2:#93a2b8; --ac:#5b8af0; --ac2:#4a79df;
+      --bad:#ff8a95; --ok:#5ee9a4; --sh:0 22px 60px rgba(0,0,0,.5); }
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:radial-gradient(1100px 600px at 15% 0%,var(--bg1),var(--bg2) 60%,var(--bg2));
+    color:var(--tx);
+  }
+  .wrap{width:100%;max-width:392px}
+  .brand{text-align:center;margin-bottom:20px}
+  .brand h1{margin:0 0 6px;font-size:21px;letter-spacing:.3px}
+  .brand p{margin:0;font-size:12.5px;color:var(--tx2)}
+  .card{background:var(--card);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--sh);padding:26px 24px 22px}
+  label.f{display:block;font-size:12.5px;font-weight:600;color:var(--tx2);margin:0 0 7px}
+  .inp{width:100%;height:44px;border:1px solid var(--bd);border-radius:11px;background:transparent;color:var(--tx);
+       font-size:14.5px;padding:0 13px;outline:none;transition:border-color .15s,box-shadow .15s;font-family:inherit}
+  .inp:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(63,111,216,.15)}
+  .fld{margin-bottom:16px}
+  .opts{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 0 18px;flex-wrap:wrap}
+  .chk{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--tx2);cursor:pointer;user-select:none}
+  .chk input{width:16px;height:16px;accent-color:var(--ac);cursor:pointer;margin:0}
+  button.go{width:100%;height:46px;border:none;border-radius:11px;background:var(--ac);color:#fff;font-size:15px;
+            font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s,transform .06s}
+  button.go:hover{background:var(--ac2)}
+  button.go:active{transform:translateY(1px)}
+  button.go:disabled{opacity:.62;cursor:not-allowed}
+  .msg{min-height:18px;margin-top:13px;font-size:12.8px;text-align:center;color:var(--bad)}
+  .msg.ok{color:var(--ok)}
+  .foot{margin-top:16px;text-align:center;font-size:12px;color:var(--tx2)}
+  .foot a{color:var(--ac);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <h1>运营商资费监控</h1>
+    <p>登录后可保存个人推送配置</p>
+  </div>
+  <div class="card">
+    <form id="f" autocomplete="on">
+      <div class="fld">
+        <label class="f" for="u">账号</label>
+        <input class="inp" id="u" name="username" type="text" autocomplete="username" spellcheck="false" placeholder="请输入账号">
+      </div>
+      <div class="fld">
+        <label class="f" for="p">密码</label>
+        <input class="inp" id="p" name="password" type="password" autocomplete="current-password" placeholder="请输入密码">
+      </div>
+      <div class="opts">
+        <label class="chk"><input type="checkbox" id="rememberPw"> 记住密码</label>
+        <label class="chk"><input type="checkbox" id="autoLogin" checked> 自动登录</label>
+      </div>
+      <button class="go" id="go" type="submit">登 录</button>
+      <div class="msg" id="msg"></div>
+    </form>
+  </div>
+  <div class="foot">没有账号？联系管理员开通 · <a href="index.html">先随便看看</a></div>
+</div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var msg = $('msg'), go = $('go');
+
+  function setMsg(t, ok){ msg.textContent = t || ''; msg.className = 'msg' + (ok ? ' ok' : ''); }
+
+  // 已登录则直接进站（顺带校验 token 是否还有效）
+  (async function(){
+    if (!TC.getToken()) { initForm(); return; }
+    setMsg('正在恢复登录状态…', true);
+    try {
+      await TC.req('/me');
+      location.replace('index.html');
+    } catch (e) {
+      setMsg('');
+      initForm();
+    }
+  })();
+
+  function initForm(){
+    var c = TC.loadCred();
+    if (c) {
+      $('u').value = c.username;
+      $('p').value = c.password;
+      $('rememberPw').checked = true;
+    }
+    if (TC.getToken()) $('autoLogin').checked = true;
+    if (!$('u').value) setTimeout(function(){ $('u').focus(); }, 60);
+    else if (!$('p').value) setTimeout(function(){ $('p').focus(); }, 60);
+  }
+
+  $('f').addEventListener('submit', async function(ev){
+    ev.preventDefault();
+    var u = $('u').value.trim(), p = $('p').value;
+    if (!u || !p) { setMsg('请输入账号和密码'); return; }
+    go.disabled = true; go.textContent = '登录中…';
+    setMsg('');
+    try {
+      var r = await TC.req('/login', { method: 'POST', body: { username: u, password: p } });
+      if ($('rememberPw').checked) TC.saveCred(u, p); else TC.clearCred();
+      TC.saveSession(r.token, r.user, $('autoLogin').checked);
+      setMsg('登录成功，正在进入…', true);
+      location.replace('index.html');
+    } catch (e) {
+      setMsg(e.message || '登录失败');
+      go.disabled = false; go.textContent = '登 录';
+      $('p').select();
+    }
+  });
+})();
+</script>
+</body>
+</html>

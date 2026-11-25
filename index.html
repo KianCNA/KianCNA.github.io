@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-CN" data-theme="light" data-op="mobile">
 <head>
+<script src="tc-app.js"></script>
+<script>
+/* ===== 登录守卫（2026-11-26 新增）=====
+   入口先过登录页：无 token 立即跳 login.html；有 token 后台校验，失效则回登录页。 */
+(function(){
+  try{
+    if(!window.TC || !TC.getToken()){ location.replace('login.html'); return; }
+    var mount = function(){ try{ TC.mountBar(); }catch(e){} };
+    if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', mount); } else { mount(); }
+    TC.req('/me').catch(function(e){ if(e && e.status === 401){ location.replace('login.html'); } });
+  }catch(e){}
+})();
+</script>
 <script>
 /* 主题跟随系统：只读 prefers-color-scheme，读不到则日间模式；不提供手动切换 */
 (function(){
