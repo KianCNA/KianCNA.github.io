@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25 14:49",
+ "updated": "2026-11-25 16:49",
  "count": 176,
  "items": [
   {
@@ -10,6 +10,16 @@
    "date": "2026-11-26",
    "summary": "尊敬的用户，您好！因业务发展调整，2026年12月31日24时起福建省内中国移动CMCC、CMCC-WEB、CMCC-FJ、CMCC-EDU网络将停止服务，已订",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/fj/index_591_591_detail_56216.html",
+   "status": "on"
+  },
+  {
+   "id": "56274",
+   "prov": "fujian",
+   "prov_name": "福建",
+   "title": "关于部分定向流量、小闽卡、彩印业务下线的公告",
+   "date": "2026-11-25",
+   "summary": "尊敬的客户您好： 因业务调整，我公司将于2027年1月1日0时起停止部分“定向流量、小闽卡、彩印”业务的服务，具体业务点击查看。系统将自动为已订购以上5个业务的",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/fj/index_591_591_detail_56274.html",
    "status": "on"
   },
   {
@@ -993,16 +1003,6 @@
    "status": "on"
   },
   {
-   "id": "55896",
-   "prov": "fujian",
-   "prov_name": "福建",
-   "title": "关于腾讯视频 VIP 会员月卡供应安排调整的通知",
-   "date": "2026-09-29",
-   "summary": "尊敬的客户，您好! 因权益合作方单方面调整供货策略，影音会员大流量及PLUS 娱乐版会员权益池内的腾讯视频 VIP 会员月卡供应安排调整如下: 自 2026年1",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/fj/index_591_591_detail_55896.html",
-   "status": "on"
-  },
-  {
    "id": "55873",
    "prov": "guizhou",
    "prov_name": "贵州",
@@ -1863,10 +1863,10 @@
   {
    "section": "fujian",
    "name": "福建",
-   "count": 60,
-   "active": 60,
+   "count": 61,
+   "active": 61,
    "removed": 0,
-   "updated": "2026-11-20 10:37"
+   "updated": "2026-11-25 16:49"
   },
   {
    "section": "jiangxi",
