@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25 09:08",
+ "updated": "2026-11-25 10:29",
  "count": 176,
  "items": [
   {
@@ -10,6 +10,26 @@
    "date": "2026-11-26",
    "summary": "尊敬的用户，您好！因业务发展调整，2026年12月31日24时起福建省内中国移动CMCC、CMCC-WEB、CMCC-FJ、CMCC-EDU网络将停止服务，已订",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/fj/index_591_591_detail_56216.html",
+   "status": "on"
+  },
+  {
+   "id": "56272",
+   "prov": "beijing",
+   "prov_name": "北京",
+   "title": "网络调整公告",
+   "date": "2026-11-25",
+   "summary": "尊敬的客户： 您好！ 为进一步提升网络质量，为广大客户提供优质通信服务，我司将对部分通信设备开展倒换应急演练。依据《中华人民共和国电信条例》相关规定，现将演练提",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/bj/index_100_100_detail_56272.html",
+   "status": "on"
+  },
+  {
+   "id": "56271",
+   "prov": "shanghai",
+   "prov_name": "上海",
+   "title": "业务系统升级公告",
+   "date": "2026-11-25",
+   "summary": "尊敬的客户： 您好，为进一步提升客户服务质量，我公司计划于2026年11月25日23:00至11月26日7:00对业务系统进行升级，届时我公司所有服务渠道将暂停",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sh/index_210_210_detail_56271.html",
    "status": "on"
   },
   {
@@ -783,16 +803,6 @@
    "status": "on"
   },
   {
-   "id": "56072",
-   "prov": "beijing",
-   "prov_name": "北京",
-   "title": "关于 600 元档悦享大礼包等产品下线的公告",
-   "date": "2026-10-31",
-   "summary": "尊敬的客户： 您好！ 2026 年 11 月 1 日起，所有渠道停售 600 元档悦享大礼包 2025 版（12 个月）、800 元档悦享大礼包 2025 流量",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/bj/index_100_100_detail_56072.html",
-   "status": "on"
-  },
-  {
    "id": "56071",
    "prov": "hubei",
    "prov_name": "湖北",
@@ -830,16 +840,6 @@
    "date": "2026-10-30",
    "summary": "中国移动通信集团上海有限公司崇明区公司以公开方式寻源租赁营业厅用房的需求。现结合2026年10月-12月份崇明区公司营业厅租约到期情况、房东情况及拟新建营业厅区",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/sh/index_210_210_detail_56101.html",
-   "status": "on"
-  },
-  {
-   "id": "56100",
-   "prov": "shanghai",
-   "prov_name": "上海",
-   "title": "业务下线公告 （2026年10月第二批）",
-   "date": "2026-10-30",
-   "summary": "尊敬的用户： 感谢您长期以来对我们服务的支持与使用。因业务运营策略调整，部分产品将于2026年11月30日24：00正式下线并停止相关服务，具体下线产品清单详见",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sh/index_210_210_detail_56100.html",
    "status": "on"
   },
   {
@@ -1767,10 +1767,10 @@
   {
    "section": "beijing",
    "name": "北京",
-   "count": 1146,
-   "active": 1146,
+   "count": 1147,
+   "active": 1147,
    "removed": 0,
-   "updated": "2026-11-23 17:35"
+   "updated": "2026-11-25 10:29"
   },
   {
    "section": "tianjin",
@@ -1831,10 +1831,10 @@
   {
    "section": "shanghai",
    "name": "上海",
-   "count": 199,
-   "active": 199,
+   "count": 200,
+   "active": 200,
    "removed": 0,
-   "updated": "2026-11-25 00:31"
+   "updated": "2026-11-25 10:29"
   },
   {
    "section": "jiangsu",
