@@ -1,0 +1,38 @@
+name: Push Notify
+
+on:
+  workflow_run:
+    workflows:
+      - "Mobile Fetch & Build"
+      - "Unicom Fetch & Build"
+      - "Telecom Fetch & Build"
+      - "GB Fetch & Build"
+    types: [completed]
+  workflow_dispatch:
+
+concurrency:
+  group: push-notify
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: 触发增量扫描与推送
+        run: |
+          URL="https://socialist-cow-d3glswv91d832ff2d-1252525450.ap-shanghai.app.tcloudbase.com/api/internal/scan"
+          for i in 1 2 3; do
+            out="$(curl -sS --max-time 150 -X POST "$URL" -H 'Content-Type: application/json' -d '{}' || true)"
+            echo "$out"
+            case "$out" in
+              *'"ok":true'*) echo "扫描完成"; exit 0 ;;
+            esac
+            echo "第 $i 次调用失败，10 秒后重试"
+            sleep 10
+          done
+          echo "::warning::扫描接口连续失败，本轮跳过（不影响抓取主流程）"
