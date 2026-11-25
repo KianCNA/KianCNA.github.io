@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>抓取日志 · 资费监控</title>
+<script src="tc-app.js"></script>
+<style>
+  :root{--bg:#f4f7fc;--card:#fff;--bd:#e3e8f1;--tx:#16202e;--tx2:#6b7686;--ac:#3f6fd8;--ac2:#2f5cc0;
+        --bad:#c5221f;--ok:#0f7a46;--warn:#b06f00;--sh:0 10px 34px rgba(20,40,80,.09)}
+  @media (prefers-color-scheme:dark){:root{--bg:#0d1520;--card:#151f2b;--bd:#26313f;--tx:#e8eefb;--tx2:#93a2b8;
+        --ac:#5b8af0;--ac2:#4a79df;--bad:#ff8a95;--ok:#5ee9a4;--warn:#e0a63a;--sh:0 14px 44px rgba(0,0,0,.45)}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;padding:22px 16px 96px}
+  .wrap{max-width:1080px;margin:0 auto}
+  .head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .head h1{margin:0;font-size:19px}
+  .head .sub{font-size:12.5px;color:var(--tx2);margin-top:4px}
+  .head .acts{display:flex;gap:9px;align-items:center}
+  .btn{height:36px;padding:0 15px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);
+       font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit}
+  .btn:hover{border-color:var(--ac)}
+  .btn.pri{background:var(--ac);border-color:var(--ac);color:#fff}
+  .btn.pri:hover{background:var(--ac2)}
+  .btn:disabled{opacity:.55;cursor:not-allowed}
+  .card{background:var(--card);border:1px solid var(--bd);border-radius:16px;box-shadow:var(--sh);overflow:hidden;margin-bottom:16px}
+  .card .ttl{padding:14px 18px;border-bottom:1px solid var(--bd);font-size:13.5px;font-weight:700;display:flex;
+             align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .card .ttl .r{font-size:12px;font-weight:500;color:var(--tx2)}
+  .pad{padding:16px 18px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+  .kv .k{font-size:11.5px;color:var(--tx2);margin-bottom:5px}
+  .kv .v{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+  .kv .v small{font-size:12px;font-weight:500;color:var(--tx2);margin-left:3px}
+  .live{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--tx2);flex:none}
+  .dot.run{background:var(--ok);box-shadow:0 0 0 0 rgba(15,122,70,.5);animation:pl 1.6s infinite}
+  @keyframes pl{0%{box-shadow:0 0 0 0 rgba(15,122,70,.45)}70%{box-shadow:0 0 0 9px rgba(15,122,70,0)}100%{box-shadow:0 0 0 0 rgba(15,122,70,0)}}
+  .live .nm{font-size:14px;font-weight:700}
+  .live .st{font-size:12.5px;color:var(--tx2)}
+  .bar{height:7px;border-radius:999px;background:rgba(127,150,190,.2);overflow:hidden;margin:4px 0 10px}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),#6fa0ff);border-radius:999px;
+         width:0;transition:width .5s}
+  .steps{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+  .step{font-size:11.5px;padding:4px 10px;border-radius:999px;border:1px solid var(--bd);color:var(--tx2);
+        background:transparent;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .step.done{color:var(--ok);border-color:rgba(15,122,70,.35);background:rgba(15,122,70,.08)}
+  .step.now{color:var(--ac);border-color:var(--ac);background:rgba(63,111,216,.1);font-weight:700}
+  .step.fail{color:var(--bad);border-color:rgba(197,34,31,.35);background:rgba(197,34,31,.08)}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--bd);white-space:nowrap}
+  th{font-size:11.5px;color:var(--tx2);font-weight:600;background:rgba(127,150,190,.07)}
+  tr:last-child td{border-bottom:none}
+  td.num{font-variant-numeric:tabular-nums;text-align:right}
+  .tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:700}
+  .tag.ok{background:rgba(15,122,70,.13);color:var(--ok)}
+  .tag.bad{background:rgba(197,34,31,.12);color:var(--bad)}
+  .tag.run{background:rgba(63,111,216,.13);color:var(--ac)}
+  .tag.warn{background:rgba(176,111,0,.14);color:var(--warn)}
+  .tag.mode{background:rgba(127,150,190,.16);color:var(--tx2)}
+  .empty{padding:34px;text-align:center;color:var(--tx2);font-size:13.5px}
+  .toast{position:fixed;left:50%;top:20px;transform:translateX(-50%);background:#16202e;color:#fff;padding:10px 18px;
+         border-radius:10px;font-size:13px;z-index:99999;opacity:0;transition:opacity .2s;pointer-events:none}
+  .toast.show{opacity:.96}
+  .note{font-size:12px;color:var(--tx2);line-height:1.7;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <h1>抓取日志</h1>
+      <div class="sub" id="sub">正在加载…</div>
+    </div>
+    <div class="acts">
+      <button class="btn" id="cleanup" style="display:none">清理旧日志</button>
+      <button class="btn pri" id="reload">刷新</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ttl">当前运行 <span class="r" id="liveHint">—</span></div>
+    <div class="pad" id="liveBox"><div class="empty">加载中…</div></div>
+  </div>
+
+  <div class="card">
+    <div class="ttl">近 24 小时汇总</div>
+    <div class="pad">
+      <div class="grid" id="sum"></div>
+      <div class="note" id="schedNote"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ttl">历史明细 <span class="r" id="cnt"></span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr>
+          <th>开始时间</th><th>模式</th><th>触发</th><th>状态</th>
+          <th style="text-align:right">耗时</th><th style="text-align:right">板块</th>
+          <th style="text-align:right">条目</th><th style="text-align:right">速度</th><th>备注</th>
+        </tr></thead>
+        <tbody id="rows"><tr><td colspan="9" class="empty">加载中…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  if (!window.TC) return;
+  if (!TC.guard()) return;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var timer = null;
+
+  function toast(m) {
+    var t = $('toast');
+    t.textContent = m;
+    t.classList.add('show');
+    clearTimeout(t._h);
+    t._h = setTimeout(function () { t.classList.remove('show'); }, 2200);
+  }
+
+  function pdate(s) {
+    if (!s) return null;
+    var t = String(s).trim().replace(' ', 'T').replace(/([+-]\d{2})$/, '$1:00');
+    var d = new Date(t);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  function hhmm(d) {
+    if (!d) return '—';
+    var p = function (n) { return n < 10 ? '0' + n : '' + n; };
+    return (d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+  }
+
+  function dur(sec) {
+    if (sec === null || sec === undefined || sec === '') return '—';
+    sec = Math.max(0, Math.round(Number(sec)));
+    var m = Math.floor(sec / 60), s = sec % 60;
+    return m > 0 ? m + '分' + (s ? s + '秒' : '') : s + '秒';
+  }
+
+  function ago(d) {
+    if (!d) return '—';
+    var s = Math.max(0, Math.round((Date.now() - d.getTime()) / 1000));
+    if (s < 60) return s + ' 秒前';
+    if (s < 3600) return Math.floor(s / 60) + ' 分钟前';
+    return Math.floor(s / 3600) + ' 小时前';
+  }
+
+  var STATUS = {
+    success: ['ok', '成功'], failure: ['bad', '失败'],
+    cancelled: ['warn', '取消'], running: ['run', '进行中']
+  };
+  var MODE = { full: '全量', focus: '重点', priority: '优先' };
+  var TRIG = { heartbeat: '心跳', cron: '定时', manual: '手动', refresh: '刷新按钮', priority: '优先轮', dispatch: '派发' };
+
+  function paintLive(d) {
+    var box = $('liveBox');
+    var g = d.github || {};
+    var a = g.active;
+    var cur = d.current;
+    if (!a && !cur) {
+      $('liveHint').textContent = '空闲';
+      var last = g.last;
+      box.innerHTML = '<div class="live"><span class="dot"></span><span class="nm">当前没有抓取在跑</span>' +
+        '<span class="st">' + (last ? '最近一轮：' + last.name + ' · ' + hhmm(pdate(last.created_at)) + ' · ' +
+        (STATUS[last.status === 'completed' ? (last.conclusion || 'success') : last.status] || ['', last.status])[1] : '') +
+        '</span></div>';
+      return;
+    }
+    $('liveHint').textContent = a ? 'GitHub 正在运行' : '数据库有未收尾记录';
+    var startAt = pdate(a && a.run_started_at) || pdate(cur && cur.started_at);
+    var elapsed = startAt ? Math.round((Date.now() - startAt.getTime()) / 1000) : null;
+    var steps = (g.steps || []).filter(function (s) { return s.status !== 'queued'; });
+    var done = steps.filter(function (s) { return s.status === 'completed'; }).length;
+    var nowStep = null;
+    for (var i = 0; i < steps.length; i++) { if (steps[i].status === 'in_progress') { nowStep = steps[i]; break; } }
+    var total = g.steps ? g.steps.length : 0;
+    var pct = total ? Math.round((done / total) * 100) : 0;
+
+    var html = '<div class="live"><span class="dot run"></span>' +
+      '<span class="nm">' + (a ? a.name : '进行中') + '</span>' +
+      '<span class="st">已运行 ' + dur(elapsed) + (nowStep ? ' · 当前步骤：' + nowStep.name : '') +
+      (cur && cur.trigger_type ? ' · 触发：' + (TRIG[cur.trigger_type] || cur.trigger_type) : '') + '</span></div>';
+    html += '<div class="bar"><i style="width:' + Math.min(100, pct) + '%"></i></div>';
+    html += '<div class="st" style="font-size:12.5px;color:var(--tx2)">步骤 ' + done + ' / ' + (g.steps ? g.steps.length : 0) + ' 完成' +
+      (a ? ' · <a href="' + a.html_url + '" target="_blank" rel="noopener" style="color:var(--ac)">查看 GitHub 运行</a>' : '') + '</div>';
+    if (g.steps && g.steps.length) {
+      html += '<div class="steps">';
+      g.steps.forEach(function (s) {
+        var cls = 'step';
+        if (s.status === 'completed') cls += s.conclusion === 'success' ? ' done' : ' fail';
+        else if (s.status === 'in_progress') cls += ' now';
+        html += '<span class="' + cls + '" title="' + (s.name || '') + '">' + (s.name || '') + '</span>';
+      });
+      html += '</div>';
+    }
+    box.innerHTML = html;
+  }
+
+  function paintSum(s, sched) {
+    s = s || {};
+    var rate = s.runs ? (Number(s.fails) / Number(s.runs) * 100) : 0;
+    var cells = [
+      ['轮次', (s.runs || 0), '轮'],
+      ['失败', (s.fails || 0), '轮'],
+      ['成功率', s.runs ? (100 - rate).toFixed(1) : '—', '%'],
+      ['平均耗时', s.avg_sec == null ? '—' : dur(s.avg_sec), ''],
+      ['累计条目', (s.items || 0), '条'],
+      ['平均速度', s.avg_per_min || '—', '条/分']
+    ];
+    $('sum').innerHTML = cells.map(function (c) {
+      return '<div class="kv"><div class="k">' + c[0] + '</div><div class="v">' + c[1] +
+        (c[2] ? '<small>' + c[2] + '</small>' : '') + '</div></div>';
+    }).join('');
+
+    var st = (sched && sched.state) || {};
+    var lf = st.last_full ? pdate(st.last_full.at) : null;
+    var lp = st.last_priority ? pdate(st.last_priority.at) : null;
+    var lfo = st.last_focus ? pdate(st.last_focus.at) : null;
+    $('schedNote').textContent = '调度状态：全量最后完成 ' + (lf ? hhmm(lf) + '（' + ago(lf) + '）' : '无记录') +
+      '；优先最后完成 ' + (lp ? hhmm(lp) + '（' + ago(lp) + '）' : '无记录') +
+      (lfo ? '；重点最后完成 ' + hhmm(lfo) : '') + '。目标节奏：优先每 15 分钟一轮、全量每 30 分钟一轮。';
+  }
+
+  function paintRows(runs) {
+    var tb = $('rows');
+    if (!runs || !runs.length) {
+      tb.innerHTML = '<tr><td colspan="9" class="empty">暂无记录。抓取完成后会自动写入。</td></tr>';
+      $('cnt').textContent = '';
+      return;
+    }
+    $('cnt').textContent = '共 ' + runs.length + ' 条';
+    tb.innerHTML = runs.map(function (r) {
+      var s = STATUS[r.status] || ['warn', r.status || '—'];
+      var d = pdate(r.started_at);
+      var sec = r.duration_sec != null ? r.duration_sec : (d && r.status === 'running' ? Math.round((Date.now() - d.getTime()) / 1000) : null);
+      var secs = (r.sections_total ? ((r.sections_done || 0) + '/' + r.sections_total) : '—');
+      return '<tr>' +
+        '<td>' + hhmm(d) + '</td>' +
+        '<td><span class="tag mode">' + (MODE[r.mode] || r.mode || '—') + '</span></td>' +
+        '<td>' + (TRIG[r.trigger_type] || r.trigger_type || '—') + '</td>' +
+        '<td><span class="tag ' + s[0] + '">' + s[1] + '</span></td>' +
+        '<td class="num">' + dur(sec) + '</td>' +
+        '<td class="num">' + secs + '</td>' +
+        '<td class="num">' + (r.items_total == null ? '—' : r.items_total) + '</td>' +
+        '<td class="num">' + (r.items_per_min == null ? '—' : r.items_per_min) + '</td>' +
+        '<td style="white-space:normal;max-width:260px;color:var(--tx2)">' + (r.note || '') + '</td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  async function load() {
+    try {
+      var logs = await TC.req('/crawl/logs?limit=60');
+      paintRows(logs.runs);
+      var sched = await TC.req('/internal/sched').catch(function () { return null; });
+      paintSum(logs.summary24h, sched);
+      $('sub').textContent = '数据每 30 秒自动刷新 · 日志保留 7 天';
+    } catch (e) {
+      $('sub').textContent = '加载失败：' + (e && e.message ? e.message : '未知错误');
+    }
+    try {
+      var lv = await TC.req('/crawl/live');
+      paintLive(lv);
+    } catch (e) {
+      $('liveBox').innerHTML = '<div class="empty">实时进度获取失败：' + (e && e.message ? e.message : '') + '</div>';
+    }
+  }
+
+  var u = TC.getUser();
+  if (u && u.role === 'admin') {
+    var cb = $('cleanup');
+    cb.style.display = '';
+    cb.addEventListener('click', async function () {
+      if (!confirm('删除 7 天前的抓取日志？')) return;
+      cb.disabled = true;
+      try {
+        var r = await TC.req('/crawl/logs/cleanup', { method: 'POST', body: { days: 7 } });
+        toast('已清理 ' + r.removed + ' 条，剩余 ' + r.remain + ' 条');
+        load();
+      } catch (e) {
+        toast('清理失败：' + (e && e.message ? e.message : ''));
+      }
+      cb.disabled = false;
+    });
+  }
+
+  $('reload').addEventListener('click', load);
+  load();
+  timer = setInterval(load, 30000);
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) { clearInterval(timer); timer = null; }
+    else if (!timer) { load(); timer = setInterval(load, 30000); }
+  });
+})();
+</script>
+<script>
+(function(){ try{ if(window.TC) TC.mountBar(); }catch(e){} })();
+</script>
+</body>
+</html>

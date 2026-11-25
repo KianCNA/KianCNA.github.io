@@ -155,6 +155,7 @@ window.TC = (function () {
       '<div class="tcpanel">' +
       '<div class="tcwho"><b></b><span></span></div>' +
       '<a class="tcitem" href="push-center.html">我的推送配置</a>' +
+      '<a class="tcitem" href="crawl-log.html">抓取日志</a>' +
       (u.role === 'admin' ? '<a class="tcitem" href="admin.html">账号管理</a>' : '') +
       '<button class="tcitem tcrefresh" type="button"><span class="tcdot"></span><span class="txt">立即刷新</span></button>' +
       '<button class="tcitem tclogout" type="button">退出登录</button>' +
