@@ -1,7 +1,17 @@
 {
- "updated": "2026-11-26 09:43",
+ "updated": "2026-11-26 10:12",
  "count": 176,
  "items": [
+  {
+   "id": "56282",
+   "prov": "hebei",
+   "prov_name": "河北",
+   "title": "中国移动通信集团河北有限公司秦皇岛分公司引商、委托加盟店 （第三批）招募项目比选公告",
+   "date": "2026-11-26",
+   "summary": "一、项目基本情况 1、采购内容：对7个营业厅开展引商、委托加盟店合作招募工作。 2、采购方式：公开比选。 3、实施周期：自合同生效之日起≤2年。合作期满后，重新",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/he/index_311_311_detail_56282.html",
+   "status": "on"
+  },
   {
    "id": "56281",
    "prov": "fujian",
@@ -1163,16 +1173,6 @@
    "status": "on"
   },
   {
-   "id": "54884",
-   "prov": "hebei",
-   "prov_name": "河北",
-   "title": "中国移动超级基站和应急卫星网能力升级工程（河北节点单项工程） 环境影响报告书（征求意见稿）全文公示",
-   "date": "2026-04-21",
-   "summary": "为保障公众环境保护知情权、参与权、表达权和监督权，依据《环境影响评价公众参与办法》（生态环境部令第4号），现公开下列信息，征求与该建设项目环境影响有关的意见。 ",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/he/index_311_311_detail_54884.html",
-   "status": "on"
-  },
-  {
    "id": "54850",
    "prov": "jilin",
    "prov_name": "吉林",
@@ -1783,10 +1783,10 @@
   {
    "section": "hebei",
    "name": "河北",
-   "count": 33,
-   "active": 33,
+   "count": 34,
+   "active": 34,
    "removed": 0,
-   "updated": "2026-11-23 10:26"
+   "updated": "2026-11-26 10:12"
   },
   {
    "section": "shanxi",
