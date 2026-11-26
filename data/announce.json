@@ -1,7 +1,17 @@
 {
- "updated": "2026-11-26 14:50",
+ "updated": "2026-11-26 15:07",
  "count": 176,
  "items": [
+  {
+   "id": "56286",
+   "prov": "shandong",
+   "prov_name": "山东",
+   "title": "关于12580部分产品资费下线的公告",
+   "date": "2026-11-26",
+   "summary": "尊敬的客户，您好： 因业务优化调整，自2026年12月28日24时起，我司12580部分产品资费将下线并停止提供服务，具体下线资费清单请见公告附件。 已订购附件",
+   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sd/index_531_531_detail_56286.html",
+   "status": "on"
+  },
   {
    "id": "56285",
    "prov": "jilin",
@@ -890,16 +900,6 @@
    "date": "2026-10-30",
    "summary": "尊敬的客户您好: 因业务调整，我公司将于2026年12月1日0时起停止“5G特惠流量包35元10GB档（权益超市版）、5G特惠流量包25元10GB档（权益超市版",
    "page_url": "https://www.10086.cn/aboutus/news/pannounce/fj/index_591_591_detail_56068.html",
-   "status": "on"
-  },
-  {
-   "id": "56073",
-   "prov": "shandong",
-   "prov_name": "山东",
-   "title": "关于山东移动10月30日晚系统维护公告",
-   "date": "2026-10-29",
-   "summary": "尊敬的移动用户： 您好！ 为提升系统性能给客户提供更好的服务，2026年10月30日晚24:00点至31日早上7:00点我公司将进行系统紧急维护升级，升级期间会",
-   "page_url": "https://www.10086.cn/aboutus/news/pannounce/sd/index_531_531_detail_56073.html",
    "status": "on"
   },
   {
@@ -1879,10 +1879,10 @@
   {
    "section": "shandong",
    "name": "山东",
-   "count": 26,
-   "active": 26,
+   "count": 27,
+   "active": 27,
    "removed": 0,
-   "updated": "2026-11-23 16:19"
+   "updated": "2026-11-26 15:07"
   },
   {
    "section": "henan",
