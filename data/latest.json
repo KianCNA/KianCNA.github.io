@@ -1,12 +1,12 @@
 {
-  "updated": "2026-11-26 00:32:42",
+  "updated": "2026-11-26 00:50:10",
   "default": "beijing",
   "sections": [
     {
       "section": "quanguo",
       "name": "全网(全国)",
       "total": 2860,
-      "updated": "2026-11-26 00:14:17"
+      "updated": "2026-11-26 00:46:01"
     },
     {
       "section": "anhui",
@@ -84,7 +84,7 @@
       "section": "hubei",
       "name": "湖北",
       "total": 1226,
-      "updated": "2026-11-26 00:25:04"
+      "updated": "2026-11-26 00:46:20"
     },
     {
       "section": "hunan",
@@ -96,13 +96,13 @@
       "section": "jiangsu",
       "name": "江苏",
       "total": 1761,
-      "updated": "2026-11-26 00:21:12"
+      "updated": "2026-11-26 00:46:49"
     },
     {
       "section": "jiangxi",
       "name": "江西",
       "total": 2464,
-      "updated": "2026-11-26 00:23:18"
+      "updated": "2026-11-26 00:47:56"
     },
     {
       "section": "jilin",
@@ -126,13 +126,13 @@
       "section": "ningxia",
       "name": "宁夏",
       "total": 1316,
-      "updated": "2026-11-26 00:32:08"
+      "updated": "2026-11-26 00:48:15"
     },
     {
       "section": "qinghai",
       "name": "青海",
       "total": 541,
-      "updated": "2026-11-26 00:31:50"
+      "updated": "2026-11-26 00:48:30"
     },
     {
       "section": "shaanxi",
@@ -150,7 +150,7 @@
       "section": "shanghai",
       "name": "上海",
       "total": 1047,
-      "updated": "2026-11-26 00:20:37"
+      "updated": "2026-11-26 00:48:55"
     },
     {
       "section": "shanxi",
@@ -174,7 +174,7 @@
       "section": "xinjiang",
       "name": "新疆",
       "total": 1116,
-      "updated": "2026-11-26 00:32:42"
+      "updated": "2026-11-26 00:49:44"
     },
     {
       "section": "xizang",
@@ -186,7 +186,7 @@
       "section": "yunnan",
       "name": "云南",
       "total": 1535,
-      "updated": "2026-11-26 00:30:22"
+      "updated": "2026-11-26 00:50:10"
     },
     {
       "section": "zhejiang",
