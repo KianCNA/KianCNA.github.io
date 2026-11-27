@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-27 11:37",
+ "updated": "2026-11-27 11:55",
  "count": 176,
  "items": [
   {
@@ -1863,10 +1863,10 @@
   {
    "section": "fujian",
    "name": "福建",
-   "count": 63,
-   "active": 63,
+   "count": 64,
+   "active": 64,
    "removed": 0,
-   "updated": "2026-11-26 15:44"
+   "updated": "2026-11-27 11:55"
   },
   {
    "section": "jiangxi",
