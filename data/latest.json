@@ -1,12 +1,12 @@
 {
-  "updated": "2026-11-27 02:42:38",
+  "updated": "2026-11-27 03:04:28",
   "default": "beijing",
   "sections": [
     {
       "section": "quanguo",
       "name": "全网(全国)",
       "total": 2862,
-      "updated": "2026-11-27 02:37:36"
+      "updated": "2026-11-27 02:59:49"
     },
     {
       "section": "anhui",
@@ -84,7 +84,7 @@
       "section": "hubei",
       "name": "湖北",
       "total": 1226,
-      "updated": "2026-11-27 02:37:56"
+      "updated": "2026-11-27 03:00:17"
     },
     {
       "section": "hunan",
@@ -96,13 +96,13 @@
       "section": "jiangsu",
       "name": "江苏",
       "total": 1765,
-      "updated": "2026-11-27 02:38:29"
+      "updated": "2026-11-27 03:00:45"
     },
     {
       "section": "jiangxi",
       "name": "江西",
       "total": 2464,
-      "updated": "2026-11-27 02:39:26"
+      "updated": "2026-11-27 03:01:53"
     },
     {
       "section": "jilin",
@@ -126,13 +126,13 @@
       "section": "ningxia",
       "name": "宁夏",
       "total": 1320,
-      "updated": "2026-11-27 02:39:49"
+      "updated": "2026-11-27 03:02:18"
     },
     {
       "section": "qinghai",
       "name": "青海",
       "total": 528,
-      "updated": "2026-11-27 02:40:12"
+      "updated": "2026-11-27 03:02:38"
     },
     {
       "section": "shaanxi",
@@ -150,7 +150,7 @@
       "section": "shanghai",
       "name": "上海",
       "total": 1040,
-      "updated": "2026-11-27 02:40:34"
+      "updated": "2026-11-27 03:03:11"
     },
     {
       "section": "shanxi",
@@ -174,7 +174,7 @@
       "section": "xinjiang",
       "name": "新疆",
       "total": 1125,
-      "updated": "2026-11-27 02:40:54"
+      "updated": "2026-11-27 03:03:46"
     },
     {
       "section": "xizang",
@@ -185,8 +185,8 @@
     {
       "section": "yunnan",
       "name": "云南",
-      "total": 1552,
-      "updated": "2026-11-27 02:42:38"
+      "total": 1551,
+      "updated": "2026-11-27 03:04:28"
     },
     {
       "section": "zhejiang",
@@ -196,10 +196,10 @@
     }
   ],
   "quanguo_total": 2862,
-  "prov_total": 43559,
+  "prov_total": 43558,
   "prov_dist": {
     "个人资费": {
-      "营销活动": 12488,
+      "营销活动": 12487,
       "套餐": 12149,
       "加装包": 14925,
       "其他业务": 575,
@@ -672,14 +672,14 @@
       }
     },
     "yunnan": {
-      "total": 1552,
-      "personal": 1075,
+      "total": 1551,
+      "personal": 1074,
       "gq": 477,
       "dist": {
         "个人资费": {
           "加装包": 44,
           "套餐": 308,
-          "营销活动": 653,
+          "营销活动": 652,
           "其他业务": 70
         },
         "政企资费": {
